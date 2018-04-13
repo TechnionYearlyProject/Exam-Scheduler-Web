@@ -25,3 +25,10 @@ class Course(models.Model):
 
     # Internal flags
     is_taught = models.BooleanField(default=True)
+
+
+class Registration(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    study_program = models.ForeignKey(StudyProgram, on_delete=models.CASCADE)
+    semester = models.IntegerField()
+
