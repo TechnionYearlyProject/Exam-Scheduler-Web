@@ -10,10 +10,11 @@ class StudyProgram(models.Model):
     name = models.CharField(max_length=200)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
 
+
 class Course(models.Model):
     ID = models.CharField(primary_key=True, max_length=6)
     name = models.CharField(max_length=200)
-    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL)
+    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
     credit_points = models.FloatField()
 
     # Algorithm flags
