@@ -4,6 +4,16 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const api = require('./server/routes/api');
 const app = express();
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&replicaSet=globaldb', {
+  auth: {
+    user: 'examscheduler',
+    password: '7ls6FfIEPsREaxQZHfaIu5xTKlPubw0QgmFwvKS0WRhNsUQBQtCZGGpSu3Fz07mYKmsRWjsuo6AvbzMAhvMYqw=='
+  }
+})
+  .then(() => console.log('connection successful'))
+  .catch((err) => console.error(err));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
