@@ -19,6 +19,9 @@ var CourseSchema = new Schema(
     }],
 
     constraint: {type: Date, default: null},
+    forbidden_days: [{
+      course: {type: Schema.ObjectId, ref: 'Course'},
+    }],
 
     // Algorithm flags
     days_before: {type: Number, default: 3, min: 1},
