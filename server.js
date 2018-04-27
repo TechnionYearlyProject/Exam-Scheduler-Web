@@ -16,7 +16,7 @@ mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&re
   .catch((err) => console.error(err));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api', api);
 
