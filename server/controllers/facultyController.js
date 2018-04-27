@@ -1,7 +1,7 @@
 const Faculty = require('../models/faculty');
 
 exports.faculty_list = function (req, res, next) {
-  Faculty.find({})
+  Faculty.find({}, 'name')
     .exec(function (err, data) {
       if (err) {
         return next(err);
@@ -32,4 +32,4 @@ exports.faculty_delete = function (req, res, next) {
     }
     res.end();
   });
-}
+};
