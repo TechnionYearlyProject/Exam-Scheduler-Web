@@ -22,14 +22,15 @@ router.delete('/faculty/:id/program/delete', study_program_controller.study_prog
 
 router.get('/course/list', course_controller.course_list);//all courses
 router.get('/faculty/:id/course/list',course_controller.faculty_course_list);//faculty courses
-router.delete('/faculty/:id/course/:courseID/delete', course_controller.faculty_course_delete);
-//router.put('/faculty/:id/course/:courseID/update',course_controller.faculty_course_update);
-
 router.post('/faculty/:id/course/create',course_controller.course_create);
+router.delete('/faculty/:id/course/:courseID/delete', course_controller.faculty_course_delete);
+router.get('/course/:courseID', course_controller.course_data);
+router.patch('/course/:courseID/update',course_controller.faculty_course_update);
 
 
-
-//router.get('/schedule/list', schedule_controller.schedule_list);
+router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
+router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
+router.get('/schedule/list', schedule_controller.schedule_list);
 // router.post('/schedule/create', schedule_controller.schedule_create);
 
 module.exports = router;
