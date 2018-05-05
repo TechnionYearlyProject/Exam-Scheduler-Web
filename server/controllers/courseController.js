@@ -22,6 +22,16 @@ exports.course_list = function(req,res,next){
   });
 };
 
+exports.faculty_course_update = function(req,res,next){
+  Course.findByIdAndUpdate({'_id' :req.params.courseID},req.body,{upsert:true},function(err,data){
+    if(err){
+      return next(err);
+    }
+    res.end();
+  });
+
+};
+
 exports.course_create = function (req, res, next) {
   const new_course = {
     id:req.body.id,
@@ -46,5 +56,16 @@ exports.faculty_course_delete = function (req, res, next) {
       return next(err);
     }
     res.end();
+  });
+};
+
+exports.course_data = function (req, res, next) {
+  Course.find({'_id':req.params.courseID},
+    'id name credit_point faculty registrations conflicts constraint forbidden_days ' +
+    'days_before is_first is_last is_required is_taught is_required has_exam').exec(function(err,data) {
+      if(err){
+        return next(err);
+      }
+      res.json(data);
   });
 };
