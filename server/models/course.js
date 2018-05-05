@@ -16,10 +16,11 @@ var CourseSchema = new Schema(
     },
     faculty: {
       type: Schema.ObjectId,
-      ref: 'Faculty'
+      ref: 'Faculty',
+      required: true
     },
     credit_point: {
-      type: Decimal128,
+      type: Schema.Types.Decimal128,
       required: true,
       default: 3,
       min: 1
