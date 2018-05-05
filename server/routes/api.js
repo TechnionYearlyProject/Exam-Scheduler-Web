@@ -22,7 +22,7 @@ router.delete('/faculty/:id/program/delete', study_program_controller.study_prog
 
 router.get('/course/list', course_controller.course_list);//all courses
 router.get('/faculty/:id/course/list',course_controller.faculty_course_list);//faculty courses
-
+router.delete('/faculty/:id/course/:courseID/delete', course_controller.faculty_course_delete);
 //router.put('/faculty/:id/course/:courseID/update',course_controller.faculty_course_update);
 
 router.post('/faculty/:id/course/create',course_controller.course_create);

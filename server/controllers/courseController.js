@@ -36,3 +36,15 @@ exports.course_create = function (req, res, next) {
     res.end();
   });
 };
+
+/*
+ remove course.
+ */
+exports.faculty_course_delete = function (req, res, next) {
+  Course.remove({_id:req.params.courseID}, function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.end();
+  });
+};
