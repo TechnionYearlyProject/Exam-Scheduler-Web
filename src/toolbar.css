@@ -10,7 +10,7 @@
 .button:hover {
   background-color: #455A64;
 }
-.button:focus{
+.button:focus {
   outline: none;
 }
 .image {
@@ -45,4 +45,12 @@
   border-radius: 50%;
   float: right;
   cursor: pointer;
+  border-width: 3px;
+  border-style: solid;
+  border-color: #607D8B;
+}
+
+.userimage:hover {
+  border-color: #455A64;
+
 }
