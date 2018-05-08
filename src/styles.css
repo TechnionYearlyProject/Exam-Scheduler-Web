@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+
+.button {
+  height: 36px;
+  width: 140px;
+  background-color: #607D8B;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.button:hover {
+  background-color: #455A64;
+}
+.button:focus{
+  outline: none;
+}
+.image {
+  vertical-align: middle;
+}
+.buttontext {
+  margin-right: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: "Segoe UI";
+}
+.maxititle {
+  font-family: "Segoe UI";
+  font-size: 30px;
+  text-align: right;
+  font-weight: bold;
+}
+.minititle {
+  font-family: "Segoe UI";
+  font-size: 20px;
+  text-align: right;
+  font-weight: bold;
+}
+.logo {
+  margin-right: 10px;
+  float: right;
+}
+.buttons {
+  float: left;
+}
+.userimage {
+  border-radius: 50%;
+  float: right;
+  cursor: pointer;
+}
