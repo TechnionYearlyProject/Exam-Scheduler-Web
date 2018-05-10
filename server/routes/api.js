@@ -5,11 +5,17 @@ const study_program_controller = require('../controllers/studyprogramController'
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
 const user_controller = require('../controllers/userController');
+const auth = require('../auth/authController');
 
 router.get('/', (req, res) => {
   res.send('api works');
 });
 
+// User management routes
+
+router.post('/login', auth.login);
+
+// Database API routes
 
 router.get('/faculty/list', faculty_controller.faculty_list);
 router.post('/faculty/create', faculty_controller.faculty_create);
