@@ -28,3 +28,18 @@ exports.user_delete = function (req, res, next) {
     res.end();
   });
 };
+
+exports.user_update = function (req, res, next) {
+  const conditions = {
+    username: req.body.username
+  };
+  const update = {
+    email: req.body.email
+  };
+  User.findOneAndUpdate(conditions, update, function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.end();
+  });
+};

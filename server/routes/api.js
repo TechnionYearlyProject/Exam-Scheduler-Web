@@ -36,5 +36,6 @@ router.get('/schedule/list', schedule_controller.schedule_list);
 
 router.post('/admin/add_user', user_controller.user_create);
 router.delete('/admin/remove_user', user_controller.user_delete);
+router.patch('/admin/update_user', user_controller.user_update);
 
 module.exports = router;
