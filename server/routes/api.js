@@ -4,6 +4,7 @@ const faculty_controller = require('../controllers/facultyController');
 const study_program_controller = require('../controllers/studyprogramController');
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
+const user_controller = require('../controllers/userController');
 
 router.get('/', (req, res) => {
   res.send('api works');
@@ -32,5 +33,8 @@ router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
 router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
 router.get('/schedule/list', schedule_controller.schedule_list);
 // router.post('/schedule/create', schedule_controller.schedule_create);
+
+router.post('/admin/add_user', user_controller.user_create);
+router.delete('/admin/remove_user', user_controller.user_delete);
 
 module.exports = router;
