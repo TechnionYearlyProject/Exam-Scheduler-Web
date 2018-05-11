@@ -1,3 +1,4 @@
 module.exports = {
-  'secret': 'darksideofthemoon'
+  enable: false,
+  secret: 'darksideofthemoon'
 };

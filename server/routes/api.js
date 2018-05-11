@@ -15,6 +15,12 @@ router.get('/', (req, res) => {
 
 router.post('/login', auth.login);
 
+router.all('*', auth.verify_token);
+
+router.get('/test', (req, res) => {
+  res.send('Test passed !');
+});
+
 // Database API routes
 
 router.get('/faculty/list', faculty_controller.faculty_list);

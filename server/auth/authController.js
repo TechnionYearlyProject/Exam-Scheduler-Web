@@ -28,3 +28,26 @@ exports.login = function (req, res, next) {
     });
   });
 };
+
+exports.verify_token = function (req, res, next) {
+  if (config.enable === false) {
+    next(); // Verifying disabled, no authorization
+  }
+  var token = req.headers['x-access-token'];
+  if (!token) {
+    return res.status(401).send({
+      auth: false,
+      message: 'No token provided.'
+    });
+  }
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) {
+      return res.status(500).send({
+        auth: false,
+        message: 'Failed to authenticate token.'
+      });
+    }
+    req.user_id = decoded.id;
+    next();
+  });
+};
