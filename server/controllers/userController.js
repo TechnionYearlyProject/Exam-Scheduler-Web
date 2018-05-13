@@ -33,7 +33,7 @@ exports.user_delete = function (req, res, next) {
 
 exports.user_update = function (req, res, next) {
   const conditions = {
-    username: req.body.username
+    username: req.user_id
   };
   const update = {
     email: req.body.email

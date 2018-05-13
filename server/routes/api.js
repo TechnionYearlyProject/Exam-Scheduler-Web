@@ -44,10 +44,16 @@ router.patch('/course/:courseID/update',course_controller.faculty_course_update)
 router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
 router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
 router.get('/schedule/list', schedule_controller.schedule_list);
-// router.post('/schedule/create', schedule_controller.schedule_create);
 
-router.post('/admin/add_user', user_controller.user_create);
-router.delete('/admin/remove_user', user_controller.user_delete);
-router.patch('/admin/update_user', user_controller.user_update);
+// User management routes
+
+// Update user email
+router.patch('/update_user', user_controller.user_update);
+
+// Following routes require admin user
+
+router.all('*', auth.verify_admin);
+router.post('/add_user', user_controller.user_create);
+router.delete('/remove_user', user_controller.user_delete);
 
 module.exports = router;
