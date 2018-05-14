@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="moed.css">
+  <meta charset="UTF-8">
+</head>
+<body>
+  <div class="form-group row">
+    <label for="start_date" class="col-sm-4 col-form-label">תאריך התחלה:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="start_date" style="padding-top: 2px; padding-bottom: 2px; margin-top:4px;">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="end_date" class="col-sm-4 col-form-label">תאריך סיום:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="end_date" style="padding-top: 2px; padding-bottom: 2px; margin-top:4px;">
+    </div>
+  </div>
+    <div class="container-fluid col">
+      <div id="calendar"></div>
+    </div>
+<script>
+  $('.form-control').datepicker({
+    format: "dd/mm/yyyy",
+    language: "he",
+    orientation: "auto",
+    autoclose: true,
+    fontSize: "8"
+  });
+  $('#calendar').fullCalendar({
+    defaultView: 'period',
+    views: {
+      period: {
+        type: 'month',
+        duration: {weeks: 6},
+        fixedWeekCount: false,
+        showNonCurrentDates: true,
+
+      }
+    }
+  });
+
+
+</script>
+
+
+</body>
+</html>
