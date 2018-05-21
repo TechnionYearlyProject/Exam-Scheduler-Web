@@ -45,11 +45,17 @@ mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&re
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '/src')));
+app.use('/js/request', express.static(path.join(__dirname, '/src/js/request.js')));
 app.use('/api', api);
 
-app.get('/index', function(req, res) {
-  res.sendFile(path.join(__dirname, '/src/index.html'));
+app.get('/login', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/login.html'));
 });
+
+app.get('/', function (req, res) {
+  res.redirect('/login');
+});
+
 const port = process.env.PORT || '3000';
 app.set('port', port);
 
