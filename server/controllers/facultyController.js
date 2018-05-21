@@ -49,7 +49,7 @@ exports.faculty_update_mail = function (req, res, next) {
   const update = {
     email: req.body.email
   };
-  User.findOneAndUpdate(conditions, update, function (err) {
+  Faculty.findOneAndUpdate(conditions, update, function (err) {
     if (err) {
       return next(err);
     }
@@ -70,7 +70,7 @@ exports.faculty_update_password = function (req, res, next) {
   const update = {
     password: hash
   };
-  User.findOneAndUpdate(conditions, update, function (err) {
+  Faculty.findOneAndUpdate(conditions, update, function (err) {
     if (err) {
       return next(err);
     }
