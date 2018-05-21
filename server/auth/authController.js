@@ -5,7 +5,7 @@ const Faculty = require('../models/faculty');
 
 exports.login = function (req, res, next) {
   const params = {
-    username: req.body.name
+    name: req.body.name
   };
   Faculty.findOne(params, function (err, faculty) {
     if (err) {
