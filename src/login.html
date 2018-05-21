@@ -22,7 +22,7 @@
       </li>
     </ul>
   </nav>
-  <form>
+  <form id="login_form">
     <div class="col-xs-4"></div>
     <div class="col-xs-4">
       <div class="form-group">
@@ -35,9 +35,14 @@
         <input type="password" class="form-control" id="password">
       </div>
       <div class="form-group">
-        <button class="btn" type="submit">התחבר</button>
+        <button class="btn">התחבר</button>
       </div>
     </div>
   </form>
+  <script>
+    $("#login_form").submit (function (e) {
+      e.preventDefault()
+    });
+  </script>
 </body>
 </html>

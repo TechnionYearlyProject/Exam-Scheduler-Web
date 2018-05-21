@@ -6,6 +6,7 @@ const api = require('./server/routes/api');
 const app = express();
 const mongoose = require('mongoose');
 const Faculty = require('./server/models/faculty');
+const auth = require('./server/auth/authController');
 const config = require('./server/auth/config');
 const bcrypt = require('bcryptjs');
 
@@ -46,14 +47,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '/src')));
 app.use('/js/request', express.static(path.join(__dirname, '/src/js/request.js')));
+app.use('/js/cookie', express.static(path.join(__dirname, '/src/js/cookie.js')));
 app.use('/api', api);
 
 app.get('/login', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/login.html'));
 });
 
+app.all('*', auth.verify_token_front);
+
+app.get('/scheduler', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/scheduler.html'));
+});
+
 app.get('/', function (req, res) {
-  res.redirect('/login');
+  res.redirect('/scheduler');
 });
 
 const port = process.env.PORT || '3000';
