@@ -1,27 +1,27 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('./config');
-const User = require('../models/user');
+const Faculty = require('../models/faculty');
 
 exports.login = function (req, res, next) {
   const params = {
-    username: req.body.username
+    username: req.body.name
   };
-  User.findOne(params, function (err, user) {
+  Faculty.findOne(params, function (err, faculty) {
     if (err) {
       return next(err);
     }
-    if (!user) {
+    if (!faculty) {
       return res.status(404).send('No user found.');
     }
-    const valid = bcrypt.compareSync(req.body.password, user.password);
+    const valid = bcrypt.compareSync(req.body.password, faculty.password);
     if (!valid) {
       return res.status(401).send({
         auth: false,
         token: null
       });
     }
-    const token = jwt.sign({id: user._id}, config.secret, {expiresIn: 86400});
+    const token = jwt.sign({id: faculty._id}, config.secret, {expiresIn: 86400});
     return res.status(200).send({
       auth: true,
       token: token
@@ -47,7 +47,7 @@ exports.verify_token = function (req, res, next) {
         message: 'Failed to authenticate token.'
       });
     }
-    req.user_id = decoded.id;
+    req.faculty_id = decoded.id;
     return next();
   });
 };
@@ -56,7 +56,7 @@ exports.verify_admin = function (req, res, next) {
   if (config.enable === false) {
     return next(); // Verifying disabled, no authorization
   }
-  User.findOne({username: 'admin'}, function (err, admin) {
+  Faculty.findOne({name: config.admin_name}, function (err, admin) {
     if (err) {
       return next(err);
     }
@@ -66,7 +66,7 @@ exports.verify_admin = function (req, res, next) {
         message: "Error: Admin user doesn't exist."
       });
     }
-    if (req.user_id == admin._id) {
+    if (req.faculty_id == admin._id) {
       return next();
     }
     return res.status(401).send({
