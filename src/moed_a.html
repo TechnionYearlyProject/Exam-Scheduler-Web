@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="moed.css">
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h4>מועד א'</h4>
+  <div class="form-group row">
+    <label for="start_date" class="col-sm-4 col-form-label">תאריך התחלה:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control datepicker" id="start_date" style="padding-top: 2px; padding-bottom: 2px; margin-top:4px;">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="end_date" class="col-sm-4 col-form-label">תאריך סיום:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control datepicker" id="end_date" style="padding-top: 2px; padding-bottom: 2px; margin-top:4px;">
+    </div>
+  </div>
+  <div class="container" id="schedule_a">
+    <div class="row">
+      <div class="col" style="border: 1px solid #CFD8DC; padding-right: 5px">א'</div>
+      <div class="col" style="border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ב'</div>
+      <div class="col" style="border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ג'</div>
+      <div class="col" style="border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ד'</div>
+      <div class="col" style="border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ה'</div>
+      <div class="col" style="border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ו'</div>
+    </div>
+  </div>
+<script>
+  $('.datepicker').datepicker({
+    format: "dd/mm/yyyy",
+    language: "he",
+    orientation: "auto",
+    autoclose: true,
+    fontSize: "8"
+  });
+  var map_a = new Map();
+  var start = new Date(2018,3,28);
+  var end = new Date(2018,5,7);
+  if (start.getDay() == 6) {
+    start.setDate(start.getDate() + 1);
+  }
+  if (end.getDay() == 6) {
+    end.setDate(end.getDate() - 1);
+  }
+  var schedule = document.getElementById("schedule_a");
+  var current = new Date(start.getTime() - start.getDay()*86400000);
+  var row = document.createElement("div");
+  row.className = "row";
+  row.style = "height: 75px";
+  while (current < start) {
+    var day = document.createElement("div");
+    day.className = "col day";
+    if (current.getDay() == 0) {
+      day.style = "font-size: 12px; text-align: left; border: 1px solid #CFD8DC; border-top: 0px; padding: 1px;"
+    } else {
+      day.style = "font-size: 12px; text-align: left; border: 1px solid #CFD8DC; border-right:0px; border-top: 0px; padding: 1px;"
+    }
+    day.innerHTML = current.getDate().toString().padStart(2,"0") + '/' + (current.getMonth()+1).toString().padStart(2,"0") + 'x';
+    row.appendChild(day);
+    current.setDate(current.getDate() + 1);
+  }
+  var counter = 0;
+  for (current = start; current <= end; current.setDate(current.getDate() + 1)) {
+    if (current.getDay() == 6) {
+      continue;
+    }
+    var day = document.createElement("div");
+    var id = "moed_a_day_" + counter;
+    counter += 1;
+    day.id = id;
+    map_a.set(current,id);
+    day.onclick = function(){
+      var test = document.createElement("div");
+      test.className = "d-flex flex-wrap test";
+      test.innerHTML = "אלגוריתמים";
+      this.appendChild(test);
+    };
+    day.className = "col day";
+    if (current.getDay() == 0) {
+      day.style = "font-size: 12px; text-align: left; 2px; border: 1px solid #CFD8DC; border-top: 0px; padding: 1px;"
+    } else {
+      day.style = "font-size: 12px; text-align: left; 2px; border: 1px solid #CFD8DC; border-right:0px; border-top: 0px; padding: 1px;"
+    }    day.innerHTML = current.getDate().toString().padStart(2,"0") + '/' + (current.getMonth()+1).toString().padStart(2,"0");
+    row.appendChild(day);
+    if (current.getDay() == 5) {
+      schedule.appendChild(row);
+      row = document.createElement("div");
+      row.className = "row";
+      row.style = "height: 75px";
+    }
+  }
+  while (current.getDay() <= 5) {
+    var day = document.createElement("div");
+    day.className = "col day";
+    if (current.getDay() == 0) {
+      day.style = "font-size: 12px; text-align: left; 2px; border: 1px solid #CFD8DC; border-top: 0px; padding: 1px;"
+    } else {
+      day.style = "font-size: 12px; text-align: left; 2px; border: 1px solid #CFD8DC; border-right:0px; border-top: 0px; padding: 1px;"
+    }    day.innerHTML = current.getDate().toString().padStart(2,"0") + '/' + (current.getMonth()+1).toString().padStart(2,"0") + 'x';
+    row.appendChild(day);
+    if (current.getDay() == 5) {
+      schedule.appendChild(row);
+      row = document.createElement("div");
+      row.className = "row";
+      row.style = "height: 75px";
+    }
+    current.setDate(current.getDate() + 1);
+  }
+</script>
+</body>
+</html>

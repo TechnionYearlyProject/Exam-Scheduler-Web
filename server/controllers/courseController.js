@@ -34,10 +34,11 @@ exports.faculty_course_update = function(req,res,next){
 
 exports.course_create = function (req, res, next) {
   const new_course = {
-    id:req.body.id,
-    name:req.body.name,
-    faculty:req.params.id,
-    credit_point:req.body.credit_point
+      id: req.body.id,
+      name: req.body.name,
+      faculty: req.params.id,
+      credit_point: req.body.credit_point,
+      registrations: req.body.programs
   };//other fields will be added.
   Course.create(new_course,function(err){
     if(err){
