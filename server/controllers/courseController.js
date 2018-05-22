@@ -37,6 +37,7 @@ exports.course_create = function (req, res, next) {
       id: req.body.id,
       name: req.body.name,
       faculty: req.params.id,
+      schedule: req.body.schedule,
       credit_point: req.body.credit_point,
       registrations: req.body.programs
   };//other fields will be added.

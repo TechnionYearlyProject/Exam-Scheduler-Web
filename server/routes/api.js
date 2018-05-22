@@ -31,6 +31,7 @@ router.delete('/faculty/:id/course/:courseID/delete', course_controller.faculty_
 router.get('/course/:courseID', course_controller.course_data);
 router.patch('/course/:courseID/update',course_controller.faculty_course_update);
 
+router.post('/faculty/:id/schedule/create', schedule_controller.schedule_create);
 router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
 router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
 router.get('/schedule/list', schedule_controller.schedule_list);

@@ -56,6 +56,11 @@ app.get('/login', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/login.html'));
 });
 
+// DEBUG ONLY
+app.get('/debug', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/debug.html'));
+});
+
 app.all('*', auth.verify_token_front);
 
 app.get('/scheduler', function (req, res) {

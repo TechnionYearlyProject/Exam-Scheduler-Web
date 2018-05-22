@@ -25,6 +25,11 @@ var CourseSchema = new Schema(
       default: 3,
       min: 1
     },
+    schedule: {
+      type: Schema.ObjectId,
+      ref: 'Schedule',
+      required: true
+    },
 
     registrations: [{
       study_program: {

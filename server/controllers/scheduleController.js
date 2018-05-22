@@ -32,7 +32,7 @@ exports.faculty_schedules = function(req,res,next){
 exports.schedule_create = function(req,res,next){
   const new_schedule = {
     name:req.body.name,
-    faculty: req.body.faculty,
+    faculty: req.params.id,
     start:req.body.start,
     end:req.body.end,
     exams:req.body.exams
