@@ -57,11 +57,11 @@ exports.verify_token_front = function (req, res, next) {
     return next(); // Verifying disabled, no authorization
   }
   if (!req.cookies.token) {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
   jwt.verify(req.cookies.token, config.secret, function (err, decoded) {
     if (err) {
-      res.redirect('/login');
+      return res.redirect('/login');
     }
     return next();
   });
