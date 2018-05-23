@@ -4,6 +4,7 @@ const faculty_controller = require('../controllers/facultyController');
 const study_program_controller = require('../controllers/studyprogramController');
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
+const semester_controller = require('../controllers/semesterController');
 const auth = require('../auth/authController');
 
 router.get('/', (req, res) => {
@@ -36,6 +37,8 @@ router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
 router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
 router.get('/schedule/list', schedule_controller.schedule_list);
 
+router.get('/semester/list', semester_controller.semester_list);
+
 // User management routes
 
 // Update user email
@@ -48,5 +51,8 @@ router.all('*', auth.verify_admin);
 
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
+
+router.post('/semester/create', semester_controller.semester_create);
+router.post('/semester/update', semester_controller.semester_update_dates);
 
 module.exports = router;
