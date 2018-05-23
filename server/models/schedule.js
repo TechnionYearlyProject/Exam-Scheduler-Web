@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const ScheduleSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
   faculty: {
     type: mongoose.Schema.ObjectId,
     ref: 'Faculty',

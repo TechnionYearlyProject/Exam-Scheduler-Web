@@ -11,20 +11,29 @@ exports.semester_list = function (req, res, next) {
 };
 
 exports.semester_create = function (req, res, next) {
-  Semester.create({
+  Semester.findOne({
     year: req.body.year,
     semester: req.body.semester,
-    start_a: req.body.start_a,
-    end_a: req.body.end_a,
-    start_b: req.body.start_b,
-    end_b: req.body.end_b
+  })
+  .then(semester => {
+    if (semester) {
+      return next(new Error('Semester already exists.'));
+    }
+    return Semester.create({
+      year: req.body.year,
+      semester: req.body.semester,
+      start_a: req.body.start_a,
+      end_a: req.body.end_a,
+      start_b: req.body.start_b,
+      end_b: req.body.end_b
+    });
   })
   .then(() => {
     return res.end();
   })
   .catch(err => {
     next(err);
-  })
+  });
 };
 
 exports.semester_update_dates = function (req, res, next) {
@@ -44,5 +53,5 @@ exports.semester_update_dates = function (req, res, next) {
   })
   .catch(err => {
     next(err);
-  })
+  });
 };

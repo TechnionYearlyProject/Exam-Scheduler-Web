@@ -31,6 +31,9 @@ router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
+router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);
+router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
+
 router.get('/semester/list', semester_controller.semester_list);
 
 // User management routes

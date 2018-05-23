@@ -1,46 +1,44 @@
 const Schedule = require('../models/schedule').model;
+const Semester = require('../models/semester').model;
 
 exports.schedule_list = function(req,res,next){
-  Schedule.find({},'name faculty start end exams')
-    .exec(function(err,data){
-    if(err){
-      return next(err);
+  Semester.findOne({
+    year: req.params.year,
+    semester: req.params.semester
+  })
+  .then(semester => {
+    if (!semester) {
+      return next(new Error('Semester not found'));
     }
-    res.json(data);
+    return Schedule.find ({semester: semester._id}, 'name faculty start end exams');
+  })
+  .then(schedule => {
+    return res.json(schedule);
+  })
+  .catch(err => {
+    next(err);
   });
 };
 
-exports.schedule_data = function(req,res,next){
-  Schedule.find({'_id':req.params.id},'name faculty start end exams').exec(function(err,data){
-    if(err){
-      return next(err);
+exports.faculty_schedule = function(req,res,next){
+  Semester.findOne({
+    year: req.params.year,
+    semester: req.params.semester
+  })
+  .then(semester => {
+    if (!semester) {
+      return next(new Error('Semester not found'));
     }
-    res.json(data);
-  });
-};
-
-exports.faculty_schedules = function(req,res,next){
-  Schedule.find({'faculty':req.params.id},'name faculty start end exams').exec(function(err,data){
-    if(err){
-      return next(err);
-    }
-    res.json(data);
-  });
-};
-
-//
-exports.schedule_create = function(req,res,next){
-  const new_schedule = {
-    name:req.body.name,
-    faculty: req.params.id,
-    start:req.body.start,
-    end:req.body.end,
-    exams:req.body.exams
-  };
-  Schedule.create(new_schedule,function (err) {
-    if(err){
-      return next(err);
-    }
-    res.end();
+    return Schedule.find ({
+      semester: semester._id,
+      faculty: req.faculty_id
+    },
+    'name faculty start end exams');
+  })
+  .then(schedule => {
+    return res.json(schedule);
+  })
+  .catch(err => {
+    next(err);
   });
 };
