@@ -20,7 +20,7 @@ exports.faculty_course_list = function(req,res,next){
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return Course.find({
       semester: semester._id,
@@ -36,30 +36,34 @@ exports.faculty_course_list = function(req,res,next){
   });
 };
 
-exports.course_create = function (req, res, next) {
-  Semester.findOne({
+exports.course_create = async function (req, res, next) {
+  const semester = await Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
-    return Course.find({
-      id: req.body.id,
-      semester: semester._id,
-      faculty: req.faculty_id
-    })
+    return semester;
+  })
+  .catch(err => {
+    next(err);
+  });
+  Course.findOne({
+    id: req.body.id,
+    semester: semester._id,
+    faculty: req.faculty_id
   })
   .then(exists => {
     if (exists) {
-      return next(new Error('Course already exists.'));
+      return res.status(400).send('Course already exists.');
     }
     return Course.create({
       id: req.body.id,
       name: req.body.name,
-      faculty: req.params.id,
-      semester: req.body.semester,
+      faculty: req.faculty_id,
+      semester: semester._id,
       credit_point: req.body.credit_point,
       registrations: req.body.programs
     });
@@ -79,7 +83,7 @@ exports.faculty_course_update = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return Course.findOneAndUpdate({
       id: req.params.courseID,
@@ -106,7 +110,7 @@ exports.faculty_course_delete = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return Course.remove({
       id: req.params.courseID,
@@ -129,7 +133,7 @@ exports.course_data = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return Course.findOne({
       id: req.params.courseID,

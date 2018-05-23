@@ -20,7 +20,7 @@ exports.study_program_list_by_faculty = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return StudyProgram.find({
       semester: semester._id,
@@ -43,7 +43,7 @@ exports.study_program_create = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return StudyProgram.create({
       name: req.body.name,
@@ -52,7 +52,7 @@ exports.study_program_create = function (req, res, next) {
     });
   })
   .then(() => {
-    res.end();
+    return res.end();
   })
   .catch(err => {
     next(err);
@@ -66,7 +66,7 @@ exports.study_program_delete = function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
-      return next(new Error('Semester not found'));
+      return res.status(404).send('Semester not found.');
     }
     return StudyProgram.remove({
       name: req.body.name,
