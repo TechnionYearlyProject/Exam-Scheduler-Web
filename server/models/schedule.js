@@ -6,18 +6,18 @@ const ScheduleSchema = new mongoose.Schema({
     required: true
   },
   faculty: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Faculty',
     required: true
   },
   semester: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Semester',
     required: true
   },
   exams: [{
     course: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'Course'
     },
     date_a: {

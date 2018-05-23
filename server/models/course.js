@@ -12,25 +12,25 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
   faculty: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Faculty',
     required: true
   },
   credit_point: {
-    type: Schema.Types.Decimal128,
+    type: mongoose.Schema.Types.Decimal128,
     required: true,
     default: 3,
     min: 1
   },
   schedule: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Schedule',
     required: true
   },
 
   registrations: [{
     study_program: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'StudyProgram'
     },
     semester: {
@@ -41,7 +41,7 @@ const CourseSchema = new mongoose.Schema({
 
   conflicts: [{
     course: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'Course'
     },
   }],
@@ -52,7 +52,7 @@ const CourseSchema = new mongoose.Schema({
   },
   forbidden_days: [{
     course: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'Course'
     },
   }],

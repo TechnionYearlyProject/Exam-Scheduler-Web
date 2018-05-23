@@ -6,7 +6,7 @@ const StudyProgramSchema = new mongoose.Schema({
     required: true
   },
   faculty: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Faculty',
     required: true
   },
