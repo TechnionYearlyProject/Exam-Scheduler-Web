@@ -1,94 +1,84 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const CourseSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    required: true,
+    min: 100000,
+    max: 999999
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  faculty: {
+    type: Schema.ObjectId,
+    ref: 'Faculty',
+    required: true
+  },
+  credit_point: {
+    type: Schema.Types.Decimal128,
+    required: true,
+    default: 3,
+    min: 1
+  },
+  schedule: {
+    type: Schema.ObjectId,
+    ref: 'Schedule',
+    required: true
+  },
 
-var CourseSchema = new Schema(
-  {
-    id: {
-      type: Number,
-      required: true,
-      min: 100000,
-      max: 999999
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    faculty: {
+  registrations: [{
+    study_program: {
       type: Schema.ObjectId,
-      ref: 'Faculty',
-      required: true
+      ref: 'StudyProgram'
     },
-    credit_point: {
-      type: Schema.Types.Decimal128,
-      required: true,
-      default: 3,
-      min: 1
-    },
-    schedule: {
-      type: Schema.ObjectId,
-      ref: 'Schedule',
-      required: true
-    },
-
-    registrations: [{
-      study_program: {
-        type: Schema.ObjectId,
-        ref: 'StudyProgram'
-      },
-      semester: {
-        type: Number,
-        min: 1
-      }
-    }],
-
-    conflicts: [{
-      course: {
-        type: Schema.ObjectId,
-        ref: 'Course'
-      },
-    }],
-
-    constraint: {
-      type: Date,
-      default: null
-    },
-    forbidden_days: [{
-      course: {
-        type: Schema.ObjectId,
-        ref: 'Course'
-      },
-    }],
-
-    // Algorithm flags
-    days_before: {
+    semester: {
       type: Number,
-      default: 3,
       min: 1
-    },
-    is_first: {
-      type: Boolean,
-      default: false
-    },
-    is_last: {
-      type: Boolean,
-      default: false
-    },
-    is_required: {
-      type: Boolean,
-      default: true
-    },
-    has_exam: {
-      type: Boolean,
-      default: true
-    },
+    }
+  }],
 
-    // Internal flags
-    is_taught: {
-      type: Boolean,
-      default: true
+  conflicts: [{
+    course: {
+      type: Schema.ObjectId,
+      ref: 'Course'
     },
-  }
-);
+  }],
 
-module.exports = mongoose.model('Course', CourseSchema);
+  constraint: {
+    type: Date,
+    default: null
+  },
+  forbidden_days: [{
+    course: {
+      type: Schema.ObjectId,
+      ref: 'Course'
+    },
+  }],
+
+  // Algorithm flags
+  days_before: {
+    type: Number,
+    default: 3,
+    min: 1
+  },
+  is_first: {
+    type: Boolean,
+    default: false
+  },
+  is_last: {
+    type: Boolean,
+    default: false
+  },
+  is_required: {
+    type: Boolean,
+    default: true
+  },
+  has_exam: {
+    type: Boolean,
+    default: true
+  },
+});
+
+exports.model = mongoose.model('Course', CourseSchema);

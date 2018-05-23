@@ -1,38 +1,30 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-
-var ScheduleSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true
-    },
-    faculty: {
+const ScheduleSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  faculty: {
+    type: Schema.ObjectId,
+    ref: 'Faculty',
+    required: true
+  },
+  semester: {
+    type: Schema.ObjectId,
+    ref: 'Semester',
+    required: true
+  },
+  exams: [{
+    course: {
       type: Schema.ObjectId,
-      ref: 'Faculty',
-      required: true
+      ref: 'Course'
     },
-    start: {
+    date: {
       type: Date,
-      required: true
+      default: null
     },
-    end: {
-      type: Date,
-      required: true
-    },
+  }],
+});
 
-    exams: [{
-      course: {
-        type: Schema.ObjectId,
-        ref: 'Course'
-      },
-      date: {
-        type: Date,
-        default: null
-      },
-    }],
-  }
-);
-
-module.exports = mongoose.model('Schedule', ScheduleSchema);
+exports.model = mongoose.model('Schedule', ScheduleSchema);

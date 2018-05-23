@@ -1,4 +1,4 @@
-const StudyProgram = require('../models/studyprogram');
+const StudyProgram = require('../models/studyprogram').model;
 
 
 exports.study_program_list = function (req, res, next) {

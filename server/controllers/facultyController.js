@@ -1,4 +1,4 @@
-const Faculty = require('../models/faculty');
+const Faculty = require('../models/faculty').model;
 const config = require('../auth/config');
 const bcrypt = require('bcryptjs');
 

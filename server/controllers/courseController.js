@@ -1,4 +1,4 @@
-const Course = require('../models/course');
+const Course = require('../models/course').model;
 
 exports.faculty_course_list = function(req,res,next){
   Course.find({'faculty': req.params.id}, 'name id credit_point')
@@ -23,7 +23,7 @@ exports.course_list = function(req,res,next){
 };
 
 exports.faculty_course_update = function(req,res,next){
-  Course.findByIdAndUpdate({'_id' :req.params.courseID},req.body,{upsert:true},function(err,data){
+  Course.findByIdAndUpdate({'_id' :req.params.courseID},req.body,{upsert:true},function(err){
     if(err){
       return next(err);
     }

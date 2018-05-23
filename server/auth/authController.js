@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('./config');
-const Faculty = require('../models/faculty');
+const Faculty = require('../models/faculty').model;
 
 exports.login = function (req, res, next) {
   const params = {
@@ -59,7 +59,7 @@ exports.verify_token_front = function (req, res, next) {
   if (!req.cookies.token) {
     return res.redirect('/login');
   }
-  jwt.verify(req.cookies.token, config.secret, function (err, decoded) {
+  jwt.verify(req.cookies.token, config.secret, function (err) {
     if (err) {
       return res.redirect('/login');
     }

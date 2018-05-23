@@ -1,4 +1,4 @@
-const Schedule = require('../models/schedule');
+const Schedule = require('../models/schedule').model;
 
 exports.schedule_list = function(req,res,next){
   Schedule.find({},'name faculty start end exams')
