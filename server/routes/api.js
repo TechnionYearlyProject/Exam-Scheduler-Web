@@ -27,8 +27,8 @@ router.delete(sem_regex + '/program/delete', study_program_controller.study_prog
 router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
 // router.get(sem_regex + '/course/list_all', course_controller.course_list); //all courses
 router.post(sem_regex + '/course/create',course_controller.course_create);
-router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
+router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
 router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
 router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);

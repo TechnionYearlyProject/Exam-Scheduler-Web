@@ -22,9 +22,9 @@ const CourseSchema = new mongoose.Schema({
     default: 3,
     min: 1
   },
-  schedule: {
+  semester: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Schedule',
+    ref: 'Semester',
     required: true
   },
 
