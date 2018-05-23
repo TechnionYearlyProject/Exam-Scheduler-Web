@@ -10,6 +10,11 @@ const StudyProgramSchema = new mongoose.Schema({
     ref: 'Faculty',
     required: true
   },
+  semester: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Semester',
+    required: true
+  }
 });
 
 exports.model = mongoose.model('StudyProgram', StudyProgramSchema);
