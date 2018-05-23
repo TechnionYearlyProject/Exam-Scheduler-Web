@@ -20,7 +20,11 @@ const ScheduleSchema = new mongoose.Schema({
       type: Schema.ObjectId,
       ref: 'Course'
     },
-    date: {
+    date_a: {
+      type: Date,
+      default: null
+    },
+    date_b: {
       type: Date,
       default: null
     },

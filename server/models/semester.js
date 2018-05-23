@@ -11,11 +11,19 @@ const SemesterModel = new mongoose.Schema({
     type: String,
     required: true
   },
-  start: {
+  start_a: {
     type: Date,
     required: true
   },
-  end: {
+  end_a: {
+    type: Date,
+    required: true
+  },
+  start_b: {
+    type: Date,
+    required: true
+  },
+  end_b: {
     type: Date,
     required: true
   },
