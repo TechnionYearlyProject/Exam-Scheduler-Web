@@ -32,7 +32,6 @@ router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_
 router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
 router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);
-router.post(sem_regex + '/schedule/create', schedule_controller.add_schedule);
 // router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
 
 router.get('/semester/list', semester_controller.semester_list);
