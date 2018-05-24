@@ -22,26 +22,40 @@
       </li>
     </ul>
   </nav>
-  <form id="login_form">
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-      <div class="form-group">
-        <label for="faculty">פקולטה</label>
-        <select class="form-control" id="faculty">
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="password">סיסמה</label>
-        <input type="password" class="form-control" id="password">
-      </div>
-      <div class="form-group">
-        <div class="alert alert-warning" id="error-message">סיסמה שגויה</div>
-        <div class="form-group">
-          <button class="btn">התחבר</button>
+  <div class="row justify-content-center">
+    <div class="col-xs-6">
+      <form id="login_form">
+        <div class='row'>
+          <div class='col-sm-12'>
+            <div class="form-group">
+              <label for="faculty">פקולטה</label>
+              <select class="form-control" id="faculty">
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class='row'>
+          <div class='col-sm-12'>
+            <div class="form-group">
+              <label for="password">סיסמה</label>
+              <input type="password" class="form-control" id="password">
+            </div>
+          </div>
+        </div>
+        <div class='row justify-content-between'>
+          <div class='col-sm-8'>
+            <div class="alert alert-warning" id="error-message">סיסמה שגויה</div>
+          </div>
+          <div class='col-sm-4'>
+            <div class="form-group">
+              <button class="btn float-left">התחבר</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
     </div>
-  </form>
+  </div>
   <script>
     $("#login_form").submit (function (e) {
       e.preventDefault()
