@@ -56,6 +56,10 @@ app.get('/login', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/login.html'));
 });
 
+app.get('/logout', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/logout.html'));
+});
+
 // DEBUG ONLY
 app.get('/debug', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/debug.html'));
