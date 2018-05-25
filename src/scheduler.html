@@ -47,7 +47,43 @@
   $('#toolbar').load('toolbar.html');
   $('#moed_a').load('moed_a.html');
   $('#moed_b').load('moed_b.html');
-  $('#courses').load('datatable.html');
+  $('#courses').load('datatable.html', function () {
+      $('#scheduler_function_caller').click(function(){
+           $("[id^='exam_for_']").remove();
+           $.ajax({url: "/make-schedule", success: function(result){
+                  //console.log(result);
+                  result = JSON.parse(result);
+                  for(var i = 0; i < result.length; i++){
+                      console.log(result[i]);
+                      var day = '#moed_a_day_' + result[i].index;
+                      for (var j = 0; j < result[i].exams.length; j++){
+                          var test = document.createElement("div");
+                          test.id = "exam_for_" + result[i].exams[j]["id"];
+                          test.className = "d-flex flex-wrap test";
+                          //test.style.margin = "2px 1px 2px 1px";
+                          var id = result[i].exams[j]["id"];
+                          var color = "green";
+                          if (id.startsWith("234")){
+                             color = "blue";
+                          } else if (id.startsWith("104")){
+                              color = "red";
+                          }
+                          test.style.backgroundColor = color;
+                          test.style.width = "60px";
+                          test.innerHTML = result[i].exams[j]["id"] + " " + result[i].exams[j]["name"];
+                          $(day).append(test);
+                      }
+                  }
+              }
+          });
+      $("#schedule_clear").click(function(){
+          //$("[id^='moed_a_day_']").remove("[id^='exam_for_']");
+          $("[id^='exam_for_']").remove();
+      })
+      });
+  });
+  console.log("here");
+
 </script>
 </body>
 </html>
