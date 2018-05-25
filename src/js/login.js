@@ -23,7 +23,9 @@ function login() {
   sendRequest('POST', '/api/login', json, function (res) {
     let data = JSON.parse(res);
     if (data.auth) {
+      console.log(data);
       setCookie('token', data.token);
+      setCookie('faculty', data.username);
       window.location.href = "/scheduler";
     } else {
       document.getElementById('error-message').style.display = 'block';
