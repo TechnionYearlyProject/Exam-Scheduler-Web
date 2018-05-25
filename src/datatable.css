@@ -1,0 +1,23 @@
+.mdl-data-table td, .mdl-data-table tr {
+    vertical-align: middle !important;
+    horiz-align: center !important;
+    height: 0px !important;
+    min-height: 0px !important;
+    padding: 2px;
+    padding-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.details-control {
+    padding-right: 8px !important;
+    padding-left: 2px !important;
+
+}
+.sorting_disabled {
+    padding-right: 8px !important;
+    padding-left: 2px !important;
+
+}
+

@@ -1,19 +1,20 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-
-var StudyProgramSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true
-    },
-    faculty: {
-      type: Schema.ObjectId,
-      ref: 'Faculty',
-      required: true
-    },
+const StudyProgramSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  faculty: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Faculty',
+    required: true
+  },
+  semester: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Semester',
+    required: true
   }
-);
+});
 
-module.exports = mongoose.model('StudyProgram', StudyProgramSchema);
+exports.model = mongoose.model('StudyProgram', StudyProgramSchema);

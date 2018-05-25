@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('./config');
-const Faculty = require('../models/faculty');
+const Faculty = require('../models/faculty').model;
 
 exports.login = function (req, res, next) {
   const params = {
@@ -21,7 +21,11 @@ exports.login = function (req, res, next) {
         token: null
       });
     }
-    const token = jwt.sign({id: faculty._id}, config.secret, {expiresIn: 86400});
+    const token_data = {
+      id: faculty._id,
+      name: faculty.name
+    };
+    const token = jwt.sign(token_data, config.secret, {expiresIn: 86400});
     return res.status(200).send({
       auth: true,
       token: token
@@ -48,6 +52,7 @@ exports.verify_token = function (req, res, next) {
       });
     }
     req.faculty_id = decoded.id;
+    req.faculty_name = decoded.name;
     return next();
   });
 };
@@ -57,11 +62,11 @@ exports.verify_token_front = function (req, res, next) {
     return next(); // Verifying disabled, no authorization
   }
   if (!req.cookies.token) {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
-  jwt.verify(req.cookies.token, config.secret, function (err, decoded) {
+  jwt.verify(req.cookies.token, config.secret, function (err) {
     if (err) {
-      res.redirect('/login');
+      return res.redirect('/login');
     }
     return next();
   });

@@ -1,21 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="resources/jquery-3.3.1.js"></script>
-  <link rel="stylesheet" href="resources/bootstrap.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
-  <link rel="stylesheet" href="resources/bootstrap-rtl.css">
-  <script src="resources/bootstrap.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.he.min.js"></script>
-  <link rel="shortcut icon" type="image/png" href="graphics/favicon.ico"/>
-
-  <meta charset="utf-8">
-  <title>Technion Exam Scheduler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css">
+    <script src="resources/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="resources/bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+    <link rel="stylesheet" href="resources/bootstrap-rtl.css">
+    <script src="resources/bootstrap.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.he.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="graphics/favicon.ico"/>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
+    <meta charset="utf-8">
+    <title>Technion Exam Scheduler</title>
 </head>
-<body>
+<body style="overflow-x: hidden;">
 <div id="toolbar"></div>
+<div class="dropdown navbar" style="padding: 0px;">
+    <label class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;">
+        סמסטר אביב תשע"ח
+    </label>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: rgba(255,255,255,0.80); margin-right: 15px; width: 350px; margin-top: -5px;">
+        <a class="dropdown-item" href="#">סמסטר חורף תשע"ח</a>
+        <a class="dropdown-item" href="#">סמסטר קיץ תשע"ז</a>
+        <a class="dropdown-item" href="#">סמסטר אביב תשע"ז</a>
+        <a class="dropdown-item" href="#">סמסטר חורף תשע"ז</a>
+        <a class="dropdown-item" href="#">סמסטר קיץ תשע"ו</a>
+    </div>
+</div>
 <div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 20px;">
   <div class="container-fluid col">
     <div id="courses"></div>
@@ -32,7 +47,7 @@
   $('#toolbar').load('toolbar.html');
   $('#moed_a').load('moed_a.html');
   $('#moed_b').load('moed_b.html');
-  $('#courses').load('courses.html');
+  $('#courses').load('datatable.html');
 </script>
 </body>
 </html>

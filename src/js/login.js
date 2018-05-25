@@ -3,10 +3,10 @@ import { setCookie } from './cookie';
 
 function getFaculties() {
   sendRequest('GET', '/api/faculty/list', null, function (res) {
-    var select = document.getElementById('faculty');
-    var faculties = JSON.parse(res);
-    for (var i in faculties) {
-      var option = document.createElement('option');
+    let select = document.getElementById('faculty');
+    let faculties = JSON.parse(res);
+    for (let i in faculties) {
+      let option = document.createElement('option');
       option.innerHTML = faculties[i].name;
       select.appendChild(option);
     }
@@ -14,16 +14,17 @@ function getFaculties() {
 }
 
 function login() {
-  var name = document.getElementById('faculty').value;
-  var password = document.getElementById('password').value;
-  var json = {"name": name, "password": password};
+  document.getElementById('error-message').style.display = 'none';
+  let name = document.getElementById('faculty').value;
+  let password = document.getElementById('password').value;
+  let json = {"name": name, "password": password};
   sendRequest('POST', '/api/login', json, function (res) {
-    var data = JSON.parse(res);
+    let data = JSON.parse(res);
     if (data.auth) {
       setCookie('token', data.token);
       window.location.href = "/scheduler";
     } else {
-      console.log('Error');
+      document.getElementById('error-message').style.display = 'block';
     }
   })
 }

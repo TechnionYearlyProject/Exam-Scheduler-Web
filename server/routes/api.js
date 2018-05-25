@@ -4,11 +4,11 @@ const faculty_controller = require('../controllers/facultyController');
 const study_program_controller = require('../controllers/studyprogramController');
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
+const semester_controller = require('../controllers/semesterController');
 const auth = require('../auth/authController');
 
-router.get('/', (req, res) => {
-  res.send('api works');
-});
+//
+const sem_regex = '/:year([1-2][0-9]{3})-:semester(winter|spring)';
 
 // User management routes
 
@@ -19,21 +19,22 @@ router.get('/faculty/list', faculty_controller.faculty_list); // Necessary to di
 
 router.all('*', auth.verify_token);
 
-router.get('/program/list', study_program_controller.study_program_list); // All faculties combined
-router.get('/faculty/:id/program/list', study_program_controller.study_program_list_by_faculty); // Specific fac
-router.post('/faculty/:id/program/create', study_program_controller.study_program_create);
-router.delete('/faculty/:id/program/delete', study_program_controller.study_program_delete);
+router.get(sem_regex + '/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty
+// router.get(sem_regex + '/program/list_all', study_program_controller.study_program_list); // All programs
+router.post(sem_regex + '/program/create', study_program_controller.study_program_create);
+router.delete(sem_regex + '/program/delete', study_program_controller.study_program_delete);
 
-router.get('/course/list', course_controller.course_list);//all courses
-router.get('/faculty/:id/course/list',course_controller.faculty_course_list);//faculty courses
-router.post('/faculty/:id/course/create',course_controller.course_create);
-router.delete('/faculty/:id/course/:courseID/delete', course_controller.faculty_course_delete);
-router.get('/course/:courseID', course_controller.course_data);
-router.patch('/course/:courseID/update',course_controller.faculty_course_update);
+router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
+// router.get(sem_regex + '/course/list_all', course_controller.course_list); //all courses
+router.post(sem_regex + '/course/create',course_controller.course_create);
+router.get(sem_regex + '/course/:courseID', course_controller.course_data);
+router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
+router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
-router.get('/faculty/:id/schedule/list', schedule_controller.faculty_schedules);
-router.get('/schedule/:scheduleID',schedule_controller.schedule_data);
-router.get('/schedule/list', schedule_controller.schedule_list);
+router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);
+// router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
+
+router.get('/semester/list', semester_controller.semester_list);
 
 // User management routes
 
@@ -47,5 +48,8 @@ router.all('*', auth.verify_admin);
 
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
+
+router.post('/semester/create', semester_controller.semester_create);
+router.post('/semester/update', semester_controller.semester_update_dates);
 
 module.exports = router;
