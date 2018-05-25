@@ -49,8 +49,7 @@
     </div>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          הפקולטה למדעי המחשב
+        <a id="faculty_name" class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <img src="graphics/taub.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-left:5px;">
@@ -61,5 +60,12 @@
       </li>
     </ul>
   </nav>
+  <script type="module">
+    import {getCookie} from "./js/cookie";
+
+    let user = document.getElementById("faculty_name");
+    user.innerHTML = getCookie('faculty') + user.innerHTML;
+    console.log(user);
+  </script>
 </body>
 </html>

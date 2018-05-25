@@ -101,8 +101,8 @@
         data[i].id = data[i].id.toString();
         delete data[i]._id;
         table.row.add(data[i]);
+        table.draw();
       }
-      table.draw();
     });
   });
 </script>

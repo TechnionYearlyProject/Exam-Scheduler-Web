@@ -28,7 +28,8 @@ exports.login = function (req, res, next) {
     const token = jwt.sign(token_data, config.secret, {expiresIn: 86400});
     return res.status(200).send({
       auth: true,
-      token: token
+      token: token,
+      username: faculty.name
     });
   });
 };
