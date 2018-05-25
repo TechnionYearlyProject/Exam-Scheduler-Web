@@ -10,6 +10,7 @@ const Faculty = require('./server/models/faculty').model;
 const auth = require('./server/auth/authController');
 const config = require('./server/auth/config');
 const bcrypt = require('bcryptjs');
+const schedulerTest = require('./tests/scheduleTest');
 
 mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&replicaSet=globaldb', {
   auth: {
@@ -69,6 +70,10 @@ app.all('*', auth.verify_token_front);
 
 app.get('/scheduler', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/scheduler.html'));
+});
+
+app.get('/make-schedule', function (req, res){
+  schedulerTest.tryToSchedule(req, res);
 });
 
 app.get('/', function (req, res) {
