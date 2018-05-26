@@ -5,106 +5,777 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<input type="text" id="search_box"
-       style="width: 100%; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;"
-       placeholder="חיפוש קורסים...">
-<table id="example" class="mdl-data-table" style="max-width:500px; min-width: 500px; table-layout: fixed">
+<input type="text" id="search_box" style="width: 439px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+<table id="example" class="mdl-data-table" style="max-width:420px; min-width: 420px; table-layout: fixed">
     <thead style="padding-left: 0px;">
     <tr>
         <th></th>
-        <th>ID</th>
-        <th>שם</th>
-        <th>העדפה</th>
+        <th style="padding-left: 0px">מספר</th>
+        <th>שם הקורס</th>
+        <th style="padding-left: 0px">העדפה</th>
+        <th style="padding-left: 0px">למידה</th>
     </tr>
     </thead>
 </table>
 <script type="module">
-  import {sendRequest} from "./js/request";
+    function format ( d ) {
+        return '\n' +
+            '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">\n' +
+            '    <tr>\n' +
+            '        <td>שבץ בלוח המבחנים:</td>\n' +
+            '        <td>\n' +
+            '            <label class="switch" style="margin-bottom: -2px; display: inline-block">\n' +
+            '                <input type="checkbox" checked>\n' +
+            '                <span class="slider round"></span>\n' +
+            '            </label>\n' +
+            '        </td>\n' +
+            '    </tr>\n' +
+            '    <tr>\n' +
+            '        <td>נקודות זכות:</td>\n' +
+            '        <td>3.5</td>\n' +
+            '    </tr>\n' +
+            '    <tr>\n' +
+            '        <td>פקולטה:</td>\n' +
+            '        <td>מדעי המחשב</td>\n' +
+            '    </tr>\n' +
+            '    <tr>\n' +
+            '        <td>ניהול התנגשויות:</td>\n' +
+            '        <td>\n' +
+            '            <button type="button" class="btn btn-secondary btn-sm" style="">\n' +
+            '                <i class="fas fa-link"></i>\n' +
+            '            </button>\n' +
+            '        </td>\n' +
+            '    </tr>\n' +
+            '    <tr>\n' +
+            '        <td>מועד שיבוץ:</td>\n' +
+            '        <td>\n' +
+            '            <div class="btn-group btn-group-toggle" data-toggle="buttons">\n' +
+            '                <label class="btn btn-secondary active btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
+            '                    <input type="radio" name="options" id="option1" autocomplete="off">\n' +
+            '                    <i class="fas fa-arrow-right"></i>\n' +
+            '                </label>\n' +
+            '                <label class="btn btn-secondary btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
+            '                    <input type="radio" name="options" id="option2" autocomplete="off" checked>\n' +
+            '                    <i class="fas fa-minus"></i>\n' +
+            '                </label>\n' +
+            '                <label class="btn btn-secondary btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
+            '                    <input type="radio" name="options" id="option3" autocomplete="off">\n' +
+            '                    <i class="fas fa-arrow-left"></i>\n' +
+            '                </label>\n' +
+            '            </div>\n' +
+            '        </td>\n' +
+            '    </tr>\n' +
+            '</table>';
+    }
+    $(document).ready(function() {
+        var table = $('#example').DataTable( {
+            scrollY: 500,
+            paging: false,
+            info: false,
+            "dom": 'lrt',
+            "data": testdata.data,
+            "columnDefs": [
+                { "width": "25px", "targets": 0 },
+                { "width": "75px", "targets": 1 },
+                { "width": "75px", "targets": 3 },
+                { "width": "70px", "targets": 4 },
 
-  function format(d) {
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-    '<tr>' +
-    '<td>ניהול התנגשויות</td>' +
-    '<td>' + d.name + '</td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>סמסטרים שנלקח</td>' +
-    '<td></td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>פקולטה מנהלת</td>' +
-    '<td>כמות נקודות</td>' +
-    '<td>האם לשבץ</td>' +
-    '</tr>' +
-    '</table>';
-  }
+            ],
+            "columns": [
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": '',
+                    "render": function () {
+                        return '<i class="fas fa-angle-down"></i>';
+                    },
+                },
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "pref" },
+                { "data": "credit_points" }
+            ],
+            "order": [[1, 'asc']]
 
-  $(document).ready(function () {
-    let table = $('#example').DataTable({
-      scrollY: 500,
-      paging: false,
-      info: false,
-      "dom": 'lrt',
-      "columns": [
-        {
-          "className": 'details-control',
-          "orderable": false,
-          "width": "15px",
-          "defaultContent": '',
-          "render": function () {return '<i class="fas fa-angle-down"></i>'}
-        },
-        {
-          "data": "id",
-          "width": "50px"
-        },
-        {
-          "data": "name",
-          "width": "100px"
-        },
-        {
-          "data": "credit_point",
-          "width": "100px"
-        },
-      ],
-      "order": [[1, 'asc']]
+        } );
+        $('#example tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fas");
+            var row = table.row( tr );
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-angle-up');
+                tdi.first().addClass('fa-angle-down');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-angle-down');
+                tdi.first().addClass('fa-angle-up');
+            }
+        } );
+        $('#search_box').keyup(function(){
+            table.search($(this).val()).draw() ;
+        })
+    } );
+    import {sendRequest} from "./js/request";
+    var req1 = sendRequest("get", "/api/2018-winter/course/list", null, function(res) {
+        console.log(res);
+        return res;
     });
+    console.log(req1);
+    var testdata = {
+        "data": [
+            {
+                "id":"104031",
+                "name":"חשבון אינפיניטסימלי 1 מ'",
+                "credit_points":"5.5",
+                "pref" :"אוטומטי"
 
-    $('#example tbody').on('click', 'td.details-control', function () {
-      var tr = $(this).closest('tr');
-      var tdi = tr.find("i.fas");
-      var row = table.row(tr);
+            },
+            {
+                "id":"104166",
+                "name":"אלגברה א'",
+                "credit_points":"5.5",
+                "pref" :"אוטומטי"
 
-      if (row.child.isShown()) {
-        // This row is already open - close it
-        row.child.hide();
-        tr.removeClass('shown');
-        tdi.first().removeClass('fa-angle-up');
-        tdi.first().addClass('fa-angle-down');
-      }
-      else {
-        // Open this row
-        row.child(format(row.data())).show();
-        tr.addClass('shown');
-        tdi.first().removeClass('fa-angle-down');
-        tdi.first().addClass('fa-angle-up');
-      }
-    });
+            },
+            {
+                "id":"324033",
+                "name":"אנגלית טכנית- מתקדמים ב'",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
 
-    $('#search_box').keyup(function () {
-      table.search($(this).val()).draw();
-    })
+            },
+            {
+                "id":"104032",
+                "name":"חשבון אינפיניטסימלי 2 מ'",
+                "credit_points":"5.0",
+                "pref" :"אוטומטי"
 
-    sendRequest("get", "/api/2018-winter/course/list", null, function (res) {
-      let data = JSON.parse(res);
-      for (let i in data) {
-        data[i].credit_point = data[i].credit_point.$numberDecimal.toString();
-        data[i].id = data[i].id.toString();
-        delete data[i]._id;
-        table.row.add(data[i]);
-        table.draw();
-      }
-    });
-  });
+            },
+            {
+                "id":"114071",
+                "name":"פיזיקה 1מ'",
+                "credit_points":"3.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"114074",
+                "name":"פיזיקה 1פ'",
+                "credit_points":"5.0",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"094323",
+                "name":"מערכות דינמיות לינאריוות",
+                "credit_points":"3.5",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"094313",
+                "name":"מודלים דטרמניסטיים בחקר ביצועים",
+                "credit_points":"3.5",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"094314",
+                "name":"מודלים סטוכסטיים בחקר ביצועים",
+                "credit_points":"3.5",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"094423",
+                "name":"מבוא לסטטיסטיקה",
+                "credit_points":"3.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"094412",
+                "name":"הסתברות 1 מ'",
+                "credit_points":"4.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"104134",
+                "name":"אלגברה מודרנית ח",
+                "credit_points":"2.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234111",
+                "name":"מבוא למדעי המחשב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234112",
+                "name":"מבוא למחשב - שפת סי",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234114",
+                "name":"מבוא למדעי המחשב מ'",
+                "credit_points":"4.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234117",
+                "name":"מבוא למדעי המחשב ח'",
+                "credit_points":"4.0",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"234118",
+                "name":"ארגון ותכנות המחשב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234122",
+                "name":"מבוא לתכנות מערכות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234123",
+                "name":"מערכות הפעלה",
+                "credit_points":"4.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234125",
+                "name":"אלגוריתמים נומריים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234127",
+                "name":"מבוא למחשב בשפת מטלאב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234141",
+                "name":"קומבינטוריקה למדעי המחשב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234145",
+                "name":"מערכות ספרתיות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234218",
+                "name":"מבני נתונים 1",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234247",
+                "name":"אלגוריתמים 1",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234262",
+                "name":"תכן לוגי",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234267",
+                "name":"מבנה מחשבים ספרתיים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234293",
+                "name":"לוגיקה ותורת הקבוצות למדעי המחשב",
+                "credit_points":"4.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234311",
+                "name":"פרויקט שנתי בהנדסת תוכנה-שלב א",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234313",
+                "name":"פרויקט תעשיתי",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234319",
+                "name":"שפות תכנות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"234322",
+                "name":"מערכות אחסון מידע",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234325",
+                "name":"גרפיקה ממוחשבת",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234326",
+                "name":"פרויקט בגרפיקה ממוחשבת ה'",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"234329",
+                "name":"פרויקט  בעיבוד וניתוח תמונות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236200",
+                "name":"עיבוד מידע סטטיסטי",
+                "credit_points":"4.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236268",
+                "name":"ארכיטקטורת מעבדים בגישה בונה",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236304",
+                "name":"לוגיקה למדעי המחשב 2",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236309",
+                "name":"מבוא לתורת הצפינה",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236313",
+                "name":"תורת הסיבוכיות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236315",
+                "name":"שיטות אלגבריות במדעי המחשב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236323",
+                "name":"פרויקט בעיבוד נתונים מ",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236328",
+                "name":"פרויקט בגרפיקה ממוחשבת מ",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236332",
+                "name":"האינטרנט של הדברים - טכנולוגיות ויישומים",
+                "credit_points":"2.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236333",
+                "name":"פרויקט באינטרנט של הדברים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236334",
+                "name":"מבוא לרשתות מחשבים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236336",
+                "name":"פתרון נומרי של משוואות דיפ חלקיות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236340",
+                "name":"פרויקט בתקשורת מחשבים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236341",
+                "name":"תקשורת באינטרנט",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236342",
+                "name":"מבוא לאימות תוכנה",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236343",
+                "name":"תורת החישוביות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236349",
+                "name":"פרויקט באבטחת מידע",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236350",
+                "name":"הגנה במערכות מתוכנתות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236351",
+                "name":"מערכות מבוזרות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236353",
+                "name":"אוטומטים ושפות פורמליות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236360",
+                "name":"תורת הקומפילציה",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236363",
+                "name":"מערכות מסד נתונים",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"236370",
+                "name":"תכנות מקבילי ומבוזר",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+            },
+            {
+                "id":"236371",
+                "name":"פרויקט בתכנות מקבילי ומבוזר",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236381",
+                "name":"פרויקט ב-וי.אל.אס.אי. ב'",
+                "credit_points":"4.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236499",
+                "name":"פרויקט בחומות אש",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236501",
+                "name":"מבוא לבינה מלאכותית",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236503",
+                "name":"פרויקט תכנות מתקדם במדעי המחשב 1",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236508",
+                "name":"קריפטוגרפיה וסיבוכיות",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236521",
+                "name":"אלגוריתמי קירוב",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236523",
+                "name":"מבוא לביואינפורמטיקה",
+                "credit_points":"3.0",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236524",
+                "name":"פרויקט בביואינפורמטיקה",
+                "credit_points":"2.5",
+                "pref" :"אוטומטי"
+
+            },
+            {
+                "id":"236601",
+                "name":"נושאים מתקדמים במ'מ 1",
+                    "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236602",
+        "name":"נושאים מתקדמים במ'מ 2",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236603",
+        "name":"נושאים מתקדמים במ'מ 3",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236604",
+        "name":"נושאים מתקדמים במ'מ 4",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236605",
+        "name":"נושאים מתקדמים במ'מ 5",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236607",
+        "name":"נושאים מתקדמים במ'מ 7",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236646",
+        "name":"נושאים מתקדמים בתאוריה של מדעי המחשב ה",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236703",
+        "name":"תכנות מונחה עצמים",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+    },
+    {
+        "id":"236716",
+        "name":"מודלים גיאומטריים במערכות תיב'מ",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236754",
+        "name":"פרויקט במערכות נבונות",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236757",
+        "name":"פרויקט במערכות לומדות",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236801",
+        "name":"סמינר במדעי המחשב 1",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236802",
+        "name":"סמינר במדעי המחשב 2",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236803",
+        "name":"סמינר במדעי המחשב 3",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236804",
+        "name":"סמינר במדעי המחשב 4",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236805",
+        "name":"סמינר במדעי המחשב 5",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236818",
+        "name":"סמינר בביואינפורמטיקה",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236826",
+        "name":"סמינר במסדי נתונים",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236832",
+        "name":"סמינר בתכנות מקבילי",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236860",
+        "name":"עיבוד תמונות דיגיטלי",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236861",
+        "name":"ראיה חישובית גאומטרית",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236862",
+        "name":"ייצוגים דלילים ויתירים ויישומיהם בעיבוד תמונות ואותות",
+        "credit_points":"2.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236873",
+        "name":"ראיה ממוחשבת",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236874",
+        "name":"פרויקט בראיה ממוחשבת",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"236927",
+        "name":"מבוא לרובוטיקה",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    },
+    {
+        "id":"238902",
+        "name":"סמינריון מחקר בקומבינטוריקה ותורת הגרפים",
+        "credit_points":"3.0",
+        "pref" :"אוטומטי"
+
+    }
+
+    ]
+    };
+
 </script>
 
 </body>
