@@ -3,7 +3,6 @@ import { setCookie } from './cookie';
 
 function getFaculties() {
   sendRequest('GET', '/api/faculty/list', null, function (res) {
-    console.log('Hmm');
     let select = document.getElementById('faculty');
     let faculties = JSON.parse(res);
     for (let i in faculties) {
@@ -18,8 +17,7 @@ function login() {
   document.getElementById('error-message').style.display = 'none';
   let name = document.getElementById('faculty').value;
   let password = document.getElementById('password').value;
-  //let json = {"name": name, "password": password};
-  let json = {"name": "Administrator", "password": "Aa123456"};
+  let json = {"name": name, "password": password};
   sendRequest('POST', '/api/login', json, function (res) {
     let data = JSON.parse(res);
     if (data.auth) {
@@ -33,6 +31,5 @@ function login() {
   })
 }
 
-console.log("AAnd here");
 window.addEventListener('load', getFaculties, false);
 window.addEventListener('submit', login, false);
