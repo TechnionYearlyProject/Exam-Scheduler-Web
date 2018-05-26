@@ -8,9 +8,18 @@
   padding-left: 2px;
   padding-right: 2px;
   font-size: 10px;
-  border-radius: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  border-radius: 2px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 70px;
+  min-width: 70px;
+  text-align: right;
+}
+
+.arrow:hover {
+  color: #455A64;
+  cursor: pointer;
 }
 
 col {
