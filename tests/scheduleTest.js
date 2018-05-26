@@ -25,7 +25,7 @@ exports.tryToSchedule = function (req, res){
 //       for (var i = 0; i < courses.length; i++){
 //           console.log(courses[i]);
 //       }
-            const testingInstance = new Scheduler(new Date(2018,3,28), new Date(2018, 5, 7));
+            const testingInstance = new Scheduler(new Date(2018,4,28), new Date(2018,6,4));
             testingInstance.schedule(courses);
             console.log(testingInstance.getResult());
             console.log('Done!');
