@@ -26,16 +26,9 @@
     {
         x.style.visibility = 'hidden';
     }
-    $('.datepicker').datepicker({
-        format: "dd/mm/yyyy",
-        language: "he",
-        orientation: "auto",
-        autoclose: true,
-        fontSize: "8"
-    });
     var map_a = new Map();
-    var start = new Date(2018,6,10);
-    var end = new Date(2018,7,13);
+    var start = new Date(2018,9,3);
+    var end = new Date(2018,9,19);
     if (start.getDay() == 6) {
         start.setDate(start.getDate() + 1);
     }
@@ -46,7 +39,7 @@
     var current = new Date(start.getTime() - start.getDay()*86400000);
     var row = document.createElement("div");
     row.className = "row";
-    row.style = "height: 90px";
+    row.style = "height: 113px";
     while (current < start) {
         var day = document.createElement("div");
         day.className = "col day";
@@ -75,7 +68,7 @@
             var test = document.createElement("span");
             test.className = "d-flex flex-wrap test";
             test.style = "white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;";
-            test.innerHTML = "יארגיררירקאואטוטאאוראוקאו";
+            test.innerHTML = "אלגוריתמים";
             this.appendChild(test);
         };
         day.onmouseover= function(){
@@ -117,7 +110,7 @@
             schedule.appendChild(row);
             row = document.createElement("div");
             row.className = "row";
-            row.style = "height: 90px";
+            row.style = "height: 113px";
         }
     }
     while (current.getDay() <= 5) {
@@ -134,7 +127,7 @@
             schedule.appendChild(row);
             row = document.createElement("div");
             row.className = "row";
-            row.style = "height: 90px";
+            row.style = "height: 113px";
         }
         current.setDate(current.getDate() + 1);
     }
