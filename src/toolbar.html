@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="toolbar.css">
   <meta charset="UTF-8">
 </head>
 <body>
@@ -49,7 +50,7 @@
     </div>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a id="faculty_name" class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a id="faculty_name" class="nav-link" href="#" style="font-weight: normal; font-size: 16px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <img src="graphics/taub.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-top: 4px; margin-left:5px; background-color: rgba(255,255,255,0.80)">
@@ -62,9 +63,9 @@
   </nav>
   <script type="module">
     import {getCookie} from "./js/cookie";
-
     let user = document.getElementById("faculty_name");
-    user.innerHTML = getCookie('faculty') + user.innerHTML;
+    //user.innerHTML = getCookie('faculty') + user.innerHTML; dorbartov: changed for poc
+    user.innerHTML = "הפקולטה למדעי המחשב" + user.innerHTML;
     console.log(user);
   </script>
 </body>
