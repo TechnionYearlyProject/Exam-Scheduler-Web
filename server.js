@@ -72,6 +72,10 @@ app.get('/scheduler', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/scheduler.html'));
 });
 
+app.get('/edit_email', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/edit_email.html'));
+});
+
 app.get('/make-schedule', function (req, res){
   schedulerTest.tryToSchedule(req, res);
 });

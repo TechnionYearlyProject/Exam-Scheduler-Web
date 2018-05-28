@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="resources/jquery-3.3.1.js"></script>
+  <link rel="stylesheet" href="resources/bootstrap.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css"
+        integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+  <link rel="stylesheet" href="resources/bootstrap-rtl.css">
+  <script src="resources/bootstrap.js"></script>
+  <meta charset="utf-8">
+  <title>Technion Exam Scheduler</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px;">
+  <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true"
+         aria-expanded="false">
+        Guest
+        <img src="graphics/guest.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
+      </a>
+    </li>
+  </ul>
+</nav>
+<div class="row justify-content-center">
+  <div class="col-xs-6">
+    <form id="edit_email_form">
+      <div class='form-group row justify-content-between'>
+        <label for="current_mail" class='col-sm-2 col-form-label'>מייל עדכני</label>
+        <div class='col-sm-10'>
+            <input type="text" readonly class="form-control-plaintext" id="current_mail">
+        </div>
+      </div>
+      <script type="module">
+        import {sendRequest} from "./js/request";
+
+        sendRequest('get', '/api/faculty/email', null, function (res) {
+          console.log(res);
+          let data = JSON.parse(res);
+          let current = document.getElementById('current_mail');
+          current.value = data.email;
+        });
+      </script>
+      <div class='form-group row justify-content-between'>
+        <label for="new_email" class="col-sm-2 col-form-label">מייל חדש</label>
+        <div class='col-sm-10'>
+          <input class="form-control 'col-sm-10" id="new_email">
+        </div>
+      </div>
+      <div class='row form-group justify-content-between'>
+        <div class='col-sm-4'>
+          <button class="btn float-left">עדכן מייל</button>
+        </div>
+        <div class='col-sm-8'>
+          <div class="alert alert-error" id="error-message">מייל לא תקין</div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+<script>
+  $("#login_form").submit(function (e) {
+    e.preventDefault();
+  });
+  // $("#error-message").hide()
+</script>
+</body>
+</html>
