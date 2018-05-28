@@ -18,32 +18,32 @@ mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&re
     password: '7ls6FfIEPsREaxQZHfaIu5xTKlPubw0QgmFwvKS0WRhNsUQBQtCZGGpSu3Fz07mYKmsRWjsuo6AvbzMAhvMYqw=='
   }
 })
-  .then(function () {
-    console.log('connection successful');
-    Faculty.findOne({name: config.admin_name}, function (err, admin) {
-      if (err) {
-        return next(err);
-      }
-      if (!admin) {
-        console.log('Admin user is missing.\nCreating default admin user...');
-        const hash = bcrypt.hashSync(config.admin_default_password, 12);
-        const admin_user = {
-          name: config.admin_name,
-          email: config.admin_default_mail,
-          password: hash
-        };
-        Faculty.create(admin_user, function (err) {
-          if (err) {
-            return next(err);
-          }
-          console.log('Admin user created successfully.');
-        });
-      } else {
-        console.log('Admin user exists.');
-      }
-    })
+.then(function () {
+  console.log('connection successful');
+  Faculty.findOne({name: config.admin_name}, function (err, admin) {
+    if (err) {
+      return next(err);
+    }
+    if (!admin) {
+      console.log('Admin user is missing.\nCreating default admin user...');
+      const hash = bcrypt.hashSync(config.admin_default_password, 12);
+      const admin_user = {
+        name: config.admin_name,
+        email: config.admin_default_mail,
+        password: hash
+      };
+      Faculty.create(admin_user, function (err) {
+        if (err) {
+          return next(err);
+        }
+        console.log('Admin user created successfully.');
+      });
+    } else {
+      console.log('Admin user exists.');
+    }
   })
-  .catch((err) => console.error(err));
+})
+.catch((err) => console.error(err));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -74,6 +74,10 @@ app.get('/scheduler', function (req, res) {
 
 app.get('/edit_email', function (req, res) {
   res.sendFile(path.join(__dirname, 'src/edit_email.html'));
+});
+
+app.get('/edit_password', function (req, res) {
+  res.sendFile(path.join(__dirname, 'src/edit_password.html'));
 });
 
 app.get('/make-schedule', function (req, res){
