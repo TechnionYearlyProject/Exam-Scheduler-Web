@@ -16,7 +16,6 @@ exports.login = function (req, res, next) {
     }
     const valid = bcrypt.compareSync(req.body.password, faculty.password);
     if (!valid) {
-      console.log("not valid");
       return res.status(401).send({
         auth: false,
         token: null

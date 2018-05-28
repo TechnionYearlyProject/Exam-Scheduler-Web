@@ -21,38 +21,24 @@
       </li>
     </ul>
   </nav>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center " style="margin-top: 40px">
     <div class="col-xs-6">
       <form id="login_form">
-        <div class='row'>
-          <div class='col-sm-12'>
-            <div class="form-group">
-              <label for="faculty">פקולטה</label>
-              <select class="form-control" id="faculty">
-              </select>
-            </div>
-          </div>
+        <div class="form-group row">
+          <label for="faculty" class="col-sm-3 col-form-label" style="text-align: right">פקולטה</label>
+          <select class="form-control col-sm-9" id="faculty"></select>
+        </div>
+        <div class="form-group row">
+          <label for="password" class="col-sm-3 col-form-label" style="text-align: right">סיסמה</label>
+          <input type="password" class="form-control col-sm-9" id="password">
         </div>
         <div class='row'>
-          <div class='col-sm-12'>
-            <div class="form-group">
-              <label for="password">סיסמה</label>
-              <input type="password" class="form-control" id="password">
-            </div>
-          </div>
+            <div class="alert alert-warning col-sm-12" id="error-message" style="text-align: right">סיסמה שגויה.</div>
         </div>
-        <div class='row justify-content-between'>
-          <div class='col-sm-8'>
-            <div class="alert alert-warning" id="error-message">סיסמה שגויה</div>
-          </div>
-          <div class='col-sm-4'>
-            <div class="form-group">
-              <button class="btn float-left">התחבר</button>
-            </div>
-          </div>
+        <div class='row'>
+          <button class="btn form-group">התחבר</button>
         </div>
       </form>
-
     </div>
   </div>
   <script type="module">

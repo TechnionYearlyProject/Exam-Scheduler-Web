@@ -23,14 +23,12 @@
     </li>
   </ul>
 </nav>
-<div class="row justify-content-center">
+<div class="row justify-content-center" style="margin-top: 40px">
   <div class="col-xs-6">
     <form id="edit_email_form">
       <div class='form-group row justify-content-between'>
-        <label for="current_mail" class='col-sm-2 col-form-label'>מייל עדכני</label>
-        <div class='col-sm-10'>
-            <input type="text" readonly class="form-control-plaintext" id="current_mail">
-        </div>
+        <label for="current_mail" class='col-sm-3 col-form-label' style="text-align: right">מייל עדכני</label>
+        <input type="text" readonly class="form-control-plaintext col-sm-9" id="current_mail">
       </div>
       <script type="module">
         import {sendRequest} from "./js/request";
@@ -43,18 +41,15 @@
         });
       </script>
       <div class='form-group row justify-content-between'>
-        <label for="new_email" class="col-sm-2 col-form-label">מייל חדש</label>
-        <div class='col-sm-10'>
-          <input class="form-control 'col-sm-10" id="new_email">
-        </div>
+        <label for="new_email" class="col-sm-3 col-form-label" style="text-align: right">מייל חדש</label>
+        <input class="form-control col-sm-9" id="new_email">
       </div>
-      <div class='row form-group justify-content-between'>
-        <div class='col-sm-4'>
-          <button class="btn float-left">עדכן מייל</button>
-        </div>
-        <div class='col-sm-8'>
-          <div class="alert alert-error" id="error-message">מייל לא תקין</div>
-        </div>
+      <div class="row">
+        <div class="alert alert-danger col-sm-12" id="error-message" style="text-align: right">המייל המוקלד לא תקין.</div>
+      </div>
+      <div class='row justify-content-between'>
+        <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
+        <button class="btn form-group float-left">עדכן מייל</button>
       </div>
     </form>
 
@@ -64,7 +59,7 @@
   $("#login_form").submit(function (e) {
     e.preventDefault();
   });
-  // $("#error-message").hide()
+  $("#error-message").hide()
 </script>
 </body>
 </html>
