@@ -19,6 +19,8 @@ router.get('/faculty/list', faculty_controller.faculty_list); // Necessary to di
 
 router.all('*', auth.verify_token);
 
+router.get('/faculty/name', faculty_controller.get_name);
+router.get('/faculty/email', faculty_controller.get_email);
 router.get(sem_regex + '/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty
 // router.get(sem_regex + '/program/list_all', study_program_controller.study_program_list); // All programs
 router.post(sem_regex + '/program/create', study_program_controller.study_program_create);

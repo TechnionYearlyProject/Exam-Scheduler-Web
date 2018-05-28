@@ -40,8 +40,28 @@ exports.faculty_delete = function (req, res, next) {
   });
 };
 
+exports.get_name = function (req, res, next) {
+  Faculty.findOne({_id: req.faculty_id})
+  .then((faculty) => {
+    return res.json({email: faculty.name});
+  })
+  .catch(err => {
+    next(err);
+  });
+};
+
+exports.get_email = function (req, res, next) {
+  Faculty.findOne({_id: req.faculty_id})
+  .then((faculty) => {
+    return res.json({email: faculty.email});
+  })
+  .catch(err => {
+    next(err);
+  });
+};
+
 exports.faculty_update_mail = function (req, res, next) {
-  const conditions = {username: req.user_id};
+  const conditions = {_id: req.faculty_id};
   const update = {email: req.body.email};
   Faculty.findOneAndUpdate(conditions, update)
   .then(() => {
@@ -53,7 +73,7 @@ exports.faculty_update_mail = function (req, res, next) {
 };
 
 exports.faculty_update_password = function (req, res, next) {
-  const conditions = {username: req.user_id};
+  const conditions = {_id: req.faculty_id};
   if (req.body.new_password != req.body.retype_new_password) {
     return req.status(400).send('Passwords are not the same.');
   }
