@@ -34,7 +34,6 @@
         import {sendRequest} from "./js/request";
 
         sendRequest('get', '/api/faculty/email', null, function (res) {
-          console.log(res);
           let data = JSON.parse(res);
           let current = document.getElementById('current_mail');
           current.value = data.email;
@@ -45,21 +44,38 @@
         <input class="form-control col-sm-9" id="new_email">
       </div>
       <div class="row">
-        <div class="alert alert-danger col-sm-12" id="error-message" style="text-align: right">המייל המוקלד לא תקין.</div>
+        <div class="alert alert-danger col-sm-12" id="error-message" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
       </div>
       <div class='row justify-content-between'>
         <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
-        <button class="btn form-group float-left">עדכן מייל</button>
+        <button type="submit" class="btn form-group float-left">עדכן מייל</button>
       </div>
     </form>
 
   </div>
 </div>
-<script>
-  $("#login_form").submit(function (e) {
+<script type="module">
+  import {sendRequest} from "./js/request";
+
+  function update_email() {
+    let alert =  document.getElementById('error-message');
+    let email = document.getElementById('new_email').value;
+    if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+      alert.style.display = 'block';
+    } else {
+      alert.style.display = 'none';
+      let json = {"email": email};
+      console.log(json);
+      sendRequest('put', '/api/update_email', json, function () {
+        window.location.href = "/scheduler";
+      })
+    }
+  }
+
+  $("#edit_email_form").submit(function (e) {
     e.preventDefault();
+    update_email()
   });
-  $("#error-message").hide()
 </script>
 </body>
 </html>

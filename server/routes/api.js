@@ -41,7 +41,7 @@ router.get('/semester/list', semester_controller.semester_list);
 // User management routes
 
 // Update user email
-router.patch('/update_email', faculty_controller.faculty_update_mail);
+router.put('/update_email', faculty_controller.faculty_update_mail);
 router.patch('/update_password', faculty_controller.faculty_update_password);
 
 // Following routes require admin user
