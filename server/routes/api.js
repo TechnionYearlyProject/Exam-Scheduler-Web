@@ -42,7 +42,7 @@ router.get('/semester/list', semester_controller.semester_list);
 
 // Update user email
 router.put('/update_email', faculty_controller.faculty_update_mail);
-router.patch('/update_password', faculty_controller.faculty_update_password);
+router.put('/update_password', faculty_controller.faculty_update_password);
 
 // Following routes require admin user
 

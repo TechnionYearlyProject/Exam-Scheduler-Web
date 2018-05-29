@@ -33,7 +33,7 @@
           <input type="password" class="form-control col-sm-9" id="password">
         </div>
         <div class='row'>
-            <div class="alert alert-warning col-sm-12" id="error-message" style="text-align: right">סיסמה שגויה.</div>
+            <div class="alert alert-warning col-sm-12" id="error-message" style="text-align: right; display: none">סיסמה שגויה.</div>
         </div>
         <div class='row'>
           <button class="btn form-group">התחבר</button>
@@ -76,14 +76,11 @@
     }
 
     window.addEventListener('load', getFaculties, false);
-    window.addEventListener('submit', login, false);
 
     $("#login_form").submit (function (e) {
       e.preventDefault();
       login();
     });
-
-    $("#error-message").hide()
   </script>
 </body>
 </html>
