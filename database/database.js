@@ -4,17 +4,19 @@ const config = require('../server/auth/config');
 const db_config = require('./database_config');
 const Mockgoose = require('mockgoose').Mockgoose;
 const mockgoose = new Mockgoose(mongoose);
+const debug = require('debug')('exam-scheduler:server');
 
 function init_admin() {
   Faculty.findOne({name: config.admin_default.name})
   .then(admin => {
     if (!admin) {
-      console.log('Admin user is missing.\nCreating default admin user...');
+      debug('Admin user is missing.');
+      debug('Creating default admin user...');
       Faculty.create(config.admin_default)
-      .then(() => console.log('Admin user created successfully.'))
+      .then(() => debug('Admin user created successfully.'))
       .catch(err => console.error(err));
     } else {
-      console.log('Admin user exists.');
+      debug('Admin user exists.');
     }
   })
   .catch(err => console.error(err));
@@ -26,7 +28,7 @@ exports.open = async function () {
     await mongoose.connect("mongodb://localhost/exam-scheduler-test");
   } else {
     await mongoose.connect(db_config.uri, db_config.options);
-    console.log('Connection to MongoDB database successful.');
+    debug('Connection to MongoDB database successful.');
     init_admin();
   }
 };

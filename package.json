@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "test": "NODE_ENV=test mocha --timeout 120000"
+    "start": "cross-env DEBUG=exam-scheduler:* node ./bin/www",
+    "test": "cross-env NODE_ENV=test mocha --timeout 120000"
   },
   "private": true,
   "dependencies": {
@@ -12,9 +12,11 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "core-js": "^2.5.6",
+    "cross-env": "^5.1.6",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.1.2",
+    "morgan": "^1.9.0",
     "npm": "^6.1.0",
     "rxjs": "^5.5.11",
     "xml2js": "^0.4.19",
@@ -25,6 +27,7 @@
     "@types/node": "^6.0.111",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "debug": "^3.1.0",
     "mocha": "^5.2.0",
     "mockgoose": "^7.3.5"
   }

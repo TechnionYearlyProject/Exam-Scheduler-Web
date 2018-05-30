@@ -1,7 +1,7 @@
 # Exam-Scheduler-Web
 Old version of the project: [link](https://github.com/TechnionYearlyProject/Exam-Scheduler)
 ## Installation instruction
-First, make sure [Node.js](https://nodejs.org/en/)is installed on your machine.
+First, make sure [Node.js](https://nodejs.org/en/) is installed on your machine.
 
 Then, clone the repository using your preferred IDE or by using the command:
 ```bash
