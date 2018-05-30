@@ -4,4 +4,4 @@ node_js:
 services:
   - mongodb
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 35c89a9e-9790-4392-8a28-2eed4c0e4916
+  - bash <(curl -s https://codecov.io/bash)

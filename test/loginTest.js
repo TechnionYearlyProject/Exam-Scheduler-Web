@@ -7,7 +7,6 @@ describe('Test 1', () => {
   after(async () => await db.close());
 
   it('test something', done => {
-    console.log('123');
     done();
   });
 

@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env DEBUG=exam-scheduler:* node ./bin/www",
-    "test": "cross-env NODE_ENV=test mocha --timeout 120000"
+    "test": "cross-env NODE_ENV=test nyc mocha --timeout 120000",
+    "coverage": "nyc report --reporter=lcov > coverage.lcov"
   },
   "private": true,
   "dependencies": {
@@ -27,8 +28,10 @@
     "@types/node": "^6.0.111",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "codecov": "^3.0.2",
     "debug": "^3.1.0",
     "mocha": "^5.2.0",
-    "mockgoose": "^7.3.5"
+    "mockgoose": "^7.3.5",
+    "nyc": "^11.8.0"
   }
 }
