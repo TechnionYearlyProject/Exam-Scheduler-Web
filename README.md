@@ -1,5 +1,6 @@
 # Exam-Scheduler-Web
 [![Build Status](https://travis-ci.org/TechnionYearlyProject/Exam-Scheduler-Web.svg?branch=master)](https://travis-ci.org/TechnionYearlyProject/Exam-Scheduler-Web)
+[![codecov](https://codecov.io/gh/TechnionYearlyProject/Exam-Scheduler-Web/branch/master/graph/badge.svg)](https://codecov.io/gh/TechnionYearlyProject/Exam-Scheduler-Web)
 
 Old version of the project: [link](https://github.com/TechnionYearlyProject/Exam-Scheduler)
 ## Installation instruction
