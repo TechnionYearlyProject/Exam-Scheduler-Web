@@ -1,4 +1,6 @@
 # Exam-Scheduler-Web
+[![Build Status](https://travis-ci.org/TechnionYearlyProject/Exam-Scheduler-Web.svg?branch=master)](https://travis-ci.org/TechnionYearlyProject/Exam-Scheduler-Web)
+
 Old version of the project: [link](https://github.com/TechnionYearlyProject/Exam-Scheduler)
 ## Installation instruction
 First, make sure [Node.js](https://nodejs.org/en/) is installed on your machine.
