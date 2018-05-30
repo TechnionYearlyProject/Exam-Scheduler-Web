@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env DEBUG=exam-scheduler:* node ./bin/www",
-    "test": "cross-env NODE_ENV=test nyc mocha --timeout 120000",
-    "coverage": "nyc report --reporter=lcov > coverage.lcov"
+    "test": "cross-env NODE_ENV=test mocha --timeout 120000",
   },
   "private": true,
   "dependencies": {
