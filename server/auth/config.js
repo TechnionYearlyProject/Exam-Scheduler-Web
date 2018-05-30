@@ -1,7 +1,11 @@
+const bcrypt = require('bcryptjs');
+
 module.exports = {
   enable: true,
   secret: 'darksideofthemoon',
-  admin_name: 'Administrator',
-  admin_default_mail: 'admin@technion.ac.il',
-  admin_default_password: 'Aa123456'
+  admin_default: {
+    name: 'Administrator',
+    email: 'admin@technion.ac.il',
+    password: bcrypt.hashSync('Aa123456', 12)
+  }
 };

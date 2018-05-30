@@ -5,45 +5,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const api = require('./server/routes/api');
 const app = express();
-const mongoose = require('mongoose');
-const Faculty = require('./server/models/faculty').model;
 const auth = require('./server/auth/authController');
-const config = require('./server/auth/config');
-const bcrypt = require('bcryptjs');
 const schedulerTest = require('./tests/scheduleTest');
+const db = require('./database/database');
 
-mongoose.connect('mongodb://examscheduler.documents.azure.com:10255/?ssl=true&replicaSet=globaldb', {
-  auth: {
-    user: 'examscheduler',
-    password: '7ls6FfIEPsREaxQZHfaIu5xTKlPubw0QgmFwvKS0WRhNsUQBQtCZGGpSu3Fz07mYKmsRWjsuo6AvbzMAhvMYqw=='
-  }
-})
-.then(function () {
-  console.log('connection successful');
-  Faculty.findOne({name: config.admin_name}, function (err, admin) {
-    if (err) {
-      return next(err);
-    }
-    if (!admin) {
-      console.log('Admin user is missing.\nCreating default admin user...');
-      const hash = bcrypt.hashSync(config.admin_default_password, 12);
-      const admin_user = {
-        name: config.admin_name,
-        email: config.admin_default_mail,
-        password: hash
-      };
-      Faculty.create(admin_user, function (err) {
-        if (err) {
-          return next(err);
-        }
-        console.log('Admin user created successfully.');
-      });
-    } else {
-      console.log('Admin user exists.');
-    }
-  })
-})
-.catch((err) => console.error(err));
+//Connection to database
+db.open();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
