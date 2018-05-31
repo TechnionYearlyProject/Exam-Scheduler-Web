@@ -10,9 +10,11 @@ const schedulerTest = require('./tests/scheduleTest');
 var logger = require('morgan');
 
 //Connection to database
-db.open();
+if (process.env.NODE_ENV.localeCompare('test')) {
+  db.open();
+  app.use(logger('dev'));
+}
 
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());

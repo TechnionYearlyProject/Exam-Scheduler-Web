@@ -12,13 +12,18 @@ exports.login = function (req, res, next) {
       return next(err);
     }
     if (!faculty) {
-      return res.status(404).send('No user found.');
+      return res.status(404).send({
+        auth: false,
+        token: null,
+        error_message: 'No user found.'
+      });
     }
     const valid = bcrypt.compareSync(req.body.password, faculty.password);
     if (!valid) {
       return res.status(401).send({
         auth: false,
-        token: null
+        token: null,
+        error_message: 'Wrong password.'
       });
     }
     const token_data = {
