@@ -82,7 +82,7 @@ exports.verify_admin = function (req, res, next) {
   if (config.enable === false) {
     return next(); // Verifying disabled, no authorization
   }
-  Faculty.findOne({name: config.admin_name}, function (err, admin) {
+  Faculty.findOne({name: config.admin_default.name}, function (err, admin) {
     if (err) {
       return next(err);
     }
