@@ -10,10 +10,11 @@ const schedulerTest = require('./tests/scheduleTest');
 var logger = require('morgan');
 
 //Connection to database
-if (process.env.NODE_ENV.localeCompare('test')) {
+if (process.env.NODE_ENV && process.env.NODE_ENV.localeCompare('test')) {
   db.open();
   app.use(logger('dev'));
 }
+db.open();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -34,7 +35,7 @@ app.all('*', auth.verify_token_front);
 app.get('/scheduler', (req, res) => res.sendFile(path.join(__dirname, 'src/scheduler.html')));
 app.get('/edit_email', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_email.html')));
 app.get('/edit_password', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_password.html')));
-app.get('/make-schedule', (req, res) => schedulerTest.tryToSchedule(req, res));
+app.post('/make-schedule', (req, res) => schedulerTest.tryToSchedule(req, res));
 app.get('/', (req, res) => res.redirect('/scheduler'));
 
 app.use(function(req, res, next) {
@@ -49,7 +50,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
 });
 
 module.exports = app;

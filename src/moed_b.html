@@ -39,7 +39,7 @@
     var current = new Date(start.getTime() - start.getDay()*86400000);
     var row = document.createElement("div");
     row.className = "row";
-    row.style = "height: 113px";
+    row.style = "min-height: 113px";
     while (current < start) {
         var day = document.createElement("div");
         day.className = "col day";
@@ -60,7 +60,7 @@
             continue;
         }
         var day = document.createElement("div");
-        var id = "moed_a_day_" + counter;
+        var id = "moed_b_day_" + counter;
         counter += 1;
         day.id = id;
         map_a.set(current,id);
@@ -95,10 +95,12 @@
                 parent.style.backgroundColor="#ECEFF1";
                 this.visibility = "visible";
                 parent.setAttribute('active', 0);
+                occupied[parent.id] = 1;
             } else {
                 parent.style.backgroundColor="white";
                 this.visibility = "hidden";
                 parent.setAttribute('active', 1);
+                delete occupied[parent.id];
             }
         };
         day.innerHTML = "<span style='float: left;'>" + current.getDate().toString().padStart(2,'0') + '/' + (current.getMonth()+1).toString().padStart(2,'0') + "</span>";
@@ -127,7 +129,7 @@
             schedule.appendChild(row);
             row = document.createElement("div");
             row.className = "row";
-            row.style = "height: 113px";
+            row.style = "min-height: 113px";
         }
         current.setDate(current.getDate() + 1);
     }
