@@ -3,7 +3,7 @@ const config = require('../auth/config');
 const bcrypt = require('bcryptjs');
 
 exports.faculty_list = function (req, res, next) {
-  Faculty.find({}, 'name')
+  Faculty.find({}, 'name image')
   .then(data => {
     return res.json(data);
   })
