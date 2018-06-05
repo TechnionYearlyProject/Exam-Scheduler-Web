@@ -14,7 +14,6 @@ if (process.env.NODE_ENV && process.env.NODE_ENV.localeCompare('test')) {
   db.open();
   app.use(logger('dev'));
 }
-db.open();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -50,7 +49,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  //res.render('error');
+  res.render('error');
 });
 
 module.exports = app;
