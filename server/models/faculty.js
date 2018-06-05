@@ -15,6 +15,10 @@ const FacultySchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true
+  },
+  image: {
+    type: String,
+    required: true
   }
 });
 

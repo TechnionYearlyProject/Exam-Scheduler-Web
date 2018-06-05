@@ -17,7 +17,8 @@ exports.faculty_create = function (req, res, next) {
   Faculty.create({
     name: req.body.name,
     email: req.body.email,
-    password: hash
+    password: hash,
+    image: req.body.image
   })
   .then(() => {
     return res.end();
