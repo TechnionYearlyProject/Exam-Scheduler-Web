@@ -41,9 +41,6 @@ exports.login = function (req, res, next) {
 };
 
 exports.verify_token = function (req, res, next) {
-  if (config.enable === false) {
-    return next(); // Verifying disabled, no authorization
-  }
   const token = req.headers['x-access-token'];
   if (!token) {
     return res.status(401).send({
@@ -65,9 +62,6 @@ exports.verify_token = function (req, res, next) {
 };
 
 exports.verify_token_front = function (req, res, next) {
-  if (config.enable === false) {
-    return next(); // Verifying disabled, no authorization
-  }
   if (!req.cookies.token) {
     return res.redirect('/login');
   }
@@ -80,9 +74,6 @@ exports.verify_token_front = function (req, res, next) {
 };
 
 exports.verify_admin = function (req, res, next) {
-  if (config.enable === false) {
-    return next(); // Verifying disabled, no authorization
-  }
   Faculty.findOne({name: config.admin_default.name}, function (err, admin) {
     if (err) {
       return next(err);
@@ -100,5 +91,23 @@ exports.verify_admin = function (req, res, next) {
       auth: false,
       message: 'Request require admin authorization.'
     });
+  });
+};
+
+exports.verify_admin_front = function (req, res, next) {
+  Faculty.findOne({name: config.admin_default.name}, function (err, admin) {
+    if (err) {
+      return next(err);
+    }
+    if (!admin) {
+      return res.status(500).send({
+        auth: false,
+        message: "Error: Admin user doesn't exist."
+      });
+    }
+    if (!req.cookies.faculty.localeCompare(config.admin_default.name)) {
+      return next();
+    }
+    return res.redirect('/scheduler');
   });
 };
