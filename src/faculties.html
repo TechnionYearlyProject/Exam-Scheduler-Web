@@ -24,9 +24,40 @@
   </ul>
 </nav>
 <div class="row justify-content-center" style="margin-top: 40px">
-  <div class="col-xs-8">
-
+  <div class="col-xs-6">
+    <ul id="fac_list" class="list-group" style="text-align: right; font-size: 18px">
+    </ul>
   </div>
 </div>
+<div class="row justify-content-center">
+  <div class="col-xs-6">
+    <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
+    <button type="submit" class="btn form-group float-left">הוסף פקולטה</button>
+  </div>
+</div>
+<script type="module">
+  import {sendRequest} from "./js/request";
+
+  let button_html = '\n' +
+  '<span class="float-left">\n' +
+  '  <button type="button" class="btn btn-secondary btn-sm">\n' +
+  '    <i class="fa fa-edit"></i>\n' +
+  '  </button>\n' +
+  '  <button type="button" class="btn btn-secondary btn-sm">\n' +
+  '    <i class="fa fa-trash"></i>\n' +
+  '  </button>\n' +
+  '</span>';
+  let list = document.getElementById('fac_list');
+  sendRequest('get', 'api/faculty/list', null, res => {
+    let data = JSON.parse(res);
+    console.log(data);
+    for (let i in data) {
+      let li = document.createElement('li');
+      li.innerHTML = data[i].name + button_html;
+      li.setAttribute('class', 'list-group-item');
+      list.appendChild(li);
+    }
+  })
+</script>
 </body>
 </html>
