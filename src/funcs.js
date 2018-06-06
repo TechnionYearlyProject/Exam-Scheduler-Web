@@ -17,8 +17,11 @@ function make_calendar(start_param, end_param, moed) {
     if (end.getDay() == 6) {
         end.setDate(end.getDate() - 1);
     }
+
     var cal_start = new Date(start.getTime() - start.getDay()*86400000);
     var cal_end = new Date(cal_start.getTime() + 34*86400000);
+    if (cal_end < end)
+        cal_end.setTime(end.getTime() + (6 - end.getDay()) * 86400000);
     var row = document.createElement("div");
     row.className = "row";
     row.style = "height: 113px";
