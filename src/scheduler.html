@@ -21,17 +21,8 @@
 <body style="overflow-x: hidden;">
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding: 0px;">
-    <label class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;">
-        סמסטר אביב תשע"ח
-    </label>
-    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: rgba(255,255,255,0.80); margin-right: 15px; width: 350px; margin-top: -5px;">
-        <a class="dropdown-item" href="#" id="sem_0">סמסטר אביב תשע"ח</a>
-        <a class="dropdown-item" href="#" id="sem_1">סמסטר חורף תשע"ח</a>
-        <a class="dropdown-item" href="#" id="sem_2">סמסטר קיץ תשע"ז</a>
-        <a class="dropdown-item" href="#" id="sem_3">סמסטר אביב תשע"ז</a>
-        <a class="dropdown-item" href="#" id="sem_4">סמסטר חורף תשע"ז</a>
-        <a class="dropdown-item" href="#" id="sem_5">סמסטר קיץ תשע"ו</a>
-    </div>
+    <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
+    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="background-color: rgba(255,255,255,0.80); margin-right: 15px; width: 350px; margin-top: -5px;"></div>
 </div>
 <div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
   <div class="container-fluid col">
@@ -57,28 +48,43 @@
     </div>
 </div>
 
-<script>
-    var dict = {};
+<script type="module">
+    import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
-    dict["sem_0"] = {name:"סמסטר אביב תשע\"ח", a_start:new Date(2018,6,4), a_end:new Date(2018,6,27), b_start:new Date(2018,9,3), b_end:new Date(2018,9,19)};
-    dict["sem_1"] = {name:"סמסטר חורף תשע\"ח", a_start:new Date(2018,0,29), a_end:new Date(2018,1,20), b_start:new Date(2018,1,27), b_end:new Date(2018,2,19)};
-    dict["sem_2"] = {name:"סמסטר קיץ תשע\"ז", a_start:new Date(2017,8,25), a_end:new Date(2017,9,23), b_start:new Date(2017,9,23), b_end:new Date(2017,9,23)};
-    dict["sem_3"] = {name:"סמסטר אביב תשע\"ז", a_start:new Date(2017,6,7), a_end:new Date(2017,6,31), b_start:new Date(2017,8,25), b_end:new Date(2017,9,23)};
-    dict["sem_4"] = {name:"סמסטר חורף תשע\"ז", a_start:new Date(2017,0,30), a_end:new Date(2017,1,21), b_start:new Date(2017,1,28), b_end:new Date(2017,2,19)};
-    dict["sem_5"] = {name:"סמסטר קיץ תשע\"ו", a_start:new Date(2016,8,12), a_end:new Date(2016,8,28), b_start:new Date(2016,8,28), b_end:new Date(2016,8,28)};
-    $('.dropdown-item').click(function() {
-        document.getElementById('dropdownMenuButton').innerHTML = this.innerHTML+" ";
-        map_a = make_calendar(dict[this.id].a_start, dict[this.id].a_end, "a");
-        map_b = make_calendar(dict[this.id].b_start, dict[this.id].b_end, "b");
+    sendRequest('GET', '/api/semester/list', null, function (res) {
+        let semesters = JSON.parse(res);
+        for (let i = semesters.length - 1; i >= 0; i--) {
+            let semester = semesters[i].semester;
+            if (semester == "spring") {
+                semester = "אביב ";
+            } else {
+                semester = "חורף ";
+            }
+            let year = semesters[i].year.toString();
+            let a = document.createElement("a");
+            a.className = "dropdown-item";
+            a.href = "#";
+            a.innerHTML = 'סמסטר ' + semester + year + ' ';
+            a.setAttribute('start_a', semesters[i].start_a);
+            a.setAttribute('end_a', semesters[i].end_a);
+            a.setAttribute('start_b', semesters[i].start_b);
+            a.setAttribute('end_b', semesters[i].end_b);
+            a.onclick = function () {
+                document.getElementById('semester_button').innerHTML = a.innerHTML;
+                map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
+                map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
+            };
+            document.getElementById('sem_picker').appendChild(a);
+        }
+        var top = document.getElementById('sem_picker').firstChild;
+        document.getElementById('semester_button').innerHTML = top.innerHTML;
+        map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
+        map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
     });
     $('#toolbar').load('toolbar.html');
-    $('#moed_a').load('moed_a.html', function () {
-        map_a = make_calendar(new Date(2018, 6, 4), new Date(2018, 6, 27), "a");
-    });
-    $('#moed_b').load('moed_b.html', function () {
-        map_b = make_calendar(new Date(2018, 9, 3), new Date(2018, 9, 19), "b");
-    });
+    $('#moed_a').load('moed_a.html');
+    $('#moed_b').load('moed_b.html');
     $('#courses').load('datatable.html', function () {
       $('#scheduler_function_caller').click(function(){
           $("[id^='exam_for_']").remove();
@@ -179,7 +185,12 @@
           })
       });
   });
-  console.log("here");
+    function initSched() {
+        var top = document.getElementById('sem_picker');
+        console.log(top);
+        document.getElementById('semester_button').innerHTML = top.innerHTML;
+    }
+    window.addEventListener('load', initSched, false);
 
 </script>
 </body>
