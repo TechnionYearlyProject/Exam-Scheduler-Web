@@ -1,4 +1,4 @@
-function make_calendar(start_param, end_param, moed) {
+function make_calendar(start, end, moed) {
     var schedule = document.getElementById("schedule_" + moed);
     schedule.innerHTML = '    <div class="row">\n' +
         '      <div class="col" style="background-color: #CFD8DC; border: 1px solid #CFD8DC; padding-right: 5px">א\'</div>\n' +
@@ -9,15 +9,12 @@ function make_calendar(start_param, end_param, moed) {
         '      <div class="col" style="background-color: #CFD8DC; border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ו\'</div>\n' +
         '    </div>';
     var map = new Map();
-    var start = new Date(start_param.getTime());
     if (start.getDay() == 6) {
         start.setDate(start.getDate() + 1);
     }
-    var end = new Date(end_param.getTime());
     if (end.getDay() == 6) {
         end.setDate(end.getDate() - 1);
     }
-
     var cal_start = new Date(start.getTime() - start.getDay()*86400000);
     var cal_end = new Date(cal_start.getTime() + 34*86400000);
     if (cal_end < end)
