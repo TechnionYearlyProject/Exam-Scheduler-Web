@@ -7,7 +7,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px;">
     <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
-    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-toolbar" id="button_toolbar" role="toolbar" aria-label="Toolbar with button groups">
       <div class="btn-group">
         <button type="button" class="btn btn-secondary btn-md" style="width: 110px; margin-left: 5px;" id="scheduler_function_caller">
           <i class="fas fa-calendar-alt" style="padding-left: 5px"></i>
@@ -47,20 +47,11 @@
           <a class="dropdown-item" href="#">בתור PNG</a>
         </div>
       </div>
-      <div class="btn-group">
-        <div style="border-left:1px solid #000 ;width: 1px; height:40px; border-color: white; margin-left: 5px;"></div>
-      </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary btn-md" style="width: 110px; margin-left: 5px;" onclick="location.href='/faculties'">
-          <i class="fa fa-address-card" style="padding-left: 5px"></i>
-          פקולטות
-        </button>
-      </div>
     </div>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a id="faculty_name" class="nav-link" href="#" style="font-weight: normal; font-size: 16px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="graphics/taub.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
+          <img id="faculty_image" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-top: 4px; margin-left:5px; background-color: rgba(255,255,255,0.80)">
           <a class="dropdown-item" href="/edit_email">שינוי מייל</a>
@@ -71,11 +62,30 @@
     </ul>
   </nav>
   <script type="module">
-    import {getCookie} from "./js/cookie";
-    let user = document.getElementById("faculty_name");
-    //user.innerHTML = getCookie('faculty') + user.innerHTML; dorbartov: changed for poc
-    user.innerHTML = "הפקולטה למדעי המחשב" + user.innerHTML;
-    console.log(user);
+      var name = localStorage.getItem('faculty_name');
+      if (name == "Administrator") {
+          name = "לימודי הסמכה";
+          var sep = document.createElement('div');
+          sep.className = "btn-group";
+          sep.innerHTML = '        <div style="border-left:1px solid #000 ;width: 1px; height:40px; border-color: white; margin-left: 5px;"></div>\n';
+          var mng = document.createElement('div');
+          mng.className = "btn-group";
+          mng.innerHTML = '<button type="button" class="btn btn-secondary btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 110px; margin-left: 5px;">\n' +
+              '          <i class="fas fa-pencil-alt" style="padding-left: 5px"></i>\n' +
+              '          ניהול\n' +
+              '        </button>\n' +
+              '        <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px; background-color: rgba(255,255,255,0.80)">\n' +
+              '          <a class="dropdown-item" href="#" onclick="location.href=\'/faculties\'">פקולטות</a>\n' +
+              '          <a class="dropdown-item" href="#">מועדים</a>\n' +
+              '          <a class="dropdown-item" href="#">קורסים</a>\n' +
+              '        </div>';
+          document.getElementById("button_toolbar").appendChild(sep);
+          document.getElementById("button_toolbar").appendChild(mng);
+      } else {
+          name = "הפקולטה ל" + name;
+      }
+      document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
+      document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
   </script>
 </body>
 </html>

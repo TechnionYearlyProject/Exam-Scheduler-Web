@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="resources/bootstrap-rtl.css">
   <link rel="stylesheet" href="styles.css">
   <script src="resources/bootstrap.js"></script>
+  <link rel="shortcut icon" type="image/png" href="graphics/favicon.ico"/>
   <meta charset="utf-8">
   <title>Technion Exam Scheduler</title>
 </head>
@@ -86,11 +87,11 @@
                     faculties_grid.appendChild(row);
                 }
                 document.getElementById('user_button_' + id).onclick = function (e) {
-                    login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id));
+                    login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id),faculties[id].image);
                 };
                 document.getElementById('user_password_' + id).onkeydown = function (e) {
                     if (e.keyCode == 13) {
-                        login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id));
+                        login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id), faculties[id].image);
                     } else {
                         document.getElementById('user_error_' + id).style.display = 'none';
                     }
@@ -98,7 +99,7 @@
             }
         });
     }
-    function login(name, password, error) {
+    function login(name, password, error, image) {
         error.style.display = 'none';
         let json = {"name": name, "password": password};
         sendRequest('POST', '/api/login', json, function (res) {
@@ -107,6 +108,8 @@
                 console.log(data);
                 setCookie('token', data.token);
                 setCookie('faculty', data.username);
+                localStorage.setItem('faculty_name', name);
+                localStorage.setItem('faculty_image', image);
                 window.location.href = "/scheduler";
             } else {
                 error.style.display = 'block';
