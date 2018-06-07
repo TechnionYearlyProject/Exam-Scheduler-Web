@@ -37,6 +37,10 @@ app.get('/edit_password', (req, res) => res.sendFile(path.join(__dirname, 'src/e
 app.post('/make-schedule', (req, res) => schedulerTest.tryToSchedule(req, res));
 app.get('/', (req, res) => res.redirect('/scheduler'));
 
+app.all('*', auth.verify_admin_front);
+
+app.get('/faculties', (req, res) => res.sendFile(path.join(__dirname, 'src/faculties.html')));
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -49,7 +53,6 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;
