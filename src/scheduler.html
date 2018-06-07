@@ -59,6 +59,8 @@
 
 <script>
     var dict = {};
+    var map_a = {};
+    var map_b = {};
     dict["sem_0"] = {name:"סמסטר אביב תשע\"ח", a_start:new Date(2018,6,4), a_end:new Date(2018,6,27), b_start:new Date(2018,9,3), b_end:new Date(2018,9,19)};
     dict["sem_1"] = {name:"סמסטר חורף תשע\"ח", a_start:new Date(2018,0,29), a_end:new Date(2018,1,20), b_start:new Date(2018,1,27), b_end:new Date(2018,2,19)};
     dict["sem_2"] = {name:"סמסטר קיץ תשע\"ז", a_start:new Date(2017,8,25), a_end:new Date(2017,9,23), b_start:new Date(2017,9,23), b_end:new Date(2017,9,23)};
@@ -67,16 +69,16 @@
     dict["sem_5"] = {name:"סמסטר קיץ תשע\"ו", a_start:new Date(2016,8,12), a_end:new Date(2016,8,28), b_start:new Date(2016,8,28), b_end:new Date(2016,8,28)};
     $('.dropdown-item').click(function() {
         document.getElementById('dropdownMenuButton').innerHTML = this.innerHTML+" ";
-        var start_a = new Date(dict[this.id].a_start.getTime());
-        var end_a = new Date(dict[this.id].a_end.getTime());
-        var start_b = new Date(dict[this.id].b_start.getTime());
-        var end_b = new Date(dict[this.id].b_end.getTime());
-        make_calendar(start_a,end_a,"a");
-        make_calendar(start_b,end_b,"b");
+        map_a = make_calendar(dict[this.id].a_start, dict[this.id].a_end, "a");
+        map_b = make_calendar(dict[this.id].b_start, dict[this.id].b_end, "b");
     });
     $('#toolbar').load('toolbar.html');
-    $('#moed_a').load('moed_a.html');
-    $('#moed_b').load('moed_b.html');
+    $('#moed_a').load('moed_a.html', function () {
+        map_a = make_calendar(new Date(2018, 6, 4), new Date(2018, 6, 27), "a");
+    });
+    $('#moed_b').load('moed_b.html', function () {
+        map_b = make_calendar(new Date(2018, 9, 3), new Date(2018, 9, 19), "b");
+    });
     $('#courses').load('datatable.html', function () {
       $('#scheduler_function_caller').click(function(){
           $("[id^='exam_for_']").remove();
