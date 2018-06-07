@@ -1,7 +1,7 @@
 const Semester = require('../models/semester').model;
 
 exports.semester_list = function (req, res, next) {
-  Semester.find({}, 'year semester')
+  Semester.find({}, 'year semester start_a end_a start_b end_b')
   .then(data => {
     return res.json(data)
   })
