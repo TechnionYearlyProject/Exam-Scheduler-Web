@@ -54,6 +54,7 @@
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
+    var dict = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
         for (let i = semesters.length - 1; i >= 0; i--) {
@@ -74,27 +75,6 @@
             a.setAttribute('start_b', semesters[i].start_b);
             a.setAttribute('end_b', semesters[i].end_b);
             a.onclick = function () {
-                var dict = [];
-                var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
-                    var courses = JSON.parse(res);
-                    for (var i in courses) {
-                        var pref = "";
-                        if (!courses[i]["is_first"] && !courses[i]["is_last"])
-                            pref = "אוטומטי";
-                        else if (courses[i]["is_first"])
-                            pref = "התחלה";
-                        else if (courses[i]["is_last"])
-                            pref = "סוף";
-                        var reshuma = {
-                            "id": courses[i]["id"],
-                            "name": courses[i]["name"],
-                            "pref": pref,
-                            "credit_points": courses[i]["credit_point"]["$numberDecimal"],
-                        };
-                        dict.push(reshuma);
-                    }
-                });
-                load_courses_table(dict);
                 document.getElementById('semester_button').innerHTML = a.innerHTML;
                 localStorage.setItem('start_a', a.getAttribute('start_a'));
                 localStorage.setItem('end_a', a.getAttribute('end_a'));
@@ -103,7 +83,7 @@
                 localStorage.setItem('semester_name', a.getAttribute('semester_name'));
                 map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
-
+                load_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
         }
@@ -116,6 +96,7 @@
         localStorage.setItem('semester_name', top.getAttribute('semester_name'));
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
+        load_courses_table();
     });
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
@@ -238,6 +219,62 @@
         };
     }
     window.addEventListener('load', initSched, false);
+    function load_courses_table() {
+        var table = $("#example").DataTable();
+        table.clear().draw();
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
+            var courses = JSON.parse(res);
+            for (var i in courses) {
+                var pref = "";
+                if (!courses[i]["is_first"] && !courses[i]["is_last"])
+                    pref = "אוטומטי";
+                else if (courses[i]["is_first"])
+                    pref = "התחלה";
+                else if (courses[i]["is_last"])
+                    pref = "סוף";
+                var reshuma = {
+                    "id": courses[i]["id"],
+                    "name": courses[i]["name"],
+                    "pref": pref,
+                    "credit_points": courses[i]["credit_point"]["$numberDecimal"],
+                };
+                dict.push(reshuma);
+                table.row.add(reshuma).draw();
+
+            }
+            table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+                let a = this.node();
+                this.node().draggable = true;
+                this.node().className = "draggable";
+                this.node().ondragstart = function (ev) {
+                    var id = a.childNodes[1].innerHTML;
+                    var test = document.createElement("label");
+                    test.className += "test_tooltip";
+                    test.innerHTML = id + " - " + a.childNodes[2].innerHTML;
+                    test.draggable = true;
+                    var color = "black";
+                    if (id.startsWith("234")){
+                        color = "#26A69A";
+                    } else if (id.startsWith("104")){
+                        color = "#EF5350";
+                    } else if (id.startsWith("094")) {
+                        color = "#FFEB3B";
+                    } else if (id.startsWith("236")) {
+                        color = "#9CCC65";
+                    }
+                    test.style.backgroundColor = color;
+                    test.style.position = 'absolute';
+                    test.style.left = '0px';
+                    test.style.top = '0px';
+                    test.style.zIndex = '-1';
+                    test.id = 'test_tooltip_' + id;
+                    document.body.appendChild(test);
+                    ev.dataTransfer.setDragImage(test, 0, 0);
+                    ev.dataTransfer.setData("list_drag", id);
+                }
+            } );
+        });
+    }
 </script>
 </body>
 </html>
