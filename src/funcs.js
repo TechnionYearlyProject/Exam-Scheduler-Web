@@ -85,6 +85,9 @@ function make_calendar(start, end, moed) {
             day.ondrop = function (ev) {
                 ev.preventDefault();
                 this.childNodes[1].style.visibility = "hidden";
+                if (this.getAttribute('active') == 0) {
+                    return;
+                }
                 var moed = day.parentNode;
                 while (!moed.hasAttribute("moed"))
                     moed = moed.parentNode;
@@ -119,6 +122,13 @@ function make_calendar(start, end, moed) {
                     parent.style.backgroundColor = "#ECEFF1";
                     this.visibility = "visible";
                     parent.setAttribute('active', 0);
+                    let children = parent.childNodes;
+                    for (let i = children.length - 1; i >= 0; i--) {
+                        console.log(children[i]);
+                        if (children[i].className == 'test') {
+                            parent.removeChild(children[i]);
+                        }
+                    }
                 } else {
                     parent.style.backgroundColor = "white";
                     this.visibility = "hidden";
