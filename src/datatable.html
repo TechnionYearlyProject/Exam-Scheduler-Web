@@ -120,9 +120,14 @@
                     color = "#9CCC65";
                 }
                 test.style.backgroundColor = color;
+                test.style.position = 'absolute';
+                test.style.left = '0px';
+                test.style.top = '0px';
+                test.style.zIndex = '-1';
+                test.id = 'test_tooltip_' + id;
                 document.body.appendChild(test);
                 ev.dataTransfer.setDragImage(test, 0, 0);
-                ev.dataTransfer.setData("text", id);
+                ev.dataTransfer.setData("list_drag", id);
             }
         } );
 

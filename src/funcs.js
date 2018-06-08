@@ -1,5 +1,4 @@
-function create_test(elem_type, text, course_id, class_name, moed)
-{
+function create_test(elem_type, text, course_id, class_name, moed) {
     var test = document.createElement(elem_type);
     test.className += class_name;
     test.innerHTML = text;
@@ -16,23 +15,22 @@ function create_test(elem_type, text, course_id, class_name, moed)
         color = "#9CCC65";
     }
     test.style.backgroundColor = color;
-
-    test.ondragstart = function(ev)
-    {
+    test.ondragstart = function(ev) {
         var test2 = document.createElement("label");
         test2.className = "test_tooltip";
         test2.innerHTML = text;
         test2.style.backgroundColor = color;
+        test2.style.position = 'absolute';
+        test2.style.left = '0px';
+        test2.style.top = '0px';
+        test2.id = 'test_tooltip_' + course_id;
+        test2.style.zIndex = '-1';
         document.body.appendChild(test2);
         ev.dataTransfer.setDragImage(test2, 0, 0);
         ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
     }
     return test;
 }
-
-
-
-
 
 function make_calendar(start, end, moed) {
     var schedule = document.getElementById("schedule_" + moed);
@@ -90,7 +88,7 @@ function make_calendar(start, end, moed) {
                 var moed = day.parentNode;
                 while (!moed.hasAttribute("moed"))
                     moed = moed.parentNode;
-                var course_id = ev.dataTransfer.getData("text");
+                var course_id = ev.dataTransfer.getData("list_drag");
                 if (course_id == "") //dragged from day
                 {
                     str = ev.dataTransfer.getData("test_drag");
