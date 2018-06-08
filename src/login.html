@@ -40,16 +40,16 @@
                     '      <div class="modal-header">\n' +
                     '        <h5 class="modal-title" id="exampleModalLongTitle">התחברות</h5>\n' +
                     '      </div>\n' +
-                    '      <div class="modal-body" align="center" style="height: 360px;">\n' +
-                    '<img src="' + faculties[i].image + '"style="border-radius: 50%; height: 150px; weight: 150px;">\n' +
-                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">\n' +
+                    '      <div class="modal-body" align="center" style="height: 305px;">\n' +
+                    '<img src="' + faculties[i].image + '"style="border-radius: 50%; height: 120px; width: 120px;">\n' +
+                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;">\n' +
                     name +
                     '                  </div>' +
-                    '<input type="password" class="form-control" id="user_password_' + id + '" placeholder="הזן סיסמה" style="margin-top:10px; margin-bottom: 10px; width: 100% !important;">\n' +
-                    '                  <button type="button" class="btn btn-secondary btn-md" id="user_button_' + id + '" style="width: 100%;" onclick="myFunction()">\n' +
+                    '<input type="password" class="form-control" id="user_password_' + id + '" placeholder="הזן סיסמה" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">\n' +
+                    '                  <button type="button" class="btn btn-secondary btn-md" id="user_button_' + id + '" style="width: 100%; font-size: 14px;" onclick="myFunction()">\n' +
                     '                      התחבר\n' +
                     '                  </button>' +
-                    '            <div class="alert alert-danger col-sm-12" id="user_error_' + id + '" style="margin-bottom: 0px; margin-top: 10px; text-align: right; display: none">הסיסמה שגויה</div>\n' +
+                    '            <div class="alert alert-danger col-sm-12" id="user_error_' + id + '" style="padding-top: 6px; padding-bottom: 6px; margin-bottom: 0px; margin-top: 10px; text-align: right; display: none; font-size: 14px;">הסיסמה שגויה</div>\n' +
                     '      </div>\n' +
                     '    </div>\n' +
                     '  </div>\n' +
@@ -71,10 +71,10 @@
                 };
                 var lbl = document.createElement("div");
                 lbl.innerHTML = name;
-                lbl.style = "text-align: center; width:150px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;";
+                lbl.style = "text-align: center; width:120px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;";
                 var img = document.createElement("img");
                 img.src = faculties[i].image;
-                img.style = "border-radius: 50%; height: 150px; weight: 150px;";
+                img.style = "border-radius: 50%; height: 120px; width: 120px;";
                 user.appendChild(img);
                 user.appendChild(lbl);
                 row.appendChild(user);
