@@ -48,8 +48,10 @@ router.put('/update_password', faculty_controller.faculty_update_password);
 
 router.all('*', auth.verify_admin);
 
+router.get('/faculty/details_list', faculty_controller.faculty_list_details); // Admin only, return also emails
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
+router.post('/faculty/update', faculty_controller.faculty_update);
 
 router.post('/semester/create', semester_controller.semester_create);
 router.post('/semester/update', semester_controller.semester_update_dates);
