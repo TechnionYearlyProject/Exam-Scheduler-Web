@@ -1,3 +1,37 @@
+function create_test(elem_type, text, course_id, class_name, moed) {
+    var test = document.createElement(elem_type);
+    test.className += class_name;
+    test.innerHTML = text;
+    test.draggable = true;
+    test.setAttribute("test_id", moed + "_" + course_id);
+    var color = "black";
+    if (course_id.startsWith("234")){
+        color = "#26A69A";
+    } else if (course_id.startsWith("104")){
+        color = "#EF5350";
+    } else if (course_id.startsWith("094")) {
+        color = "#FFEB3B";
+    } else if (course_id.startsWith("236")) {
+        color = "#9CCC65";
+    }
+    test.style.backgroundColor = color;
+    test.ondragstart = function(ev) {
+        var test2 = document.createElement("label");
+        test2.className = "test_tooltip";
+        test2.innerHTML = text;
+        test2.style.backgroundColor = color;
+        test2.style.position = 'absolute';
+        test2.style.left = '0px';
+        test2.style.top = '0px';
+        test2.id = 'test_tooltip_' + course_id;
+        test2.style.zIndex = '-1';
+        document.body.appendChild(test2);
+        ev.dataTransfer.setDragImage(test2, 0, 0);
+        ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
+    }
+    return test;
+}
+
 function make_calendar(start, end, moed) {
     var schedule = document.getElementById("schedule_" + moed);
     schedule.innerHTML = '    <div class="row">\n' +
@@ -40,12 +74,39 @@ function make_calendar(start, end, moed) {
             counter += 1;
             day.id = id;
             map.set(current, id);
+            day.setAttribute("date", current);
             day.onmouseover = function () {
                 this.childNodes[1].style.visibility = "visible";
             };
             day.onmouseout = function () {
                 if (this.getAttribute("active") == 1)
                     this.childNodes[1].style.visibility = "hidden";
+            };
+            day.ondrop = function (ev) {
+                ev.preventDefault();
+                this.childNodes[1].style.visibility = "hidden";
+                var moed = day.parentNode;
+                while (!moed.hasAttribute("moed"))
+                    moed = moed.parentNode;
+                var course_id = ev.dataTransfer.getData("list_drag");
+                if (course_id == "") //dragged from day
+                {
+                    str = ev.dataTransfer.getData("test_drag");
+                    var [course_id, day_dragged_id] = str.split("|");
+                    var day_dragged = document.getElementById(day_dragged_id);
+                    day_dragged.childNodes[1].style.visibility = "hidden";
+                    for (var i in day_dragged.childNodes){
+                        var child = day_dragged.childNodes[i];
+                        if (child.className == "test")
+                            if (child.getAttribute("test_id") == moed.getAttribute("moed") + "_" + course_id)
+                                day_dragged.removeChild(child);
+                    }
+                }
+                var test = create_test("div", course_id, course_id, "test", moed.getAttribute("moed"));
+                ev.target.appendChild(test);
+            };
+            day.ondragover = function (ev) {
+                ev.preventDefault();
             };
             var lock = document.createElement("span");
             lock.style = "float: right; padding:0px; padding-right:1px; visibility: hidden";

@@ -15,6 +15,8 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
@@ -29,10 +31,10 @@
     <div id="courses"></div>
   </div>
   <div class="container-fluid col">
-    <div id="moed_a"></div>
+    <div id="moed_a" moed="a"></div>
   </div>
   <div class="container-fluid col">
-    <div id="moed_b"></div>
+    <div id="moed_b" moed="b"></div>
   </div>
 </div>
 <div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -189,9 +191,23 @@
         var top = document.getElementById('sem_picker');
         console.log(top);
         document.getElementById('semester_button').innerHTML = top.innerHTML;
+        document.body.ondragover = function(ev) {
+            ev.preventDefault();
+        };
+        document.body.ondrop = function(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData('list_drag');
+            if (data != '') {
+                document.body.removeChild(document.getElementById('test_tooltip_' + data));
+            }
+            data =  ev.dataTransfer.getData('test_drag');
+            if (data != '') {
+                var [id, temp] = str.split("|");
+                document.body.removeChild(document.getElementById('test_tooltip_' + id));
+            }
+        };
     }
     window.addEventListener('load', initSched, false);
-
 </script>
 </body>
 </html>

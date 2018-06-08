@@ -99,6 +99,38 @@
             "order": [[1, 'asc']]
 
         } );
+        table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+            let a = this.node();
+            this.node().draggable = true;
+            this.node().className = "draggable";
+            this.node().ondragstart = function (ev) {
+                var id = a.childNodes[1].innerHTML;
+                var test = document.createElement("label");
+                test.className += "test_tooltip";
+                test.innerHTML = id + " - " + a.childNodes[2].innerHTML;
+                test.draggable = true;
+                var color = "black";
+                if (id.startsWith("234")){
+                    color = "#26A69A";
+                } else if (id.startsWith("104")){
+                    color = "#EF5350";
+                } else if (id.startsWith("094")) {
+                    color = "#FFEB3B";
+                } else if (id.startsWith("236")) {
+                    color = "#9CCC65";
+                }
+                test.style.backgroundColor = color;
+                test.style.position = 'absolute';
+                test.style.left = '0px';
+                test.style.top = '0px';
+                test.style.zIndex = '-1';
+                test.id = 'test_tooltip_' + id;
+                document.body.appendChild(test);
+                ev.dataTransfer.setDragImage(test, 0, 0);
+                ev.dataTransfer.setData("list_drag", id);
+            }
+        } );
+
         $('#example tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var tdi = tr.find("i.fas");
@@ -117,7 +149,8 @@
                 tdi.first().removeClass('fa-angle-down');
                 tdi.first().addClass('fa-angle-up');
             }
-        } );
+        }
+        );
         $('#search_box').keyup(function(){
             table.search($(this).val()).draw() ;
         })
