@@ -166,6 +166,12 @@
   }
 
   $('#add_faculty_button').click(() => {
+    document.getElementById('add_name').value = '';
+    document.getElementById('add_email').value = '';
+    document.getElementById('add_password').value = '';
+    document.getElementById('retype_add_password').value = '';
+    document.getElementById('add_image').value = '';
+    document.getElementById('add_error').style.display = 'none';
     $('#add_modal').modal('show');
   });
 
@@ -174,8 +180,10 @@
     let email = document.getElementById('add_email').value;
     let password = document.getElementById('add_password').value;
     let retype = document.getElementById('retype_add_password').value;
-    let file = document.getElementById('add_image').files[0];
-
+    let file = undefined;
+    if (document.getElementById('add_image').files !== undefined) {
+      file = document.getElementById('add_image').files[0];
+    }
     let alert = document.getElementById('add_error');
     if (name.length === 0 || email.length === 0 || password.length === 0 || retype.length === 0 || file === undefined) {
       alert.innerText = "נא למלא את כל השדות.";
@@ -193,6 +201,7 @@
       alert.innerText = "נא לצרף קובץ תמונה.";
       alert.style.display = 'block';
     } else {
+      alert.style.display = 'none';
       resize_and_convert(file, image => {
         let json = {name: name, email: email, password: password, retype: retype, image: image};
         sendRequest('post', '/api/faculty/create', json, () => {
@@ -206,8 +215,11 @@
   function showEditModal(event) {
     document.getElementById('edit_name').value = event.data.name;
     document.getElementById('edit_email').value = event.data.email;
-    let title = document.getElementById('edit_modal_title');
-    title.innerText = event.data.name + " - שינוי פקולטה";
+    document.getElementById('edit_password').value = '';
+    document.getElementById('retype_edit_password').value = '';
+    document.getElementById('edit_image').value = '';
+    document.getElementById('edit_modal_title').innerText = event.data.name + " - שינוי פקולטה";
+    document.getElementById('edit_error').style.display = 'none';
     $('#edit_modal').modal('show');
   }
 
@@ -220,7 +232,6 @@
     if (document.getElementById('edit_image').files !== undefined) {
       file = document.getElementById('edit_image').files[0];
     }
-
     let alert = document.getElementById('edit_error');
     if (email.length > 0 && !email.match(/[\w\.]+@(\w+\.)+\w+/)) {
       alert.innerText = "המייל המוקלד לא תקין.";
