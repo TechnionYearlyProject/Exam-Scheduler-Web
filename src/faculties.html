@@ -29,7 +29,7 @@
       <div class="row justify-content-between">
         <div class="col-12">
           <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
-          <button type="submit" class="btn form-group float-left">הוסף פקולטה</button>
+          <button id="add_faculty_button" type="submit" class="btn form-group float-left">הוסף פקולטה</button>
         </div>
       </div>
     </div>
@@ -38,6 +38,42 @@
         <div class="col-12">
           <ul id="fac_list" class="list-group" style="text-align: right; font-size: 18px">
           </ul>
+        </div>
+      </div>
+    </div>
+    <div id="add_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="add_modal_title">הוספת פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p class="text-secondary" style="text-align: right">נא למלא את כל השדות.</p>
+            <form id="add_form">
+              <div class="form-group">
+                <input type="text" class="form-control" id="add_name" placeholder="שם">
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" id="add_email" placeholder="מייל">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="add_password" placeholder="סיסמה">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="retype_add_password" placeholder="חזרה על סיסמה">
+              </div>
+              <div class="form-group">
+                <label for="add_image" class='col-form-label float-right'>תמונה</label>
+                <input type="file" class="form-control-file" id="add_image">
+              </div>
+              <div class="form-group">
+                <div class="alert alert-danger col-sm-12" id="add_error" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_add" type="button" class="btn btn-secondary">הוסף</button>
+          </div>
         </div>
       </div>
     </div>
@@ -54,7 +90,7 @@
                 <input type="text" class="form-control" id="edit_name" placeholder="שם">
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" id="edit_mail" placeholder="מייל">
+                <input type="email" class="form-control" id="edit_email" placeholder="מייל">
               </div>
               <div class="form-group">
                 <input type="password" class="form-control" id="edit_password" placeholder="סיסמה">
@@ -77,6 +113,21 @@
         </div>
       </div>
     </div>
+    <div id="remove_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="remove_modal_title" class="modal-title">הסרת פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p id="remove_text" style="text-align: right"></p>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_remove" type="button" class="btn btn-secondary">הסר</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </div>
@@ -84,9 +135,81 @@
 <script type="module">
   import {sendRequest} from "./js/request";
 
+  function resize_and_convert(file, callback) {
+    let MAX_SIZE = 150;
+    let reader = new FileReader();
+    console.log('1');
+    reader.onload = function (event) {
+      console.log('2');
+      let image = new Image();
+      image.src = event.target.result;
+      image.onload = function () {
+        console.log('3');
+        if (image.width > image.height) {
+          if (image.height > MAX_SIZE) {
+            image.width *= MAX_SIZE / image.height;
+            image.height = MAX_SIZE;
+          }
+        } else {
+          if (image.width > MAX_SIZE) {
+            image.height *= MAX_SIZE / image.width;
+            image.width = MAX_SIZE;
+          }
+        }
+        let canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        let context = canvas.getContext("2d");
+        context.drawImage(this, 0, 0, image.width, image.height);
+        let retval = canvas.toDataURL(file.type);
+        callback(retval);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $('#add_faculty_button').click(() => {
+    $('#add_modal').modal('show');
+  });
+
+  $('#submit_add').click(() => {
+    let name = document.getElementById('add_name').value;
+    let email = document.getElementById('add_email').value;
+    let password = document.getElementById('add_password').value;
+    let retype = document.getElementById('retype_add_password').value;
+
+    let file = document.getElementById('add_image').files[0];
+
+    let alert = document.getElementById('add_error');
+    if (name.length === 0 || email.length === 0 || password.length === 0 || retype.length === 0 || file === undefined) {
+      alert.innerText = "נא למלא את כל השדות.";
+      alert.style.display = 'block';
+    } else if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+      alert.innerText = "המייל המוקלד לא תקין.";
+      alert.style.display = 'block';
+    } else if (password.length < 8) {
+      alert.innerText = "הסיסמה המוקלדת קצרה מדי.";
+      alert.style.display = 'block';
+    } else if (password.localeCompare(retype) !== 0) {
+      alert.innerText = "הסיסמאות לא תואמות.";
+      alert.style.display = 'block';
+    } else if (!file.type.startsWith('image')) {
+      alert.innerText = "נא לצרף קובץ תמונה.";
+      alert.style.display = 'block';
+    } else {
+      resize_and_convert(file, image => {
+        let json = {name: name, email: email, password: password, retype: retype, image: image};
+        sendRequest('post', '/api/faculty/create', json, () => {
+          $('#add_modal').modal('hide');
+          window.location.href = "/faculties";
+        })
+      });
+    }
+  });
+
   function showEditModal(event) {
     document.getElementById('edit_name').value = event.data.name;
-    document.getElementById('edit_mail').value = event.data.mail;
+    document.getElementById('edit_email').value = event.data.email;
     let title = document.getElementById('edit_modal_title');
     title.innerText = event.data.name + " - שינוי פקולטה";
     $('#edit_modal').modal('show');
@@ -94,44 +217,56 @@
 
   $('#submit_edit').click(() => {
     let name = document.getElementById('edit_name').value;
-    let mail = document.getElementById('edit_mail').value;
+    let email = document.getElementById('edit_email').value;
     let password = document.getElementById('edit_password').value;
     let retype = document.getElementById('retype_password').value;
 
     let alert = document.getElementById('edit_error');
-    if (mail.length > 0 && !mail.match(/[\w\.]+@(\w+\.)+\w+/)) {
+    if (email.length > 0 && !email.match(/[\w\.]+@(\w+\.)+\w+/)) {
       alert.innerText = "המייל המוקלד לא תקין.";
       alert.style.display = 'block';
-      return;
     } else if (password.length > 0 && password.length < 8) {
       alert.innerText = "הסיסמה המוקלדת קצרה מדי.";
       alert.style.display = 'block';
-      return;
     } else if (password.length > 0 && password.localeCompare(retype) !== 0) {
       alert.innerText = "הסיסמאות לא תואמות.";
       alert.style.display = 'block';
-      return;
     } else {
       alert.style.display = 'none';
-      let update_data = {};
+      let json = {};
       if (name.length > 0) {
-        update_data.name = name;
+        json.name = name;
       }
-      if (mail.length > 0) {
-        update_data.mail = mail;
+      if (email.length > 0) {
+        json.email = email;
       }
       if (password.length > 0) {
-        update_data.password = password;
+        json.password = password;
       }
       if (retype.length > 0) {
-        update_data.retype = retype;
+        json.retype = retype;
       }
-      update_data.original = document.getElementById('edit_modal_title').innerText.split(' - ')[0];
-      sendRequest('post', '/api/faculty/update', update_data, () => {
+      json.original = document.getElementById('edit_modal_title').innerText.split(' - ')[0];
+      sendRequest('post', '/api/faculty/update', json, () => {
         $('#edit_modal').modal('hide');
         window.location.href = "/faculties";
       })
     }
+  });
+
+  function showRemoveModal(event) {
+    let title = document.getElementById('remove_modal_title');
+    title.innerText = event.data.name + " - הסרת פקולטה";
+    document.getElementById('remove_text').innerText = 'האם אתה בטוח שאתה רוצה להסיר את הפקולטה ל' + event.data.name + ' מהמערכת?';
+    $('#remove_modal').modal('show');
+  }
+
+  $('#submit_remove').click(() => {
+    let json = {name: document.getElementById('remove_modal_title').innerText.split(' - ')[0]};
+    sendRequest('delete', 'api/faculty/delete', json, res => {
+      $('#remove_modal').modal('hide');
+      window.location.href = "/faculties";
+    });
   });
 
   let list = document.getElementById('fac_list');
@@ -152,7 +287,8 @@
       li.innerHTML = data[i].name + button_html;
       li.setAttribute('class', 'list-group-item');
       list.appendChild(li);
-      $('#edit_button_' + i).click({name: data[i].name, mail: data[i].email}, showEditModal);
+      $('#edit_button_' + i).click({name: data[i].name, email: data[i].email}, showEditModal);
+      $('#remove_button_' + i).click({name: data[i].name}, showRemoveModal);
     }
   });
 </script>
