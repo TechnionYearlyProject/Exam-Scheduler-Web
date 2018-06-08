@@ -15,6 +15,7 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
+
     <link rel="stylesheet" href="styles.css">
 
     <meta charset="utf-8">
@@ -49,7 +50,6 @@
         </div>
     </div>
 </div>
-
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
@@ -68,19 +68,52 @@
             a.className = "dropdown-item";
             a.href = "#";
             a.innerHTML = 'סמסטר ' + semester + year + ' ';
+            a.setAttribute('semester_name', semesters[i].year + '-' + semesters[i].semester);
             a.setAttribute('start_a', semesters[i].start_a);
             a.setAttribute('end_a', semesters[i].end_a);
             a.setAttribute('start_b', semesters[i].start_b);
             a.setAttribute('end_b', semesters[i].end_b);
             a.onclick = function () {
+                var dict = [];
+                var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
+                    var courses = JSON.parse(res);
+                    for (var i in courses) {
+                        var pref = "";
+                        if (!courses[i]["is_first"] && !courses[i]["is_last"])
+                            pref = "אוטומטי";
+                        else if (courses[i]["is_first"])
+                            pref = "התחלה";
+                        else if (courses[i]["is_last"])
+                            pref = "סוף";
+                        var reshuma = {
+                            "id": courses[i]["id"],
+                            "name": courses[i]["name"],
+                            "pref": pref,
+                            "credit_points": courses[i]["credit_point"]["$numberDecimal"],
+                        };
+                        dict.push(reshuma);
+                    }
+                });
+                load_courses_table(dict);
                 document.getElementById('semester_button').innerHTML = a.innerHTML;
+                localStorage.setItem('start_a', a.getAttribute('start_a'));
+                localStorage.setItem('end_a', a.getAttribute('end_a'));
+                localStorage.setItem('start_b', a.getAttribute('start_b'));
+                localStorage.setItem('end_b', a.getAttribute('end_b'));
+                localStorage.setItem('semester_name', a.getAttribute('semester_name'));
                 map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
+
             };
             document.getElementById('sem_picker').appendChild(a);
         }
         var top = document.getElementById('sem_picker').firstChild;
         document.getElementById('semester_button').innerHTML = top.innerHTML;
+        localStorage.setItem('start_a', top.getAttribute('start_a'));
+        localStorage.setItem('end_a', top.getAttribute('end_a'));
+        localStorage.setItem('start_b', top.getAttribute('start_b'));
+        localStorage.setItem('end_b', top.getAttribute('end_b'));
+        localStorage.setItem('semester_name', top.getAttribute('semester_name'));
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
     });
@@ -148,9 +181,6 @@
                   }
               });
           }, 5000);
-          $("#schedule_clear").click(function(){
-              $("[id^='exam_for_']").remove();
-          });
       });
       $('#scheduler_function_caller_2').click(function(){
           $("[id^='exam_for_']").remove();

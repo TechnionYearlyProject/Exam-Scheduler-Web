@@ -86,6 +86,10 @@
       }
       document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
       document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
+      $("#schedule_clear").click(function(){
+          make_calendar(new Date(localStorage.getItem('start_a')), new Date(localStorage.getItem('end_a')), "a");
+          make_calendar(new Date(localStorage.getItem('start_b')), new Date(localStorage.getItem('end_b')), "b");
+      });
   </script>
 </body>
 </html>
