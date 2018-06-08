@@ -1,3 +1,8 @@
+
+function load_courses_table(dict) {
+    console.log(dict);
+}
+
 function create_test(elem_type, text, course_id, class_name, moed) {
     var test = document.createElement(elem_type);
     test.className += class_name;
