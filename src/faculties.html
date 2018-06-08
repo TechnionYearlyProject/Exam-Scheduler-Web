@@ -25,39 +25,90 @@
 </nav>
 <div class="row justify-content-center" style="margin-top: 40px">
   <div class="col-xs-6">
-    <ul id="fac_list" class="list-group" style="text-align: right; font-size: 18px">
-    </ul>
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-12">
+          <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
+          <button type="submit" class="btn form-group float-left">הוסף פקולטה</button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <ul id="fac_list" class="list-group" style="text-align: right; font-size: 18px">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="edit_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">שינוי פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <form id="edit_form">
+              <div class="form-group">
+                <label for="edit_name" class='float-right'>שם</label>
+                <input type="text" class="form-control" id="edit_name">
+              </div>
+              <div class="form-group">
+                <label for="edit_mail" class='col-form-label float-right'>מייל</label>
+                <input type="email" class="form-control" id="edit_mail">
+              </div>
+              <div class="form-group">
+                <label for="edit_image" class='col-form-label float-right'>תמונה</label>
+                <input type="file" class="form-control" id="edit_image">
+              </div>
+              <div class="form-group">
+                <label for="edit_password" class='col-form-label float-right'>סיסמה</label>
+                <input type="password" class="form-control" id="edit_password">
+              </div>
+              <div class="form-group">
+                <label for="retype_password" class='col-form-label float-right'>חזור על סיסמה</label>
+                <input type="password" class="form-control" id="retype_password">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary">עדכן</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div class="row justify-content-center">
-  <div class="col-xs-6">
-    <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
-    <button type="submit" class="btn form-group float-left">הוסף פקולטה</button>
-  </div>
 </div>
+
 <script type="module">
   import {sendRequest} from "./js/request";
 
-  let button_html = '\n' +
-  '<span class="float-left">\n' +
-  '  <button type="button" class="btn btn-secondary btn-sm">\n' +
-  '    <i class="fa fa-edit"></i>\n' +
-  '  </button>\n' +
-  '  <button type="button" class="btn btn-secondary btn-sm">\n' +
-  '    <i class="fa fa-trash"></i>\n' +
-  '  </button>\n' +
-  '</span>';
+  function showEditModal() {
+    $('#edit_modal').modal('show');
+  }
+
   let list = document.getElementById('fac_list');
   sendRequest('get', 'api/faculty/list', null, res => {
     let data = JSON.parse(res);
-    console.log(data);
     for (let i in data) {
+
+      let button_html = '\n' +
+      '<span class="float-left">\n' +
+      '  <button id="edit_button_' + i + '" type="button" class="btn btn-secondary btn-sm">\n' +
+      '    <i class="fa fa-edit"></i>\n' +
+      '  </button>\n' +
+      '  <button id="remove_button_' + i + '" type="button" class="btn btn-secondary btn-sm">\n' +
+      '    <i class="fa fa-trash"></i>\n' +
+      '  </button>\n' +
+      '</span>';
       let li = document.createElement('li');
       li.innerHTML = data[i].name + button_html;
       li.setAttribute('class', 'list-group-item');
       list.appendChild(li);
+      $('#edit_button_' + i).click(showEditModal);
     }
-  })
+  });
 </script>
 </body>
 </html>
