@@ -121,33 +121,6 @@
         $('#search_box').keyup(function(){
             table.search($(this).val()).draw() ;
         })
-
-        var dict = [];
-        var req1 = sendRequest("get", "/api/2018-spring/course/list", null, function(res) {
-            var courses = JSON.parse(res);
-            for (var i in courses)
-            {
-                var pref = "";
-                if (!courses[i]["is_first"] && !courses[i]["is_last"])
-                    pref  = "אוטומטי";
-                else if (courses[i]["is_first"])
-                    pref  = "התחלה";
-                else if (courses[i]["is_last"])
-                    pref  = "סוף";
-                var reshuma = {
-                    "id" : courses[i]["id"],
-                    "name" : courses[i]["name"],
-                    "pref" : pref,
-                    "credit_points" : courses[i]["credit_point"]["$numberDecimal"],
-                };
-                dict.push(reshuma);
-                table.row.add(reshuma).draw();
-            }
-        });
-        console.log(dict);
-
-
-
     } );
 </script>
 </body>
