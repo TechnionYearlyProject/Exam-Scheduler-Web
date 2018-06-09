@@ -1,6 +1,41 @@
+function popup_modal(type, text, func) {
+    var title = document.getElementById("alert_title");
+    var body = document.getElementById("alert_body");
+    var icon = document.getElementById("alert_icon");
+    var buttons = document.getElementById("alert_buttons");
+    body.innerHTML = text;
+    if (type == 'ERROR') {
+        title.innerHTML = 'שגיאה';
+        icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+        icon.style.color = '#dc3545';
+        buttons.innerHTML = '<button type="button" class="btn btn-danger" style="margin-left: inherit;" data-dismiss="modal">אישור</button>';
+    }
+    if (type == 'INFO') {
+        title.innerHTML = 'מידע';
+        icon.innerHTML = '<i class="fas fa-info-circle"></i>';
+        icon.style.color = '#ffc107';
+        buttons.innerHTML = '<button type="button" class="btn btn-warning" style="margin-left: inherit; color: white" data-dismiss="modal">אישור</button>';
+    }
+    if (type == 'CONF') {
+        title.innerHTML = 'אישור';
+        icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+        icon.style.color = '#17a2b8';
+        buttons.innerHTML = '<button type="button" class="btn btn-info" data-dismiss="modal">ביטול</button>\n' +
+            '<button type="button" id="alert_func" class="btn btn-info" data-dismiss="modal" style="margin-left: inherit;">אישור</button>';
+    }
+    $('#alert_modal').modal();
+    if (type == 'CONF') {
+        var okay = document.getElementById('alert_func');
+        okay.onclick = func;
+    }
+}
 
-function load_courses_table(dict) {
-    console.log(dict);
+function get_course_entry (course_id) {
+    var courses = JSON.parse(localStorage.getItem("courses_dict"));
+    for (var i in courses) {
+        if (courses[i]["id"] == course_id)
+            return courses[i];
+    }
 }
 
 function create_test(elem_type, text, course_id, class_name, moed) {
@@ -100,8 +135,14 @@ function make_calendar(start, end, moed) {
                 if (course_id == "") //dragged from day
                 {
                     str = ev.dataTransfer.getData("test_drag");
-                    var [course_id, day_dragged_id] = str.split("|");
+                    var [temp, day_dragged_id] = str.split("|");
+                    course_id = temp;
                     var day_dragged = document.getElementById(day_dragged_id);
+                    var moed_dragged = day_dragged.parentNode;
+                    while (!moed_dragged.hasAttribute("moed"))
+                        moed_dragged = moed_dragged.parentNode;
+                    if (moed.getAttribute("moed") != moed_dragged.getAttribute("moed"))
+                        return;
                     day_dragged.childNodes[1].style.visibility = "hidden";
                     for (var i in day_dragged.childNodes){
                         var child = day_dragged.childNodes[i];
@@ -110,7 +151,8 @@ function make_calendar(start, end, moed) {
                                 day_dragged.removeChild(child);
                     }
                 }
-                var test = create_test("div", course_id, course_id, "test", moed.getAttribute("moed"));
+                var entry = get_course_entry(course_id);
+                var test = create_test("div", entry["name"], course_id, "test", moed.getAttribute("moed"));
                 ev.target.appendChild(test);
             };
             day.ondragover = function (ev) {
