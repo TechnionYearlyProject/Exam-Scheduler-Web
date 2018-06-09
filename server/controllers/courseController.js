@@ -26,7 +26,7 @@ exports.faculty_course_list = function(req,res,next){
       semester: semester._id,
       faculty: req.faculty_id
     },
-    'name id credit_point');
+    'name id credit_point is_first is_last days_before has_exam');
   })
   .then(courses => {
     return res.json(courses);
