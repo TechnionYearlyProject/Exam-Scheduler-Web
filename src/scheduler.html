@@ -25,7 +25,7 @@
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding: 0px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
-    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="background-color: rgba(255,255,255,0.80); margin-right: 15px; width: 350px; margin-top: -5px;"></div>
+    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="margin-right: 15px; width: 350px; margin-top: -5px;"></div>
 </div>
 <div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
   <div class="container-fluid col">
@@ -38,7 +38,7 @@
     <div id="moed_b" moed="b"></div>
   </div>
 </div>
-<div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="false" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="margin-top: 90px;">
         <div class="modal-content" style="width: 440px;">
             <div class="modal-header">
@@ -50,6 +50,21 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="alert_icon" style="font-size: 30px;"></span>
+                <h5 class="modal-title" style="margin-right: 5px;" id="alert_title"></h5>
+            </div>
+            <div class="modal-body" id="alert_body" style="text-align: right; height: 80px;"></div>
+            <div class="modal-footer" id="alert_buttons" style="padding: 10px;">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
@@ -200,7 +215,6 @@
   });
     function initSched() {
         var top = document.getElementById('sem_picker');
-        console.log(top);
         document.getElementById('semester_button').innerHTML = top.innerHTML;
         document.body.ondragover = function(ev) {
             ev.preventDefault();
@@ -225,23 +239,25 @@
         var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
             var courses = JSON.parse(res);
             for (var i in courses) {
-                var pref = "";
-                if (!courses[i]["is_first"] && !courses[i]["is_last"])
-                    pref = "אוטומטי";
-                else if (courses[i]["is_first"])
+                var pref = "אוטומטי";
+                if (courses[i]["is_first"])
                     pref = "התחלה";
-                else if (courses[i]["is_last"])
+                if (courses[i]["is_last"])
                     pref = "סוף";
-                var reshuma = {
+                var entry = {
                     "id": courses[i]["id"],
                     "name": courses[i]["name"],
                     "pref": pref,
                     "credit_points": courses[i]["credit_point"]["$numberDecimal"],
+                    "days_before": courses[i]["days_before"],
+                    "has_exam": courses[i]["has_exam"],
+                    "is_first" : courses[i]["is_first"],
+                    "is_last" : courses[i]["is_last"],
                 };
-                dict.push(reshuma);
-                table.row.add(reshuma).draw();
-
+                dict.push(entry);
+                table.row.add(entry).draw();
             }
+            localStorage.setItem("courses_dict",JSON.stringify(dict));
             table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 let a = this.node();
                 this.node().draggable = true;
