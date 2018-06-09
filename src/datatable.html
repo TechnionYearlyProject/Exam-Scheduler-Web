@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<input type="text" id="search_box" style="width: 439px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+<input type="text" id="search_box" style="height: 30px; width: 439px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
 <table id="example" class="mdl-data-table" style="max-width:420px; min-width: 420px; table-layout: fixed">
     <thead style="padding-left: 0px;">
     <tr>
@@ -19,61 +19,137 @@
 </table>
 <script type="module">
     import { sendRequest } from './js/request';
-    function format ( d ) {
-        return '\n' +
-            '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">\n' +
-            '    <tr>\n' +
-            '        <td>שבץ בלוח המבחנים:</td>\n' +
-            '        <td>\n' +
-            '            <label class="switch" style="margin-bottom: -2px; display: inline-block">\n' +
-            '                <input type="checkbox" checked>\n' +
-            '                <span class="slider round"></span>\n' +
-            '            </label>\n' +
-            '        </td>\n' +
-            '    </tr>\n' +
-            '    <tr>\n' +
-            '        <td>נקודות זכות:</td>\n' +
-            '        <td>3.5</td>\n' +
-            '    </tr>\n' +
-            '    <tr>\n' +
-            '        <td>פקולטה:</td>\n' +
-            '        <td>מדעי המחשב</td>\n' +
-            '    </tr>\n' +
-            '    <tr>\n' +
-            '        <td>ניהול התנגשויות:</td>\n' +
-            '        <td>\n' +
-            '            <button type="button" class="btn btn-secondary btn-sm" style="">\n' +
-            '                <i class="fas fa-link"></i>\n' +
-            '            </button>\n' +
-            '        </td>\n' +
-            '    </tr>\n' +
-            '    <tr>\n' +
-            '        <td>מועד שיבוץ:</td>\n' +
-            '        <td>\n' +
-            '            <div class="btn-group btn-group-toggle" data-toggle="buttons">\n' +
-            '                <label class="btn btn-secondary active btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
-            '                    <input type="radio" name="options" id="option1" autocomplete="off">\n' +
-            '                    <i class="fas fa-arrow-right"></i>\n' +
-            '                </label>\n' +
-            '                <label class="btn btn-secondary btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
-            '                    <input type="radio" name="options" id="option2" autocomplete="off" checked>\n' +
-            '                    <i class="fas fa-minus"></i>\n' +
-            '                </label>\n' +
-            '                <label class="btn btn-secondary btn-sm" style="display: inline-block; padding-right: 7px; padding-left: 7px;">\n' +
-            '                    <input type="radio" name="options" id="option3" autocomplete="off">\n' +
-            '                    <i class="fas fa-arrow-left"></i>\n' +
-            '                </label>\n' +
-            '            </div>\n' +
-            '        </td>\n' +
-            '    </tr>\n' +
-            '</table>';
+
+    function course_expand (row) {
+        let entry = get_course_entry(row.data().id);
+        let has_exam = '';
+        if (entry["has_exam"] == true)
+            has_exam = 'checked';
+        var mini_table = document.createElement('table');
+        mini_table.style = "padding-left:50px; border: 0px ; cellspacing: 0px; cellpadding: 5px";
+        var pairs = [];
+        var switcher = document.createElement("label");
+        switcher.className = "switch";
+        switcher.style = "margin-bottom: -2px; display: inline-block";
+        switcher.innerHTML = '<input type="checkbox" ' + has_exam + '>\n' +
+            '<span class="slider round"></span>\n';
+        pairs.push({text: 'שבץ בלוח המבחנים:', elem: switcher, elem_is_text: false});
+        pairs.push({text: 'פקולטה:', elem: 'פקולטה גנרית', elem_is_text: true});
+        pairs.push({text: 'נקודות זכות:', elem: entry['credit_points'], elem_is_text: true});
+        var input = document.createElement("input");
+        input.value = entry["days_before"];
+        input.className = "form-control";
+        input.setAttribute("type", "number");
+        input.setAttribute("min", "0");
+        input.setAttribute("step", "1");
+        input.style = "padding-right: 2px; padding-left: 0px; border-color: #6c757d; font-size: 13px; height: 20px; width: 58px;border-radius: 0.2rem;";
+        input.onchange = function(){
+            var d1 = row.data();
+                d1["days_before"] = input.value;
+            row.data(d1);
+        }
+        pairs.push({text: 'ימי למידה:', elem: input, elem_is_text: false});
+        var button_group = document.createElement('div');
+        button_group. className = 'btn-group btn-group-toggle';
+        button_group.setAttribute('data-toggle','buttons');
+        var start_button = document.createElement('label');
+        start_button.className = "btn btn-outline-secondary";
+        start_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem;"
+        start_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> התחלה\n';
+        start_button.onclick = function () {
+            var d1 = row.data();
+            d1["pref"] = "התחלה";
+            row.data(d1);
+        }
+        var auto_button = document.createElement('label');
+        auto_button.className = "btn btn-outline-secondary active";
+        auto_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;"
+        auto_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> אוטומטי\n';
+        auto_button.checked = "true";
+        auto_button.onclick = function () {
+            var d1 = row.data();
+            d1["pref"] = "אוטומטי";
+            row.data(d1);
+        }
+        var end_button = document.createElement('label');
+        end_button.className = "btn btn-outline-secondary";
+        end_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem;"
+        end_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> סוף\n';
+        end_button.onclick = function () {
+            var d1 = row.data();
+            d1["pref"] = "סוף";
+            row.data(d1);
+        };
+        if (entry["is_first"]) {
+            auto_button.className = "btn btn-outline-secondary";
+            auto_button.checked = "false";
+            end_button.className = "btn btn-outline-secondary";
+            end_button.checked = "false";
+            start_button.className = "btn btn-outline-secondary active";
+            start_button.checked = "true";
+        }
+        if (entry["is_last"]) {
+            auto_button.className = "btn btn-outline-secondary";
+            auto_button.checked = "false";
+            start_button.className = "btn btn-outline-secondary";
+            start_button.checked = "false";
+            end_button.className = "btn btn-outline-secondary active";
+            end_button.checked = "true";
+        }
+        button_group.appendChild(start_button);
+        button_group.appendChild(auto_button);
+        button_group.appendChild(end_button);
+        pairs.push({text: 'העדפת שיבוץ:', elem: button_group, elem_is_text: false});
+        var conbutton = document.createElement("button");
+        conbutton.type = "button";
+        conbutton.className = "btn btn-outline-secondary btn-sm";
+        conbutton.style = "height: 20px; width: 20px; padding: 0px;"
+        conbutton.innerHTML = '<i class="fas fa-link"></i>';
+        conbutton.onclick = function() {
+          alert("hi");
+        };
+        pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
+        var delbutton = document.createElement("button");
+        delbutton.type = "button";
+        delbutton.className = "btn btn-outline-secondary btn-sm";
+        delbutton.style = "height: 20px; width: 20px; padding: 0px;"
+        delbutton.innerHTML = '<i class="fas fa-trash"></i>';
+        delbutton.onclick = function() {
+            function del() {
+                row.remove();
+                row.node().parentNode.removeChild(row.node());
+            };
+            popup_modal("CONF", 'האם אתה בטוח שברצונך למחוק את הקורס?', del);
+        };
+        pairs.push({text: 'מחיקת הקורס:', elem: delbutton, elem_is_text: false});
+        for (var i in pairs) {
+            var td1 = document.createElement("td");
+            td1.style = "border-color: transparent !important;";
+            td1.innerHTML = pairs[i].text;
+            var td2 = document.createElement("td");
+            td2.style = "border-color: transparent !important;";
+            if (pairs[i].elem_is_text)
+                td2.innerHTML = pairs[i].elem;
+            else
+                td2.appendChild(pairs[i].elem);
+            var tr = document.createElement("tr");
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            mini_table.appendChild(tr);
+        }
+        row.child(mini_table).show();
     }
+
     $(document).ready(function() {
         var table = $('#example').DataTable( {
-            scrollY: 523,
+            scrollY: 540,
             paging: false,
             info: false,
             "dom": 'lrt',
+            "language":  {
+              "emptyTable": "טוען רשימת קורסים...",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
             "columnDefs": [
                 { "width": "25px", "targets": 0 },
                 { "width": "75px", "targets": 1 },
@@ -93,25 +169,22 @@
                 { "data": "id" },
                 { "data": "name" },
                 { "data": "pref" },
-                { "data": "credit_points" }
+                { "data": "days_before" }
             ],
             "order": [[1, 'asc']]
-
         } );
         $('#example tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var tdi = tr.find("i.fas");
             var row = table.row( tr );
             if ( row.child.isShown() ) {
-                // This row is already open - close it
                 row.child.hide();
                 tr.removeClass('shown');
                 tdi.first().removeClass('fa-angle-up');
                 tdi.first().addClass('fa-angle-down');
             }
             else {
-                // Open this row
-                row.child( format(row.data()) ).show();
+                course_expand(row);
                 tr.addClass('shown');
                 tdi.first().removeClass('fa-angle-down');
                 tdi.first().addClass('fa-angle-up');
