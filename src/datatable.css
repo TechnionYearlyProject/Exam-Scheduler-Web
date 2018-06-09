@@ -55,11 +55,11 @@
 }
 
 input:checked + .slider {
-    background-color: #455A64;
+    background-color: #6c757d;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #455A64;
+    box-shadow: 0 0 1px #6c757d;
 }
 
 input:checked + .slider:before {
@@ -94,4 +94,9 @@ input:checked + .slider:before {
 
 .thead {
     border-right: 1px solid rgba(0,0,0,.12) !important;
+}
+
+
+.btn.btn-outline-secondary:not(hover):not(focus):not(active) {
+    background-color: white;
 }
