@@ -6,15 +6,13 @@ const api = require('./server/routes/api');
 const app = express();
 const db = require('./database/database');
 const auth = require('./server/auth/authController');
-const schedulerTest = require('./tests/scheduleTest');
+const scheduleMaker = require('./lib/algorithm/scheduleMaker');
 var logger = require('morgan');
 
 //Connection to database
 if (process.env.NODE_ENV && process.env.NODE_ENV.localeCompare('test')) {
-  db.open();
-  app.use(logger('dev'));
-} else {
-  db.open();
+    db.open();
+    app.use(logger('dev'));
 }
 
 app.use(bodyParser.json());
@@ -36,7 +34,7 @@ app.all('*', auth.verify_token_front);
 app.get('/scheduler', (req, res) => res.sendFile(path.join(__dirname, 'src/scheduler.html')));
 app.get('/edit_email', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_email.html')));
 app.get('/edit_password', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_password.html')));
-app.post('/make-schedule', (req, res) => schedulerTest.tryToSchedule(req, res));
+app.post('/make-schedule', (req, res) => scheduleMaker.tryToSchedule(req, res));
 app.get('/', (req, res) => res.redirect('/scheduler'));
 
 app.all('*', auth.verify_admin_front);
