@@ -119,7 +119,7 @@
                 row.remove();
                 row.node().parentNode.removeChild(row.node());
             };
-            popup_modal("CONF", 'האם אתה בטוח שברצונך למחוק את הקורס?', del);
+            popup_modal("CONF", 'האם אתה בטוח שברצונך למחוק את הקורס "' + entry["name"] +'"?', del);
         };
         pairs.push({text: 'מחיקת הקורס:', elem: delbutton, elem_is_text: false});
         for (var i in pairs) {
