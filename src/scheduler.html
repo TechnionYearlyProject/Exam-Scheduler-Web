@@ -113,6 +113,40 @@
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         load_courses_table();
     });
+    var fillScheduleWithCourses = function (moeds) {
+        return function (result) {
+            result = JSON.parse(result);
+            console.log(result);
+            for (var m = 0; m < moeds.length; m++){
+                var moed = moeds[m];
+                for(var i = 0; i < result[moed].schedule.length; i++){
+                    var examDay = result[moed].schedule[i];
+                    var day = '#'+ moed +'_day_' + examDay.index;
+                    console.log(day);
+                    for (var j = 0; j < examDay.exams.length; j++){
+                        var test = document.createElement("div");
+                        var id = examDay.exams[j]["id"];
+                        test.id = "exam_for_" + id;
+                        test.className = "test";
+                        var color = "#FFA726";
+                        if (id.startsWith("234")){
+                            color = "#26A69A";
+                        } else if (id.startsWith("104")){
+                            color = "#EF5350";
+                        } else if (id.startsWith("094")) {
+                            color = "#FFEB3B";
+                        } else if (id.startsWith("236")) {
+                            color = "#9CCC65";
+                        }
+                        test.style.backgroundColor = color;
+                        test.style.width = "60px";
+                        test.innerHTML = examDay.exams[j]["name"];
+                        $(day).append(test);
+                    }
+                }
+            }
+        }
+    };
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
     $('#moed_b').load('moed_b.html');
@@ -123,95 +157,26 @@
           $('#exampleModal').modal("show");
           setTimeout(function () {
               $('#exampleModal').modal("hide");
-              $.ajax({url: "/make-schedule", type: "POST", data: JSON.stringify({occupied: occupied}), success: function(result){
-                      result = JSON.parse(result);
-                      for(var i = 0; i < result.moedA.length; i++){
-                          var day = '#moed_a_day_' + result.moedA[i].index;
-                          console.log(day);
-                          for (var j = 0; j < result.moedA[i].exams.length; j++){
-                              var test = document.createElement("div");
-                              test.id = "exam_for_" + result.moedA[i].exams[j]["id"];
-                              test.className = "test";
-                              //test.style.margin = "2px 1px 2px 1px";
-                              var id = result.moedA[i].exams[j]["id"];
-                              var color = "#FFA726";
-                              if (id.startsWith("234")){
-                                  color = "#26A69A";
-                              } else if (id.startsWith("104")){
-                                  color = "#EF5350";
-                              } else if (id.startsWith("094")) {
-                                  color = "#FFEB3B";
-                              } else if (id.startsWith("236")) {
-                                  color = "#9CCC65";
-                              }
-                              test.style.backgroundColor = color;
-                              test.style.width = "60px";
-                              test.innerHTML = result.moedA[i].exams[j]["name"];
-                              $(day).append(test);
-                          }
-                      }
-                  for(var i = 0; i < result.moedB.length; i++){
-                      var day = '#moed_b_day_' + result.moedB[i].index;
-                      for (var j = 0; j < result.moedB[i].exams.length; j++){
-                          var test = document.createElement("div");
-                          test.id = "exam_for_" + result.moedB[i].exams[j]["id"];
-                          test.className = "test";
-                          //test.style.margin = "2px 1px 2px 1px";
-                          var id = result.moedB[i].exams[j]["id"];
-                          var color = "#FFA726";
-                          if (id.startsWith("234")){
-                              color = "#26A69A";
-                          } else if (id.startsWith("104")){
-                              color = "#EF5350";
-                          } else if (id.startsWith("094")) {
-                              color = "#FFEB3B";
-                          } else if (id.startsWith("236")) {
-                              color = "#9CCC65";
-                          }
-                          test.style.backgroundColor = color;
-                          test.style.width = "60px";
-                          test.innerHTML = result.moedB[i].exams[j]["name"];
-                          $(day).append(test);
-                      }
-                  }
-                  }
+              $.ajax({
+                    url: "/make-schedule",
+                    type: "POST",
+                    data: JSON.stringify({occupied: occupied}),
+                    success: fillScheduleWithCourses(["moed_a", "moed_b"])
               });
           }, 5000);
       });
       $('#scheduler_function_caller_2').click(function(){
           $("[id^='exam_for_']").remove();
-          $.ajax({url: "/make-schedule", type: 'POST', data: JSON.stringify({occupied: occupied}), success: function(result){
-                  result = JSON.parse(result);
-                  for(var i = 0; i < result.length; i++){
-                      var day = '#moed_a_day_' + result[i].index;
-                      for (var j = 0; j < result[i].exams.length; j++){
-                          var test = document.createElement("div");
-                          test.id = "exam_for_" + result[i].exams[j]["id"];
-                          test.className = "test";
-                          //test.style.margin = "2px 1px 2px 1px";
-                          var id = result[i].exams[j]["id"];
-                          var color = "#FFA726";
-                          if (id.startsWith("234")){
-                              color = "#26A69A";
-                          } else if (id.startsWith("104")){
-                              color = "#EF5350";
-                          } else if (id.startsWith("094")) {
-                              color = "#FFEB3B";
-                          } else if (id.startsWith("236")) {
-                              color = "#9CCC65";
-                          }
-                          test.style.backgroundColor = color;
-                          test.style.width = "60px";
-                          test.innerHTML = result[i].exams[j]["name"];
-                          $(day).append(test);
-                      }
-                  }
-              }
+          $.ajax({
+              url: "/make-schedule",
+              type: 'POST',
+              data: JSON.stringify({occupied: occupied}),
+              success: fillScheduleWithCourses(["moed_a"]),
           });
-          $("#schedule_clear").click(function(){
-              $("[id^='exam_for_']").remove();
-          })
       });
+      $("#schedule_clear").click(function(){
+          $("[id^='exam_for_']").remove();
+      })
   });
     function initSched() {
         var top = document.getElementById('sem_picker');
