@@ -6,7 +6,10 @@ const Schedule = require('../server/models/schedule').model;
 const Semester = require('../server/models/semester').model;
 
 exports.tryToSchedule = function (req, res){
-    var occupiedDays = Object.keys((JSON.parse(Object.keys(req.body)[0]))["occupied"]);
+    var request = JSON.parse(Object.keys(req.body)[0]);
+    var occupiedDays = Object.keys(request.occupied);
+    var semester = request.semester.split("-");
+    var faculty = request.faculty;
     var occupied ={moedA: [], moedB: []};
     for (var i = 0; i < occupiedDays.length; i++){
         var occupiedDay = occupiedDays[i];
@@ -20,12 +23,11 @@ exports.tryToSchedule = function (req, res){
         }
     }
     //Schedule.find({semester: semester._id}, 'name faculty start end exams').then(data=>{console.log(data)});
-    var semester;
     var courses;
-    Semester.findOne({year: 2018, semester: 'spring'}, "year semester start_a end_a start_b end_b").exec()
+    Semester.findOne({year: semester[0], semester: semester[1]}, "year semester start_a end_a start_b end_b").exec()
         .then(data => {
             semester = data;
-            return Course.find({}, 'name id credit_point registrations has_exam').exec();
+            return Course.find({}, 'name id credit_point registrations has_exam faculty').populate('faculty').exec();
         })
         .then(data => {
             courses = data;
@@ -44,8 +46,8 @@ exports.tryToSchedule = function (req, res){
             }
         })
         .then(data => {
-            const moedA = new Scheduler(semester.start_a, semester.end_a, occupied.moedA);
-            const moedB = new Scheduler(semester.start_b, semester.end_b, occupied.moedB);
+            const moedA = new Scheduler(semester.start_a, semester.end_a, faculty, occupied.moedA);
+            const moedB = new Scheduler(semester.start_b, semester.end_b, faculty, occupied.moedB);
             moedA.schedule(courses);
             moedB.schedule(courses);
             res.send(JSON.stringify({

@@ -126,7 +126,7 @@
                     for (var j = 0; j < examDay.exams.length; j++){
                         var test = document.createElement("div");
                         var id = examDay.exams[j]["id"];
-                        test.id = "exam_for_" + id;
+                        test.id = "exam_for_" +moed + "_" + id;
                         test.className = "test";
                         var color = "#FFA726";
                         if (id.startsWith("234")){
@@ -153,24 +153,32 @@
     $('#courses').load('datatable.html', function () {
       $('#scheduler_function_caller').click(function(){
           $("[id^='exam_for_']").remove();
-          console.log(occupied);
+          console.log(localStorage);
           $('#exampleModal').modal("show");
           setTimeout(function () {
               $('#exampleModal').modal("hide");
               $.ajax({
                     url: "/make-schedule",
                     type: "POST",
-                    data: JSON.stringify({occupied: occupied}),
+                    data: JSON.stringify({
+                        occupied: occupied,
+                        semester: localStorage.semester_name,
+                        faculty: localStorage.faculty_name
+                    }),
                     success: fillScheduleWithCourses(["moed_a", "moed_b"])
               });
           }, 5000);
       });
       $('#scheduler_function_caller_2').click(function(){
-          $("[id^='exam_for_']").remove();
+          $("[id^='exam_for_moed_a']").remove();
           $.ajax({
               url: "/make-schedule",
               type: 'POST',
-              data: JSON.stringify({occupied: occupied}),
+              data: JSON.stringify({
+                  occupied: occupied,
+                  semester: localStorage.semester_name,
+                  faculty: localStorage.faculty_name
+              }),
               success: fillScheduleWithCourses(["moed_a"]),
           });
       });
