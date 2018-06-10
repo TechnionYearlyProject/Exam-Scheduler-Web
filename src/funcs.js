@@ -143,7 +143,10 @@ function make_calendar(start, end, moed) {
                     while (!moed_dragged.hasAttribute("moed"))
                         moed_dragged = moed_dragged.parentNode;
                     if (moed.getAttribute("moed") != moed_dragged.getAttribute("moed"))
+                    {
+                        popup_modal("ERROR", 'לא ניתן להעביר מבחנים בין מועדים', null);
                         return;
+                    }
                     day_dragged.childNodes[1].style.visibility = "hidden";
                     for (var i in day_dragged.childNodes){
                         var child = day_dragged.childNodes[i];
