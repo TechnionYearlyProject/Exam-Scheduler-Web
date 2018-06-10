@@ -13,6 +13,8 @@ var logger = require('morgan');
 if (process.env.NODE_ENV && process.env.NODE_ENV.localeCompare('test')) {
   db.open();
   app.use(logger('dev'));
+} else {
+  db.open();
 }
 
 app.use(bodyParser.json());
