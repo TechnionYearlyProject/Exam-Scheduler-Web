@@ -3,7 +3,17 @@ const config = require('../auth/config');
 const bcrypt = require('bcryptjs');
 
 exports.faculty_list = function (req, res, next) {
-  Faculty.find({}, 'name')
+  Faculty.find({}, 'name image')
+  .then(data => {
+    return res.json(data);
+  })
+  .catch(err => {
+    next(err);
+  });
+};
+
+exports.faculty_list_details = function (req, res, next) {
+  Faculty.find({}, 'name email')
   .then(data => {
     return res.json(data);
   })
@@ -17,7 +27,8 @@ exports.faculty_create = function (req, res, next) {
   Faculty.create({
     name: req.body.name,
     email: req.body.email,
-    password: hash
+    password: hash,
+    image: req.body.image
   })
   .then(() => {
     return res.end();
@@ -54,6 +65,17 @@ exports.get_email = function (req, res, next) {
   Faculty.findOne({_id: req.faculty_id})
   .then((faculty) => {
     return res.json({email: faculty.email});
+  })
+  .catch(err => {
+    next(err);
+  });
+};
+
+exports.faculty_update = function (req, res, next) {
+  const conditions = {name: req.body.original};
+  Faculty.findOneAndUpdate(conditions, req.body)
+  .then(() => {
+    return res.end();
   })
   .catch(err => {
     next(err);

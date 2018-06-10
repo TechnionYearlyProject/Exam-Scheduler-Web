@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="resources/jquery-3.3.1.js"></script>
+  <link rel="stylesheet" href="resources/bootstrap.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css"
+        integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+  <link rel="stylesheet" href="resources/bootstrap-rtl.css">
+  <script src="resources/bootstrap.js"></script>
+  <meta charset="utf-8">
+  <title>Technion Exam Scheduler</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px;">
+  <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true"
+         aria-expanded="false">
+        Guest
+        <img src="graphics/guest.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
+      </a>
+    </li>
+  </ul>
+</nav>
+<div class="row justify-content-center" style="margin-top: 40px">
+  <div class="col-xs-6">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-12">
+          <button type="button" class="btn form-group float-right" onclick="location.href='/scheduler'">חזרה</button>
+          <button id="add_faculty_button" type="submit" class="btn form-group float-left">הוסף פקולטה</button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <ul id="fac_list" class="list-group" style="text-align: right; font-size: 18px">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="add_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="add_modal_title">הוספת פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p class="text-secondary" style="text-align: right">נא למלא את כל השדות.</p>
+            <form id="add_form">
+              <div class="form-group">
+                <input type="text" class="form-control" id="add_name" placeholder="שם">
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" id="add_email" placeholder="מייל">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="add_password" placeholder="סיסמה">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="retype_add_password" placeholder="חזרה על סיסמה">
+              </div>
+              <div class="form-group">
+                <label for="add_image" class='col-form-label float-right'>תמונה</label>
+                <input type="file" class="form-control-file" id="add_image">
+              </div>
+              <div class="form-group">
+                <div class="alert alert-danger col-sm-12" id="add_error" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_add" type="button" class="btn btn-secondary">הוסף</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="edit_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit_modal_title">שינוי פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p class="text-secondary" style="text-align: right">שדות ריקות לא יעודכנו.</p>
+            <form id="edit_form">
+              <div class="form-group">
+                <input type="text" class="form-control" id="edit_name" placeholder="שם">
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" id="edit_email" placeholder="מייל">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="edit_password" placeholder="סיסמה">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="retype_edit_password" placeholder="חזרה על סיסמה">
+              </div>
+              <div class="form-group">
+                <label for="edit_image" class='col-form-label float-right'>תמונה</label>
+                <input type="file" class="form-control-file" id="edit_image">
+              </div>
+              <div class="form-group">
+                <div class="alert alert-danger col-sm-12" id="edit_error" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_edit" type="button" class="btn btn-secondary">עדכן</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="remove_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="remove_modal_title" class="modal-title">הסרת פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p id="remove_text" style="text-align: right"></p>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_remove" type="button" class="btn btn-secondary">הסר</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="module">
+  import {sendRequest} from "./js/request";
+
+  function resize_and_convert(file, callback) {
+    let MAX_SIZE = 150;
+    let reader = new FileReader();
+    reader.onload = function (event) {
+      let image = new Image();
+      image.src = event.target.result;
+      image.onload = function () {
+        if (image.width > image.height) {
+          if (image.height > MAX_SIZE) {
+            image.width *= MAX_SIZE / image.height;
+            image.height = MAX_SIZE;
+          }
+        } else {
+          if (image.width > MAX_SIZE) {
+            image.height *= MAX_SIZE / image.width;
+            image.width = MAX_SIZE;
+          }
+        }
+        let canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        let context = canvas.getContext("2d");
+        context.drawImage(this, 0, 0, image.width, image.height);
+        let retval = canvas.toDataURL(file.type);
+        callback(retval);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $('#add_faculty_button').click(() => {
+    document.getElementById('add_name').value = '';
+    document.getElementById('add_email').value = '';
+    document.getElementById('add_password').value = '';
+    document.getElementById('retype_add_password').value = '';
+    document.getElementById('add_image').value = '';
+    document.getElementById('add_error').style.display = 'none';
+    $('#add_modal').modal('show');
+  });
+
+  $('#submit_add').click(() => {
+    let name = document.getElementById('add_name').value;
+    let email = document.getElementById('add_email').value;
+    let password = document.getElementById('add_password').value;
+    let retype = document.getElementById('retype_add_password').value;
+    let file = undefined;
+    if (document.getElementById('add_image').files !== undefined) {
+      file = document.getElementById('add_image').files[0];
+    }
+    let alert = document.getElementById('add_error');
+    if (name.length === 0 || email.length === 0 || password.length === 0 || retype.length === 0 || file === undefined) {
+      alert.innerText = "נא למלא את כל השדות.";
+      alert.style.display = 'block';
+    } else if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+      alert.innerText = "המייל המוקלד לא תקין.";
+      alert.style.display = 'block';
+    } else if (password.length < 8) {
+      alert.innerText = "הסיסמה המוקלדת קצרה מדי.";
+      alert.style.display = 'block';
+    } else if (password.localeCompare(retype) !== 0) {
+      alert.innerText = "הסיסמאות לא תואמות.";
+      alert.style.display = 'block';
+    } else if (!file.type.startsWith('image')) {
+      alert.innerText = "נא לצרף קובץ תמונה.";
+      alert.style.display = 'block';
+    } else {
+      alert.style.display = 'none';
+      resize_and_convert(file, image => {
+        let json = {name: name, email: email, password: password, retype: retype, image: image};
+        sendRequest('post', '/api/faculty/create', json, () => {
+          $('#add_modal').modal('hide');
+          window.location.href = "/faculties";
+        });
+      });
+    }
+  });
+
+  function showEditModal(event) {
+    document.getElementById('edit_name').value = event.data.name;
+    document.getElementById('edit_email').value = event.data.email;
+    document.getElementById('edit_password').value = '';
+    document.getElementById('retype_edit_password').value = '';
+    document.getElementById('edit_image').value = '';
+    document.getElementById('edit_modal_title').innerText = event.data.name + " - שינוי פקולטה";
+    document.getElementById('edit_error').style.display = 'none';
+    $('#edit_modal').modal('show');
+  }
+
+  $('#submit_edit').click(() => {
+    let name = document.getElementById('edit_name').value;
+    let email = document.getElementById('edit_email').value;
+    let password = document.getElementById('edit_password').value;
+    let retype = document.getElementById('retype_edit_password').value;
+    let file = undefined;
+    if (document.getElementById('edit_image').files !== undefined) {
+      file = document.getElementById('edit_image').files[0];
+    }
+    let alert = document.getElementById('edit_error');
+    if (email.length > 0 && !email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+      alert.innerText = "המייל המוקלד לא תקין.";
+      alert.style.display = 'block';
+    } else if (password.length > 0 && password.length < 8) {
+      alert.innerText = "הסיסמה המוקלדת קצרה מדי.";
+      alert.style.display = 'block';
+    } else if (password.length > 0 && password.localeCompare(retype) !== 0) {
+      alert.innerText = "הסיסמאות לא תואמות.";
+      alert.style.display = 'block';
+    } else if (file !== undefined && !file.type.startsWith('image')) {
+      alert.innerText = "נא לצרף קובץ תמונה.";
+      alert.style.display = 'block';
+    } else {
+      alert.style.display = 'none';
+      let json = {};
+      if (name.length > 0) {
+        json.name = name;
+      }
+      if (email.length > 0) {
+        json.email = email;
+      }
+      if (password.length > 0) {
+        json.password = password;
+      }
+      if (retype.length > 0) {
+        json.retype = retype;
+      }
+      json.original = document.getElementById('edit_modal_title').innerText.split(' - ')[0];
+      if (file !== undefined) {
+        resize_and_convert(file, image => {
+          json.image = image;
+          console.log(json);
+          sendRequest('post', '/api/faculty/update', json, () => {
+            $('#edit_modal').modal('hide');
+            window.location.href = "/faculties";
+          })
+        });
+      } else {
+        console.log(json);
+        sendRequest('post', '/api/faculty/update', json, () => {
+          $('#edit_modal').modal('hide');
+          window.location.href = "/faculties";
+        })
+      }
+    }
+  });
+
+  function showRemoveModal(event) {
+    let title = document.getElementById('remove_modal_title');
+    title.innerText = event.data.name + " - הסרת פקולטה";
+    document.getElementById('remove_text').innerText = 'האם אתה בטוח שאתה רוצה להסיר את הפקולטה ל' + event.data.name + ' מהמערכת?';
+    $('#remove_modal').modal('show');
+  }
+
+  $('#submit_remove').click(() => {
+    let json = {name: document.getElementById('remove_modal_title').innerText.split(' - ')[0]};
+    sendRequest('delete', 'api/faculty/delete', json, res => {
+      $('#remove_modal').modal('hide');
+      window.location.href = "/faculties";
+    });
+  });
+
+  let list = document.getElementById('fac_list');
+  sendRequest('get', 'api/faculty/details_list', null, res => {
+    let data = JSON.parse(res);
+    for (let i in data) {
+
+      let button_html = '\n' +
+      '<span class="float-left">\n' +
+      '  <button id="edit_button_' + i + '" type="button" class="btn btn-secondary btn-sm">\n' +
+      '    <i class="fa fa-edit"></i>\n' +
+      '  </button>\n' +
+      '  <button id="remove_button_' + i + '" type="button" class="btn btn-secondary btn-sm">\n' +
+      '    <i class="fa fa-trash"></i>\n' +
+      '  </button>\n' +
+      '</span>';
+      let li = document.createElement('li');
+      li.innerHTML = data[i].name + button_html;
+      li.setAttribute('class', 'list-group-item');
+      list.appendChild(li);
+      $('#edit_button_' + i).click({name: data[i].name, email: data[i].email}, showEditModal);
+      $('#remove_button_' + i).click({name: data[i].name}, showRemoveModal);
+    }
+  });
+</script>
+</body>
+</html>

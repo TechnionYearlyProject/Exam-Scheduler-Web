@@ -1,0 +1,60 @@
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+.test{
+    font-weight: bold;
+    color: white;
+    margin: 1px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 10px;
+    border-radius: 2px;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 70px;
+    min-width: 70px;
+    text-align: right;
+}
+
+.test_tooltip{
+    font-weight: bold;
+    color: white;
+    margin: 1px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 10px;
+    border-radius: 2px;
+    text-align: right;
+}
+
+.day{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
