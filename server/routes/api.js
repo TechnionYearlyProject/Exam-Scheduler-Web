@@ -33,13 +33,13 @@ router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
 router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
-router.patch(sem_regex + '/course/:courseID/schedule',schedule_controller.schedule_course);
-router.patch(sem_regex + '/schedule/clear',schedule_controller.clearExams);
-router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);
+router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);//create schedule (load if exists)
+router.patch(sem_regex + '/course/:courseID/schedule_a',schedule_controller.schedule_moed_a);//assign moed_a
+router.patch(sem_regex + '/course/:courseID/schedule_b',schedule_controller.schedule_moed_b);//assign moed_b
+router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//clear schedule
 // router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
 
 router.get('/semester/list', semester_controller.semester_list);
-
 // User management routes
 
 // Update user email
@@ -51,10 +51,10 @@ router.put('/update_password', faculty_controller.faculty_update_password);
 router.all('*', auth.verify_admin);
 
 router.get('/faculty/details_list', faculty_controller.faculty_list_details); // Admin only, return also emails
+router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
 router.post('/faculty/update', faculty_controller.faculty_update);
-
 router.post('/semester/create', semester_controller.semester_create);
 router.post('/semester/update', semester_controller.semester_update_dates);
 
