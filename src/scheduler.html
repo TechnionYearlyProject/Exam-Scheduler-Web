@@ -15,17 +15,29 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
-
     <link rel="stylesheet" href="styles.css">
-
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
 <div id="toolbar"></div>
-<div class="dropdown navbar" style="padding: 0px;">
+<div class="dropdown navbar" style="padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
-    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="margin-right: 15px; width: 350px; margin-top: -5px;"></div>
+    <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="width: 350px; margin-top: -5px;"></div>
+    <div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary btn-md" style="height: 40px; width: 110px; margin-left: 5px;" id="scheduler_function_caller">
+                <i class="fas fa-calendar-alt" style="padding-left: 5px"></i>
+                שיבוץ
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary btn-md" style="height: 40px; width: 110px; margin-left: 5px;" id="schedule_clear">
+                <i class="fas fa-trash-alt" style="padding-left: 5px"></i>
+                ניקוי
+            </button>
+        </div>
+    </div>
 </div>
 <div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
   <div class="container-fluid col">
