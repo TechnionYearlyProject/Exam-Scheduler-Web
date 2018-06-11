@@ -31,6 +31,23 @@ function popup_modal(type, text, func) {
     }
 }
 
+
+function popover_comment(elem_id, course_name) {
+    var test = document.getElementById(elem_id);
+    test.setAttribute("data-toggle", "popover");
+    var input = document.getElementById("popover_input");
+    var button = document.getElementById("popover_button");
+    input.placeholder = 'הערה עבור קורס "' + course_name + '"';
+    $('#' + elem_id).popover({
+        trigger: 'focus',
+        placement: 'right',
+        html:true,
+        content:  $('#popover_comment').html()
+    })
+
+}
+
+
 function get_course_entry (course_id) {
     var courses = JSON.parse(localStorage.getItem("courses_dict"));
     for (var i in courses) {
@@ -44,6 +61,7 @@ function create_test(elem_type, text, course_id, class_name, moed) {
     test.className += class_name;
     test.innerHTML = text;
     test.draggable = true;
+    test.id = moed + "_" + course_id;
     test.setAttribute("test_id", moed + "_" + course_id);
     var color = "black";
     if (course_id.startsWith("234")){
@@ -125,10 +143,12 @@ function make_calendar(start, end, moed) {
             };
             day.ondrop = function (ev) {
                 ev.preventDefault();
-                this.childNodes[1].style.visibility = "hidden";
+                if (ev.target.className != "col day")
+                    return;
                 if (this.getAttribute('active') == 0) {
                     return;
                 }
+                this.childNodes[1].style.visibility = "hidden";
                 var moed = day.parentNode;
                 while (!moed.hasAttribute("moed"))
                     moed = moed.parentNode;
@@ -158,10 +178,17 @@ function make_calendar(start, end, moed) {
                 var entry = get_course_entry(course_id);
                 var test = create_test("div", entry["name"], course_id, "test", moed.getAttribute("moed"));
                 ev.target.appendChild(test);
+                popover_comment(test.id, entry["name"]);
+                test.ondblclick = function () {
+                    $('#' + test.id).popover("show");
+                }
             };
             day.ondragover = function (ev) {
                 ev.preventDefault();
             };
+            day.oncontextmenu = function (ev) {
+
+            }
             var lock = document.createElement("span");
             lock.style = "float: right; padding:0px; padding-right:1px; visibility: hidden";
             var img = document.createElement("i");

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="resources/bootstrap.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
     <link rel="stylesheet" href="resources/bootstrap-rtl.css">
+    <script src="umd/popper.js"></script>
     <script src="resources/bootstrap.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
@@ -15,9 +16,7 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
-
     <link rel="stylesheet" href="styles.css">
-
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
@@ -38,6 +37,14 @@
     <div id="moed_b" moed="b"></div>
   </div>
 </div>
+
+<div id="popover_comment" class="modal fade">
+    <div class = "row">
+        <div class="col 9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea></div>
+        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
+    </div>
+</div>
+
 <div class="modal fade" data-backdrop="false" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="margin-top: 90px;">
         <div class="modal-content" style="width: 440px;">
@@ -147,6 +154,13 @@
             }
         }
     };
+    $('body').on('click', function (e) {
+        if (e.target.className == "popover-body" || e.target.id == "popover_input" || e.target.id == "popover_button")
+            return;
+        $('[data-toggle="popover"]').each(function () {
+            $(this).popover('hide');
+        });
+    });
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
     $('#moed_b').load('moed_b.html');
