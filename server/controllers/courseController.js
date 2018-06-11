@@ -150,3 +150,21 @@ exports.course_data = function (req, res, next) {
     next(err);
   });
 };
+
+exports.all_courses = function(req,res,next){
+    Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    }).then(semester => {
+        if (!semester) {
+            return res.status(404).send('Semester not found.');
+        }
+        return Course.find({
+            semester: semester._id,
+        }, 'name id credit_point');
+    }).then(courses => {
+        return res.json(courses);
+    }).catch(err => {
+        next(err);
+    });
+};
