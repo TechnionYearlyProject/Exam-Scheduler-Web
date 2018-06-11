@@ -100,3 +100,7 @@ input:checked + .slider:before {
 .btn.btn-outline-secondary:not(hover):not(focus):not(active) {
     background-color: white;
 }
+
+.btn.btn-outline-secondary:hover {
+    background-color: #6c757d;
+}
