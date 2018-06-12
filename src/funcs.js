@@ -44,6 +44,11 @@ function popover_comment(elem_id, course_name) {
         html:true,
         content:  $('#popover_comment').html()
     })
+    $('#' + elem_id).tooltip({
+        trigger: 'hover',
+        placement: 'left',
+        title:  course_name
+    })
 
 }
 
@@ -75,6 +80,8 @@ function create_test(elem_type, text, course_id, class_name, moed) {
     }
     test.style.backgroundColor = color;
     test.ondragstart = function(ev) {
+        $('#' + test.id).popover("hide");
+        $('#' + test.id).tooltip("hide");
         var test2 = document.createElement("label");
         test2.className = "test_tooltip";
         test2.innerHTML = text;
