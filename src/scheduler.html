@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<div class="modal fade" data-backdrop="false" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="margin-top: 90px;">
         <div class="modal-content" style="width: 440px;">
             <div class="modal-header">
@@ -142,27 +142,10 @@
                 var moed = moeds[m];
                 for(var i = 0; i < result[moed].schedule.length; i++){
                     var examDay = result[moed].schedule[i];
-                    var day = '#'+ moed +'_day_' + examDay.index;
-                    console.log(day);
+                    var day = moed +'_day_' + examDay.index;
+                    var day_elem = document.getElementById(day);
                     for (var j = 0; j < examDay.exams.length; j++){
-                        var test = document.createElement("div");
-                        var id = examDay.exams[j]["id"];
-                        test.id = "exam_for_" +moed + "_" + id;
-                        test.className = "test";
-                        var color = "#FFA726";
-                        if (id.startsWith("234")){
-                            color = "#26A69A";
-                        } else if (id.startsWith("104")){
-                            color = "#EF5350";
-                        } else if (id.startsWith("094")) {
-                            color = "#FFEB3B";
-                        } else if (id.startsWith("236")) {
-                            color = "#9CCC65";
-                        }
-                        test.style.backgroundColor = color;
-                        test.style.width = "60px";
-                        test.innerHTML = examDay.exams[j]["name"];
-                        $(day).append(test);
+                        var test = create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                     }
                 }
             }

@@ -44,12 +44,6 @@ function popover_comment(elem_id, course_name) {
         html:true,
         content:  $('#popover_comment').html()
     })
-    $('#' + elem_id).tooltip({
-        trigger: 'hover',
-        placement: 'left',
-        title:  course_name
-    })
-
 }
 
 
@@ -61,7 +55,7 @@ function get_course_entry (course_id) {
     }
 }
 
-function create_test(elem_type, text, course_id, class_name, moed) {
+function create_test(target, elem_type, text, course_id, class_name, moed) {
     var test = document.createElement(elem_type);
     test.className += class_name;
     test.innerHTML = text;
@@ -95,7 +89,14 @@ function create_test(elem_type, text, course_id, class_name, moed) {
         ev.dataTransfer.setDragImage(test2, 0, 0);
         ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
     }
+    target.appendChild(test);
+    $('#' + test.id).tooltip({
+        trigger: 'hover',
+        placement: 'left',
+        title:  text
+    });
     return test;
+
 }
 
 function make_calendar(start, end, moed) {
@@ -183,8 +184,7 @@ function make_calendar(start, end, moed) {
                     }
                 }
                 var entry = get_course_entry(course_id);
-                var test = create_test("div", entry["name"], course_id, "test", moed.getAttribute("moed"));
-                ev.target.appendChild(test);
+                var test = create_test(ev.target, "div", entry["name"], course_id, "test", moed.getAttribute("moed"));
                 popover_comment(test.id, entry["name"]);
                 test.ondblclick = function () {
                     $('#' + test.id).popover("show");
