@@ -86,6 +86,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <h5 class="modal-title" style="margin-right: 5px;">העלאה לענן</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 90px;">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck1">מערכת קורסים</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck2">
+                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck2">מועד א'</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck3">
+                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck3">מועד ב'</label>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ביטול</button>
+                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="margin-left: inherit;">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
