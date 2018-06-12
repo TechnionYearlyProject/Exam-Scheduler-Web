@@ -56,8 +56,8 @@
           ענן
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
-          <a class="dropdown-item" href="#">הורדה</a>
-          <a class="dropdown-item" href="#">העלאה</a>
+          <a class="dropdown-item" href="#" id="download_button">הורדה</a>
+          <a class="dropdown-item" href="#" id="upload_button">העלאה</a>
         </div>
       </div>
       <div class="btn-group">
@@ -131,6 +131,21 @@
               make_calendar(new Date(localStorage.getItem('start_b')), new Date(localStorage.getItem('end_b')), "b");
           }
           popup_modal("CONF", 'האם אתה בטוח שברצונך לנקות את התוכנית?', clean);
+      };
+
+      var download_button = document.getElementById("download_button");
+      download_button.onclick = function(){
+          function download() {
+              alert("download_constraints");
+          }
+          popup_modal("CONF", 'האם אתה בטוח שברצונך להוריד התנגשויות?', download);
+      };
+
+
+      var upload_button = document.getElementById("upload_button");
+      upload_button.onclick = function(){
+          $('#upload_modal').modal();
+
       };
   </script>
 </body>
