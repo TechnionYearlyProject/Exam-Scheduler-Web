@@ -40,10 +40,29 @@
         </div>
       </div>
     </div>
+    <div id="add_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="add_modal_title">הוספת סמסטר</h5>
+          </div>
+          <div class="modal-body">
+            <p class="text-secondary" style="text-align: right">נא למלא את כל השדות.</p>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_add" type="button" class="btn btn-secondary">הוסף</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <script type="module">
   import {sendRequest} from "./js/request";
+
+  $('#add_semester_button').click(() => {
+    $('#add_modal').modal('show');
+  });
 
   let name = "הפקולטה ל" + localStorage.getItem('faculty_name');
   document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
