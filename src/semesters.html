@@ -84,6 +84,46 @@
         </div>
       </div>
     </div>
+    <div id="edit_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit_modal_title">הוספת סמסטר</h5>
+          </div>
+          <div class="modal-body">
+            <h5 style="text-align: right">מואד א'</h5>
+            <div class="form-group row">
+              <label for="add_start_a" class="col-2 col-form-label" style="text-align: right">התחלה</label>
+              <div class="col-10">
+                <input type="text" class="form-control datepicker" id="edit_start_a">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add_end_a" class="col-2 col-form-label" style="text-align: right">סיום</label>
+              <div class="col-10">
+                <input type="text" class="form-control datepicker" id="edit_end_a">
+              </div>
+            </div>
+            <h5 style="text-align: right">מואד ב'</h5>
+            <div class="form-group row">
+              <label for="add_start_b" class="col-2 col-form-label" style="text-align: right">התחלה</label>
+              <div class="col-10">
+                <input type="text" class="form-control datepicker" id="edit_start_b">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add_end_b" class="col-2 col-form-label" style="text-align: right">סיום</label>
+              <div class="col-10">
+                <input type="text" class="form-control datepicker" id="edit_end_b">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_edit" type="button" class="btn btn-secondary">הוסף</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <script type="module">
@@ -105,6 +145,19 @@
     $('#add_modal').modal('show');
   });
 
+  function showEditModal(event) {
+    $('#edit_start_a').datepicker('setDate', new Date(event.data.start_a));
+    $('#edit_end_a').datepicker('setDate', new Date(event.data.end_a));
+    $('#edit_start_b').datepicker('setDate', new Date(event.data.start_b));
+    $('#edit_end_b').datepicker('setDate', new Date(event.data.end_b));
+    $('#edit_modal').modal('show');
+  }
+
+  function getDate (string) {
+    let date = new Date(string);
+    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+  }
+
   let name = "הפקולטה ל" + localStorage.getItem('faculty_name');
   document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
   document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
@@ -112,7 +165,6 @@
   let list = document.getElementById('sem_list');
   sendRequest('get', 'api/semester/list', null, res => {
     let data = JSON.parse(res);
-    console.log(data);
     for (let i in data) {
 
       let button_html = '\n' +
@@ -133,7 +185,14 @@
       li.innerHTML = name + button_html;
       li.setAttribute('class', 'list-group-item');
       list.appendChild(li);
-      // $('#edit_button_' + i).click({name: data[i].name, email: data[i].email}, showEditModal);
+      $('#edit_button_' + i).click(
+      {
+        start_a: data[i].start_a,
+        end_a: data[i].end_a,
+        start_b: data[i].start_b,
+        end_b: data[i].end_b
+      },
+      showEditModal);
       // $('#remove_button_' + i).click({name: data[i].name}, showRemoveModal);
     }
   });
