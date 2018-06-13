@@ -15,10 +15,9 @@
   <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
   <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-      <a class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true"
+      <a id="faculty_name" class="nav-link" href="#" style="font-size: 16px;" data-toggle="dropdown" aria-haspopup="true"
          aria-expanded="false">
-        Guest
-        <img src="graphics/guest.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
+        <img id="faculty_image" src="graphics/guest.jpg" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
       </a>
     </li>
   </ul>
@@ -294,6 +293,10 @@
       window.location.href = "/faculties";
     });
   });
+
+  let name = "הפקולטה ל" + localStorage.getItem('faculty_name');
+  document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
+  document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
 
   let list = document.getElementById('fac_list');
   sendRequest('get', 'api/faculty/details_list', null, res => {
