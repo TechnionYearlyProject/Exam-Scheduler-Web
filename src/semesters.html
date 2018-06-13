@@ -51,30 +51,41 @@
           </div>
           <div class="modal-body">
             <p class="text-secondary" style="text-align: right">נא למלא את כל השדות.</p>
-            <h5 style="text-align: right">מואד א'</h5>
             <div class="form-group row">
-              <label for="add_start_a" class="col-2 col-form-label" style="text-align: right">התחלה</label>
+              <label for="add_year" class="col-2 col-form-label" style="text-align: right">שנה</label>
               <div class="col-10">
-                <input type="text" class="form-control datepicker" id="add_start_a">
+                <input type="text" class="form-control yearpicker" id="add_year" style="text-align: right">
               </div>
             </div>
             <div class="form-group row">
-              <label for="add_end_a" class="col-2 col-form-label" style="text-align: right">סיום</label>
+              <label for="add_semester" class="col-2 col-form-label" style="text-align: right">סמסטר</label>
               <div class="col-10">
-                <input type="text" class="form-control datepicker" id="add_end_a">
+                <select class="form-control" id="add_semester" style="text-align: right">
+                  <option>חורף</option>
+                  <option>אביב</option>
+                </select>
+              </div>
+            </div>
+            <h5 style="text-align: right">מואד א'</h5>
+            <div class="form-group row">
+              <div class="col-6">
+                <label for="add_start_a" class="float-right">התחלה</label>
+                <input type="text" class="form-control datepicker" id="add_start_a" style="text-align: right">
+              </div>
+              <div class="col-6">
+                <label for="add_end_a" class="float-right">סיום</label>
+                <input type="text" class="form-control datepicker" id="add_end_a" style="text-align: right">
               </div>
             </div>
             <h5 style="text-align: right">מואד ב'</h5>
             <div class="form-group row">
-              <label for="add_start_b" class="col-2 col-form-label" style="text-align: right">התחלה</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="add_start_b">
+              <div class="col-6">
+                <label for="add_start_b" class="float-right">התחלה</label>
+                <input type="text" class="form-control datepicker" id="add_start_b" style="text-align: right">
               </div>
-            </div>
-            <div class="form-group row">
-              <label for="add_end_b" class="col-2 col-form-label" style="text-align: right">סיום</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="add_end_b">
+              <div class="col-6">
+                <label for="add_end_b" class="float-right">סיום</label>
+                <input type="text" class="form-control datepicker" id="add_end_b" style="text-align: right">
               </div>
             </div>
           </div>
@@ -93,28 +104,24 @@
           <div class="modal-body">
             <h5 style="text-align: right">מואד א'</h5>
             <div class="form-group row">
-              <label for="add_start_a" class="col-2 col-form-label" style="text-align: right">התחלה</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="edit_start_a">
+              <div class="col-6">
+                <label for="edit_start_a" class="float-right">התחלה</label>
+                <input type="text" class="form-control datepicker" id="edit_start_a" style="text-align: right">
               </div>
-            </div>
-            <div class="form-group row">
-              <label for="add_end_a" class="col-2 col-form-label" style="text-align: right">סיום</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="edit_end_a">
+              <div class="col-6">
+                <label for="edit_end_a" class="float-right">סיום</label>
+                <input type="text" class="form-control datepicker" id="edit_end_a" style="text-align: right">
               </div>
             </div>
             <h5 style="text-align: right">מואד ב'</h5>
             <div class="form-group row">
-              <label for="add_start_b" class="col-2 col-form-label" style="text-align: right">התחלה</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="edit_start_b">
+              <div class="col-6">
+                <label for="edit_start_b" class="float-right">התחלה</label>
+                <input type="text" class="form-control datepicker" id="edit_start_b" style="text-align: right">
               </div>
-            </div>
-            <div class="form-group row">
-              <label for="add_end_b" class="col-2 col-form-label" style="text-align: right">סיום</label>
-              <div class="col-10">
-                <input type="text" class="form-control datepicker" id="edit_end_b">
+              <div class="col-6">
+                <label for="edit_end_b" class="float-right">סיום</label>
+                <input type="text" class="form-control datepicker" id="edit_end_b" style="text-align: right">
               </div>
             </div>
           </div>
@@ -124,10 +131,36 @@
         </div>
       </div>
     </div>
+    <div id="remove_modal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="remove_modal_title" class="modal-title">הסרת פקולטה</h5>
+          </div>
+          <div class="modal-body">
+            <p id="remove_text" style="text-align: right"></p>
+          </div>
+          <div class="modal-footer">
+            <button id="submit_remove" type="button" class="btn btn-secondary">הסר</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <script type="module">
   import {sendRequest} from "./js/request";
+
+  $('.yearpicker').datepicker({
+    format: "yyyy",
+    language: "he",
+    orientation: "auto",
+    autoclose: true,
+    fontSize: "8",
+    startView: 2,
+    minViewMode: 2,
+    maxViewMode: 2
+  });
 
   $('.datepicker').datepicker({
     format: "dd/mm/yyyy",
@@ -138,6 +171,8 @@
   });
 
   $('#add_semester_button').click(() => {
+    document.getElementById('add_year').value = '';
+    document.getElementById('add_semester').value = '';
     document.getElementById('add_start_a').value = '';
     document.getElementById('add_end_a').value = '';
     document.getElementById('add_start_b').value = '';
@@ -150,12 +185,17 @@
     $('#edit_end_a').datepicker('setDate', new Date(event.data.end_a));
     $('#edit_start_b').datepicker('setDate', new Date(event.data.start_b));
     $('#edit_end_b').datepicker('setDate', new Date(event.data.end_b));
+    let semester = event.data.semester + " " + event.data.year;
+    document.getElementById('edit_modal_title').innerText = semester + " - שינוי פקולטה";
     $('#edit_modal').modal('show');
   }
 
-  function getDate (string) {
-    let date = new Date(string);
-    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+  function showRemoveModal(event) {
+    let title = document.getElementById('remove_modal_title');
+    let semester = event.data.semester + " " + event.data.year;
+    title.innerText = semester + " - הסרת סמסטר";
+    document.getElementById('remove_text').innerText = 'האם אתה בטוח שאתה רוצה להסיר את סמסטר ' + semester + ' מהמערכת?';
+    $('#remove_modal').modal('show');
   }
 
   let name = "הפקולטה ל" + localStorage.getItem('faculty_name');
@@ -187,13 +227,20 @@
       list.appendChild(li);
       $('#edit_button_' + i).click(
       {
+        semester: semester,
+        year: data[i].year,
         start_a: data[i].start_a,
         end_a: data[i].end_a,
         start_b: data[i].start_b,
         end_b: data[i].end_b
       },
       showEditModal);
-      // $('#remove_button_' + i).click({name: data[i].name}, showRemoveModal);
+      $('#remove_button_' + i).click(
+      {
+        semester: semester,
+        year: data[i].year,
+      },
+      showRemoveModal);
     }
   });
 </script>
