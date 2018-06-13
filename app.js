@@ -40,6 +40,7 @@ app.get('/', (req, res) => res.redirect('/scheduler'));
 app.all('*', auth.verify_admin_front);
 
 app.get('/faculties', (req, res) => res.sendFile(path.join(__dirname, 'src/faculties.html')));
+app.get('/semesters', (req, res) => res.sendFile(path.join(__dirname, 'src/semesters.html')));
 
 app.use(function(req, res, next) {
   next(createError(404));
