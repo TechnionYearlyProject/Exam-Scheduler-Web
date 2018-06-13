@@ -55,7 +55,9 @@ router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of al
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
 router.post('/faculty/update', faculty_controller.faculty_update);
+
 router.post('/semester/create', semester_controller.semester_create);
+router.delete('/semester/delete', semester_controller.semester_create);
 router.post('/semester/update', semester_controller.semester_update_dates);
 
 module.exports = router;

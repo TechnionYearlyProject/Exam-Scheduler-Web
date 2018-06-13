@@ -36,6 +36,19 @@ exports.semester_create = function (req, res, next) {
   });
 };
 
+exports.semester_delete = function (req, res, next) {
+  Semester.remove({
+    year: req.body.year,
+    semester: req.body.semester
+  })
+  .then(() => {
+    return res.end();
+  })
+  .catch(err => {
+    next(err);
+  });
+};
+
 exports.semester_update_dates = function (req, res, next) {
   const condition = {
     year: req.body.year,
