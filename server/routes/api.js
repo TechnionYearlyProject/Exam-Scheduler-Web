@@ -57,7 +57,7 @@ router.delete('/faculty/delete', faculty_controller.faculty_delete);
 router.post('/faculty/update', faculty_controller.faculty_update);
 
 router.post('/semester/create', semester_controller.semester_create);
-router.delete('/semester/delete', semester_controller.semester_create);
+router.delete('/semester/delete', semester_controller.semester_delete);
 router.post('/semester/update', semester_controller.semester_update_dates);
 
 module.exports = router;

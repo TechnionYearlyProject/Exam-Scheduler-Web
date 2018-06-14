@@ -105,7 +105,6 @@
         sendRequest('POST', '/api/login', json, function (res) {
             let data = JSON.parse(res);
             if (data.auth) {
-                console.log(data);
                 setCookie('token', data.token);
                 setCookie('faculty', data.username);
                 localStorage.setItem('faculty_name', name);

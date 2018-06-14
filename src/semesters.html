@@ -132,7 +132,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button id="submit_edit" type="button" class="btn btn-secondary">הוסף</button>
+            <button id="submit_edit" type="button" class="btn btn-secondary">עדכן</button>
           </div>
         </div>
       </div>
@@ -243,6 +243,38 @@
     $('#edit_modal').modal('show');
   }
 
+  $('#submit_edit').click(() => {
+    let semyear = document.getElementById('edit_modal_title').innerText.split(' - ')[0].split(' ');
+    let semester = "winter";
+    if (!semyear[0].localeCompare("אביב")) {
+      semester = "spring";
+    }
+    let year = semyear[1];
+    let start_a = parseDate(document.getElementById('edit_start_a').value);
+    let end_a = parseDate(document.getElementById('edit_end_a').value);
+    let start_b = parseDate(document.getElementById('edit_start_b').value);
+    let end_b = parseDate(document.getElementById('edit_end_b').value);
+    let alert = document.getElementById('edit_error');
+
+    if (start_a === -1 || end_a === -1 || start_b === -1 || end_b === -1) {
+      alert.innerText = "נא למלא את כל השדות.";
+      alert.style.display = 'block';
+    } else if (start_a >= end_a) {
+      alert.innerText = "מואד א': תאריך התחלה חייבת להיות לפני תאריך סיום.";
+      alert.style.display = 'block';
+    } else if (start_b >= end_b) {
+      alert.innerText = "מואד ב': תאריך התחלה חייבת להיות לפני תאריך סיום.";
+      alert.style.display = 'block';
+    } else {
+      alert.style.display = 'none';
+      let json = {year: year, semester: semester, start_a: start_a, end_a: end_a, start_b: start_b, end_b: end_b};
+      sendRequest('post', 'api/semester/update', json, () => {
+        $('#edit_modal').modal('hide');
+        window.location.href = "/semesters";
+      });
+    }
+  });
+
   function showRemoveModal(event) {
     let title = document.getElementById('remove_modal_title');
     let semester = event.data.semester + " " + event.data.year;
@@ -250,6 +282,20 @@
     document.getElementById('remove_text').innerText = 'האם אתה בטוח שאתה רוצה להסיר את סמסטר ' + semester + ' מהמערכת?';
     $('#remove_modal').modal('show');
   }
+
+  $('#submit_remove').click(() => {
+    let semyear = document.getElementById('remove_modal_title').innerText.split(' - ')[0].split(' ');
+    let semester = "winter";
+    if (!semyear[0].localeCompare("אביב")) {
+      semester = "spring";
+    }
+    let year = semyear[1];
+    let json = {year: year, semester: semester};
+    sendRequest('delete', 'api/semester/delete', json, () => {
+      $('#remove_modal').modal('hide');
+      window.location.href = "/semesters";
+    });
+  });
 
   let name = "הפקולטה ל" + localStorage.getItem('faculty_name');
   document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
