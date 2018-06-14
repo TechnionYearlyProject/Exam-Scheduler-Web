@@ -187,6 +187,9 @@
     if (name.length === 0 || email.length === 0 || password.length === 0 || retype.length === 0 || file === undefined) {
       alert.innerText = "נא למלא את כל השדות.";
       alert.style.display = 'block';
+    } else if (faculties_list.includes(name)) {
+      alert.innerText = "פקולטה זאת כבר קיימת.";
+      alert.style.display = 'block';
     } else if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
       alert.innerText = "המייל המוקלד לא תקין.";
       alert.style.display = 'block';
@@ -298,6 +301,7 @@
   document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
   document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
 
+  let faculties_list = [];
   let list = document.getElementById('fac_list');
   sendRequest('get', 'api/faculty/details_list', null, res => {
     let data = JSON.parse(res);
@@ -316,6 +320,7 @@
       li.innerHTML = data[i].name + button_html;
       li.setAttribute('class', 'list-group-item');
       list.appendChild(li);
+      faculties_list.push(data[i].name);
       $('#edit_button_' + i).click({name: data[i].name, email: data[i].email}, showEditModal);
       $('#remove_button_' + i).click({name: data[i].name}, showRemoveModal);
     }

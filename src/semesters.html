@@ -183,6 +183,7 @@
     document.getElementById('add_end_a').value = '';
     document.getElementById('add_start_b').value = '';
     document.getElementById('add_end_b').value = '';
+    document.getElementById('add_error').style.display = 'none';
     $('#add_modal').modal('show');
   });
 
@@ -212,6 +213,9 @@
     if (year.length === 0 || semester.length === 0 || start_a === -1 || end_a === -1 || start_b === -1 || end_b === -1) {
       alert.innerText = "נא למלא את כל השדות.";
       alert.style.display = 'block';
+    } else if (semester_list.includes(semester + " " + year)) {
+      alert.innerText = "סמסטר זה כבר קיים.";
+      alert.style.display = 'block';
     } else if (start_a >= end_a) {
       alert.innerText = "מואד א': תאריך התחלה חייבת להיות לפני תאריך סיום.";
       alert.style.display = 'block';
@@ -240,6 +244,7 @@
     $('#edit_end_b').datepicker('setDate', new Date(event.data.end_b));
     let semester = event.data.semester + " " + event.data.year;
     document.getElementById('edit_modal_title').innerText = semester + " - שינוי סמסטר";
+    document.getElementById('edit_error').style.display = 'none';
     $('#edit_modal').modal('show');
   }
 
@@ -301,6 +306,7 @@
   document.getElementById("faculty_name").innerHTML = name + document.getElementById("faculty_name").innerHTML;
   document.getElementById("faculty_image").src = localStorage.getItem('faculty_image');
 
+  let semester_list = [];
   let list = document.getElementById('sem_list');
   sendRequest('get', 'api/semester/list', null, res => {
     let data = JSON.parse(res);
@@ -321,6 +327,7 @@
         semester = "אביב"
       }
       let name = semester + " " + data[i].year;
+      semester_list.push(name);
       li.innerHTML = name + button_html;
       li.setAttribute('class', 'list-group-item');
       list.appendChild(li);
