@@ -88,6 +88,9 @@
                 <input type="text" class="form-control datepicker" id="add_end_b" style="text-align: right">
               </div>
             </div>
+            <div class="form-group">
+              <div class="alert alert-danger col-sm-12" id="add_error" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
+            </div>
           </div>
           <div class="modal-footer">
             <button id="submit_add" type="button" class="btn btn-secondary">הוסף</button>
@@ -123,6 +126,9 @@
                 <label for="edit_end_b" class="float-right">סיום</label>
                 <input type="text" class="form-control datepicker" id="edit_end_b" style="text-align: right">
               </div>
+            </div>
+            <div class="form-group">
+              <div class="alert alert-danger col-sm-12" id="edit_error" style="text-align: right; display: none">המייל המוקלד לא תקין.</div>
             </div>
           </div>
           <div class="modal-footer">
@@ -180,13 +186,60 @@
     $('#add_modal').modal('show');
   });
 
+  function parseDate(str) {
+    if (str === "") {
+      return -1;
+    }
+    let values = str.split("/");
+    let day =  parseInt(values[0]);
+    let month = parseInt(values[1]);
+    let year = parseInt(values[2]);
+    let date = new Date;
+    date.setTime(0);
+    date.setFullYear(year, month, day);
+    return date.getTime();
+  }
+
+  $('#submit_add').click(() => {
+    let year = document.getElementById('add_year').value;
+    let semester = document.getElementById('add_semester').value;
+    let start_a = parseDate(document.getElementById('add_start_a').value);
+    let end_a = parseDate(document.getElementById('add_end_a').value);
+    let start_b = parseDate(document.getElementById('add_start_b').value);
+    let end_b = parseDate(document.getElementById('add_end_b').value);
+    let alert = document.getElementById('add_error');
+
+    if (year.length === 0 || semester.length === 0 || start_a === -1 || end_a === -1 || start_b === -1 || end_b === -1) {
+      alert.innerText = "נא למלא את כל השדות.";
+      alert.style.display = 'block';
+    } else if (start_a >= end_a) {
+      alert.innerText = "מואד א': תאריך התחלה חייבת להיות לפני תאריך סיום.";
+      alert.style.display = 'block';
+    } else if (start_b >= end_b) {
+      alert.innerText = "מואד ב': תאריך התחלה חייבת להיות לפני תאריך סיום.";
+      alert.style.display = 'block';
+    } else {
+      alert.style.display = 'none';
+      if (!semester.localeCompare("אביב")) {
+        semester = "spring";
+      } else {
+        semester = "winter";
+      }
+      let json = {year: year, semester: semester, start_a: start_a, end_a: end_a, start_b: start_b, end_b: end_b};
+      sendRequest('post', 'api/semester/create', json, () => {
+        $('#add_modal').modal('hide');
+        window.location.href = "/semesters";
+      });
+    }
+  });
+
   function showEditModal(event) {
     $('#edit_start_a').datepicker('setDate', new Date(event.data.start_a));
     $('#edit_end_a').datepicker('setDate', new Date(event.data.end_a));
     $('#edit_start_b').datepicker('setDate', new Date(event.data.start_b));
     $('#edit_end_b').datepicker('setDate', new Date(event.data.end_b));
     let semester = event.data.semester + " " + event.data.year;
-    document.getElementById('edit_modal_title').innerText = semester + " - שינוי פקולטה";
+    document.getElementById('edit_modal_title').innerText = semester + " - שינוי סמסטר";
     $('#edit_modal').modal('show');
   }
 
@@ -218,7 +271,7 @@
       '</span>';
       let li = document.createElement('li');
       let semester = "חורף";
-      if (data[i].semester.localeCompare("spring")) {
+      if (!data[i].semester.localeCompare("spring")) {
         semester = "אביב"
       }
       let name = semester + " " + data[i].year;
