@@ -17,6 +17,10 @@
     </tr>
     </thead>
 </table>
+
+
+
+
 <script type="module">
     import { sendRequest } from './js/request';
 
@@ -34,7 +38,7 @@
         switcher.innerHTML = '<input type="checkbox" ' + has_exam + '>\n' +
             '<span class="slider round"></span>\n';
         pairs.push({text: 'שבץ בלוח המבחנים:', elem: switcher, elem_is_text: false});
-        pairs.push({text: 'פקולטה:', elem: 'פקולטה גנרית', elem_is_text: true});
+        pairs.push({text: 'פקולטה:', elem: entry["faculty"], elem_is_text: true});
         pairs.push({text: 'נקודות זכות:', elem: entry['credit_points'], elem_is_text: true});
         var input = document.createElement("input");
         input.value = entry["days_before"];
@@ -106,7 +110,12 @@
         conbutton.style = "height: 20px; width: 20px; padding: 0px;"
         conbutton.innerHTML = '<i class="fas fa-link"></i>';
         conbutton.onclick = function() {
-          alert("hi");
+            var title = document.getElementById("conflicts_title");
+            title.innerHTML = 'ניהול קשרים עבור הקורס "' + entry["name"] + '"';
+            var table1 = $("#all_courses").DataTable();
+            var table2 = $("#conflicting_courses").DataTable();
+            table2.clear().draw();
+            $('#conflicts_modal').modal();
         };
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
         var delbutton = document.createElement("button");
