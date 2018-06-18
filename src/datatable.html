@@ -19,8 +19,15 @@
 </table>
 <script type="module">
     import { sendRequest } from './js/request';
-
     function course_expand (row) {
+        let row_changer = function (row, field, value) {
+          return function(){
+              var d1 = row.data();
+              d1[field] = value;
+              row.data(d1);
+              save_changes_to_local(d1.id, field, value);
+          }
+        };
         let entry = get_course_entry(row.data().id);
         let has_exam = '';
         if (entry["has_exam"] == true)
@@ -31,7 +38,7 @@
         var switcher = document.createElement("label");
         switcher.className = "switch";
         switcher.style = "margin-bottom: -2px; display: inline-block";
-        switcher.innerHTML = '<input type="checkbox" ' + has_exam + '>\n' +
+        switcher.innerHTML = '<input type="checkbox" id="has_exam_checker_' + entry.id + '" ' + has_exam + '>\n' +
             '<span class="slider round"></span>\n';
         pairs.push({text: 'שבץ בלוח המבחנים:', elem: switcher, elem_is_text: false});
         pairs.push({text: 'פקולטה:', elem: 'פקולטה גנרית', elem_is_text: true});
@@ -44,42 +51,25 @@
         input.setAttribute("step", "1");
         input.style = "padding-right: 2px; padding-left: 0px; border-color: #6c757d; font-size: 13px; height: 20px; width: 58px;border-radius: 0.2rem;";
         input.onchange = function(){
-            var d1 = row.data();
-                d1["days_before"] = input.value;
-            row.data(d1);
-        }
+            save_changes_to_local(entry.id, "preparationTime", input.value);
+        };
         pairs.push({text: 'ימי למידה:', elem: input, elem_is_text: false});
         var button_group = document.createElement('div');
         button_group. className = 'btn-group btn-group-toggle';
         button_group.setAttribute('data-toggle','buttons');
         var start_button = document.createElement('label');
         start_button.className = "btn btn-outline-secondary";
-        start_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem;"
         start_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> התחלה\n';
-        start_button.onclick = function () {
-            var d1 = row.data();
-            d1["pref"] = "התחלה";
-            row.data(d1);
-        }
+        start_button.onclick = row_changer(row, "pref", "התחלה");
         var auto_button = document.createElement('label');
         auto_button.className = "btn btn-outline-secondary active";
-        auto_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;"
         auto_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> אוטומטי\n';
         auto_button.checked = "true";
-        auto_button.onclick = function () {
-            var d1 = row.data();
-            d1["pref"] = "אוטומטי";
-            row.data(d1);
-        }
+        auto_button.onclick = row_changer(row, "pref", "אוטומטי" );
         var end_button = document.createElement('label');
         end_button.className = "btn btn-outline-secondary";
-        end_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem;"
         end_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> סוף\n';
-        end_button.onclick = function () {
-            var d1 = row.data();
-            d1["pref"] = "סוף";
-            row.data(d1);
-        };
+        end_button.onclick = row_changer(row, "pref", "סוף" );
         if (entry["is_first"]) {
             auto_button.className = "btn btn-outline-secondary";
             auto_button.checked = "false";
@@ -138,9 +128,14 @@
             mini_table.appendChild(tr);
         }
         row.child(mini_table).show();
+        $("[id^='has_exam_checker']").click(function () {
+            let id = $(this).attr('id').split("_").pop();
+            save_changes_to_local(id, "has_exam", $(this).is(":checked"));
+        });
     }
 
     $(document).ready(function() {
+        localStorage.setItem(changes_root_key, "{}");
         var table = $('#example').DataTable( {
             scrollY: 540,
             paging: false,

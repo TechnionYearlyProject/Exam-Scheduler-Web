@@ -1,4 +1,15 @@
 var occupied = {};
+var changes_root_key = "local_course_changes";
+
+function save_changes_to_local(id, field, value) {
+    let changes = JSON.parse(localStorage.getItem(changes_root_key)) || {};
+    if (!changes.hasOwnProperty(id)){
+        changes[id] = {};
+    }
+    changes[id][field] = value;
+    localStorage.setItem(changes_root_key, JSON.stringify(changes));
+    console.log(localStorage);
+};
 function popup_modal(type, text, func) {
     var title = document.getElementById("alert_title");
     var body = document.getElementById("alert_body");
@@ -60,7 +71,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
     test.className += class_name;
     test.innerHTML = text;
     test.draggable = true;
-    test.id = moed + "_" + course_id;
+    test.id = "exam_for_" + moed + "_" + course_id;
     test.setAttribute("test_id", moed + "_" + course_id);
     var color = "black";
     if (course_id.startsWith("234")){
@@ -183,8 +194,11 @@ function make_calendar(start, end, moed) {
                                 day_dragged.removeChild(child);
                     }
                 }
+                $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 var entry = get_course_entry(course_id);
-                var test = create_test(ev.target, "div", entry["name"], course_id, "test", moed.getAttribute("moed"));
+                var test = create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
+                let constraint = ev.target.getAttribute("date");
+                save_changes_to_local(course_id, moed.getAttribute("moed") + "_constraint", constraint);
                 popover_comment(test.id, entry["name"]);
                 test.ondblclick = function () {
                     $('#' + test.id).popover("show");

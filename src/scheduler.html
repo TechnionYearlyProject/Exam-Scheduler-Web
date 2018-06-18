@@ -174,7 +174,7 @@
                     var day = moed +'_day_' + examDay.index;
                     var day_elem = document.getElementById(day);
                     for (var j = 0; j < examDay.exams.length; j++){
-                        var test = create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
+                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                     }
                 }
             }
@@ -206,7 +206,8 @@
                     data: JSON.stringify({
                         occupied: occupied,
                         semester: localStorage.semester_name,
-                        faculty: localStorage.faculty_name
+                        faculty: localStorage.faculty_name,
+                        changes: localStorage.getItem(changes_root_key),
                     }),
                     success: fillScheduleWithCourses(["moed_a", "moed_b"])
               });
