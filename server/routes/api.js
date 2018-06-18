@@ -26,6 +26,8 @@ router.get('/program/list', study_program_controller.study_program_list_by_facul
 //router.delete('/program/delete', study_program_controller.study_program_delete);
 
 router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
+router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
+
 router.post(sem_regex + '/course/create',course_controller.course_create);
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
@@ -49,7 +51,6 @@ router.put('/update_password', faculty_controller.faculty_update_password);
 router.all('*', auth.verify_admin);
 router.post('/program/create', study_program_controller.study_program_create);
 router.get('/faculty/details_list', faculty_controller.faculty_list_details); // Admin only, return also emails
-router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
 router.post('/faculty/update', faculty_controller.faculty_update);
