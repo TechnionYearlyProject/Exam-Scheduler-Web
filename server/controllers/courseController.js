@@ -1,17 +1,6 @@
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
-
-/*
- Get list of all courses.
- */
-exports.course_list = function(req,res,next){
-  Course.find({},'name id credit_point').exec(function (err, data) {
-    if(err){
-      return next(err);
-    }
-    res.json(data);
-  });
-};
+const StudyProgram = require('../models/studyprogram').model;
 
 exports.faculty_course_list = function(req,res,next){
   Semester.findOne({
@@ -26,7 +15,8 @@ exports.faculty_course_list = function(req,res,next){
       semester: semester._id,
       faculty: req.faculty_id
     },
-    'name id credit_point is_first is_last days_before has_exam');
+    'name id credit_point constraint_a constraint_b is_first ' +
+        'is_last days_before has_exam');
   })
   .then(courses => {
     return res.json(courses);
@@ -50,6 +40,36 @@ exports.course_create = async function (req, res, next) {
   .catch(err => {
     next(err);
   });
+  if(req.body.id.length != 6){
+      return res.status(400).send('Course ID must be 6 digits.');
+  }
+
+  const faculty_programs = await StudyProgram.find({
+        faculty: req.faculty_id
+    }).then(programs => {
+        return programs;
+    }).catch(err => {
+        next(err);
+    });
+  var i;
+  var programs = [];
+    for(i =0;i<req.body.programs.length;i++){
+        var flag = false;
+        for(let j in faculty_programs){
+        if(faculty_programs[j].name == req.body.programs[i].study_program){
+          flag = true;
+          var p = {
+              "study_program":faculty_programs[j]._id,
+              "semester":req.body.programs[i].semester
+          };
+          programs.push(p);
+        }
+      }
+      if(flag === false ){
+        return res.status(400).send('Study program does not exist.');
+      }
+    }
+
   Course.findOne({
     id: req.body.id,
     semester: semester._id,
@@ -57,7 +77,7 @@ exports.course_create = async function (req, res, next) {
   })
   .then(exists => {
     if (exists) {
-      return res.status(400).send('Course already exists.');
+        return res.status(400).send('Course already exists.');
     }
     return Course.create({
       id: req.body.id,
@@ -65,7 +85,7 @@ exports.course_create = async function (req, res, next) {
       faculty: req.faculty_id,
       semester: semester._id,
       credit_point: req.body.credit_point,
-      registrations: req.body.programs
+      registrations: programs
     });
   })
   .then(() => {
@@ -140,8 +160,8 @@ exports.course_data = function (req, res, next) {
       semester: semester._id,
       faculty: req.faculty_id
     },
-    'id name credit_point faculty registrations conflicts constraint forbidden_days ' +
-    'days_before is_first is_last is_required is_taught is_required has_exam');
+    'id name credit_point faculty registrations conflicts constraint_a constraint_b ' +
+    'days_before is_first  is_last is_required is_taught has_exam');
   })
   .then(course => {
     return res.json(course);
@@ -151,6 +171,9 @@ exports.course_data = function (req, res, next) {
   });
 };
 
+/*
+ * only admin can get the list of all courses.
+ */
 exports.all_courses = function(req,res,next){
     Semester.findOne({
         year: req.params.year,
