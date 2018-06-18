@@ -5,6 +5,7 @@ const study_program_controller = require('../controllers/studyprogramController'
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
 const semester_controller = require('../controllers/semesterController');
+const message_list_controller = require('../controllers/messagelistController');
 const auth = require('../auth/authController');
 
 //
@@ -38,6 +39,10 @@ router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//cl
 // router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
 
 router.get('/semester/list', semester_controller.semester_list);
+
+router.get('/message/list', message_list_controller.messageList);
+router.post(sem_regex + '/message/send', message_list_controller.sendMessage);
+
 // User management routes
 
 // Update user email
