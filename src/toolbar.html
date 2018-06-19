@@ -66,10 +66,9 @@
           יצוא
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
-          <a class="dropdown-item" href="#">בתור Excel</a>
-          <a class="dropdown-item" href="#">בתור XML</a>
-          <a class="dropdown-item" href="#">בתור Calendar</a>
-          <a class="dropdown-item" href="#">בתור PNG</a>
+          <a class="dropdown-item" href="#">בתור xls</a>
+          <a class="dropdown-item" href="#">בתור txt</a>
+          <a class="dropdown-item" href="#">בתור png</a>
         </div>
       </div>
     </div>
@@ -79,14 +78,16 @@
           <img id="faculty_image" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-top: 4px; margin-left:5px;">
-          <a class="dropdown-item" href="#email_change_modal" data-toggle="modal">שינוי מייל</a>
-          <a class="dropdown-item" href="/edit_password">שינוי סיסמה</a>
-          <a class="dropdown-item" href="/logout">התנתק</a>
+          <a class="dropdown-item" id="email_change_button" data-toggle="modal" style="height: 27.8px;">עדכון כתובת דוא"ל</a>
+          <a class="dropdown-item" href="/edit_password" style="height: 27.8px;">עדכון סיסמה</a>
+          <a class="dropdown-item" href="/logout" style="height: 27.8px;">התנתק</a>
         </div>
       </li>
     </ul>
   </nav>
   <script type="module">
+      import {sendRequest} from "./js/request";
+
       // Collapse accordion every time dropdown is shown
       $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
           var accordion = $(this).find($(this).data('accordion'));
@@ -147,6 +148,19 @@
           $('#upload_modal').modal();
 
       };
+      document.getElementById('email_change_button').onclick = function(e) {
+          sendRequest('get', '/api/faculty/email', null, function (res) {
+              let data = JSON.parse(res);
+              document.getElementById('current_mail').innerHTML = data.email;
+          });
+          document.getElementById('email_change_error').innerHTML = "";
+          document.getElementById('new_email').value = "";
+
+          $('#email_change_modal').modal();
+      }
+
+
+
   </script>
 </body>
 </html>

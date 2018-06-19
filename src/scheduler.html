@@ -173,42 +173,43 @@
 <div class="modal fade" id="email_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
                 <span id="email_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
             </div>
             <div class="modal-body" style="text-align: right; height: 120px;">
-                    <div class='row'>
-                        <div class = "col-sm" style="width: 120px !important;">
-                            <label for="current_mail" style="text-align: right;">מייל עדכני:</label>
-                        </div>
-                        <div class = "col-sm" style="width: 380px !important;">
-                             <p class="text-right form-control-plaintext col-sm" id="current_mail"></p>
-                        </div>
+                <div class='row align-items-center' style="margin-bottom: 5px;">
+                    <div class = "col-sm-3">
+                        <div style="text-align: right;">כתובת נוכחית:</div>
                     </div>
-                    <script type="module">
-                        import {sendRequest} from "./js/request";
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                         <p class="text-right form-control-plaintext" id="current_mail"></p>
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <div class = "col-sm-3">
+                        <div style="text-align: right">כתובת חדשה:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                        <input type="text" class="form-control" id="new_email">
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <p class="text-right" id="email_change_error" style="font-size:13px; color: red; margin-top: 5px; padding-right: 15px"></p>
+                </div>
+                <script type="module">
+                    import {sendRequest} from "./js/request";
 
-                        sendRequest('get', '/api/faculty/email', null, function (res) {
-                            let data = JSON.parse(res);
-                            let current = document.getElementById('current_mail');
-                            current.innerHTML = data.email;
-                        });
-                    </script>
-                    <div class='row'>
-                        <label for="new_email" class="col-sm-3 col-form-label" style="text-align: right">מייל חדש:</label>
-                        <input class="form-control col-sm-9" id="new_email">
-                    </div>
-                    <div class="row">
-                        <div class="col-sm">
-                            <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px;"></p>
-                        </div>
-                    </div>
-
+                    sendRequest('get', '/api/faculty/email', null, function (res) {
+                        let data = JSON.parse(res);
+                        let current = document.getElementById('current_mail');
+                        current.innerHTML = data.email;
+                    });
+                </script>
             </div>
             <div class="modal-footer" style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-                <button type="button" id="email_change_button" class="btn btn-secondary" style="margin-left: inherit; color: white">עדכן</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="email_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
             </div>
         </div>
     </div>
@@ -451,7 +452,7 @@
             let json = {"email": email};
             console.log(json);
             sendRequest('put', '/api/update_email', json, function () {
-                window.location.href = "/scheduler";
+                $('#email_change_modal').modal('hide');
             })
         }
     }
