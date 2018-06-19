@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="toolbar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <link rel="stylesheet" href="toolbar.css">
   <meta charset="UTF-8">
 </head>
 <body>
@@ -68,7 +69,7 @@
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
           <a class="dropdown-item" href="#">בתור xls</a>
           <a class="dropdown-item" href="#">בתור txt</a>
-          <a class="dropdown-item" href="#">בתור png</a>
+          <a class="dropdown-item" id="png_export_button" href="#">בתור png</a>
         </div>
       </div>
     </div>
@@ -87,13 +88,20 @@
   </nav>
   <script type="module">
       import {sendRequest} from "./js/request";
-
+      document.getElementById('png_export_button').onclick = function(e) {
+          html2canvas($("#master"),{
+              onrendered: function(canvas) {
+                  var a = document.createElement('a');
+                  a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                  a.download = 'exam_schedule.jpg';
+                  a.click();
+              }});
+      };
       // Collapse accordion every time dropdown is shown
       $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
           var accordion = $(this).find($(this).data('accordion'));
           accordion.find('.panel-collapse.in').collapse('hide');
       });
-
       // Prevent dropdown to be closed when we click on an accordion link
       $('.dropdown-accordion').on('click', 'a[data-toggle="collapse"]', function (event) {
           event.preventDefault();
@@ -161,6 +169,7 @@
       document.getElementById('password_change_button').onclick = function(e) {
           $('#password_change_modal').modal();
       }
+
 
 
 
