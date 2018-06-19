@@ -19,6 +19,15 @@ input[type="textarea"]:focus,
     outline: 0 none;
 }
 
+textarea:focus {
+    border-color: #ced4da !important;
+    overflow: auto !important;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 
 
 .test{

@@ -48,7 +48,6 @@ function popover_comment(elem_id, course_name) {
     test.setAttribute("data-toggle", "popover");
     var input = document.getElementById("popover_input");
     var button = document.getElementById("popover_button");
-    input.placeholder = 'הערה עבור קורס "' + course_name + '"';
     $('#' + elem_id).popover({
         trigger: 'focus',
         placement: 'right',
