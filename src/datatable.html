@@ -68,15 +68,18 @@
         var start_button = document.createElement('label');
         start_button.className = "btn btn-outline-secondary";
         start_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> התחלה\n';
+        start_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem;"
         start_button.onclick = row_changer(row, "pref", "התחלה");
         var auto_button = document.createElement('label');
         auto_button.className = "btn btn-outline-secondary active";
         auto_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> אוטומטי\n';
         auto_button.checked = "true";
+        auto_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;"
         auto_button.onclick = row_changer(row, "pref", "אוטומטי" );
         var end_button = document.createElement('label');
         end_button.className = "btn btn-outline-secondary";
         end_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> סוף\n';
+        end_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem;"
         end_button.onclick = row_changer(row, "pref", "סוף" );
         if (entry["is_first"]) {
             auto_button.className = "btn btn-outline-secondary";
@@ -127,10 +130,10 @@
         pairs.push({text: 'מחיקת הקורס:', elem: delbutton, elem_is_text: false});
         for (var i in pairs) {
             var td1 = document.createElement("td");
-            td1.style = "border-color: transparent !important;";
+            td1.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
             td1.innerHTML = pairs[i].text;
             var td2 = document.createElement("td");
-            td2.style = "border-color: transparent !important;";
+            td2.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
             if (pairs[i].elem_is_text)
                 td2.innerHTML = pairs[i].elem;
             else

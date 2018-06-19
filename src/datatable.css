@@ -96,16 +96,6 @@ input:checked + .slider:before {
     border-right: 1px solid rgba(0,0,0,.12) !important;
 }
 
-.btn.btn-outline-secondary {
-    height: 20px;
-    width: 58px;
-    padding: 0px;
-    font-size: 13px;
-    border-top-left-radius: 0.2rem;
-    border-bottom-left-radius: 0.2rem;
-}
-
-
 .btn.btn-outline-secondary:not(hover):not(focus):not(active) {
     background-color: white;
 }
