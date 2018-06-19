@@ -78,8 +78,8 @@
           <img id="faculty_image" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-top: 4px; margin-left:5px;">
-          <a class="dropdown-item" id="email_change_button" data-toggle="modal" style="height: 27.8px;">עדכון כתובת דוא"ל</a>
-          <a class="dropdown-item" href="/edit_password" style="height: 27.8px;">עדכון סיסמה</a>
+          <a class="dropdown-item" href="#" id="email_change_button" style="height: 27.8px;">עדכון כתובת דוא"ל</a>
+          <a class="dropdown-item" href="#" id="password_change_button" style="height: 27.8px;">עדכון סיסמה</a>
           <a class="dropdown-item" href="/logout" style="height: 27.8px;">התנתק</a>
         </div>
       </li>
@@ -155,9 +155,14 @@
           });
           document.getElementById('email_change_error').innerHTML = "";
           document.getElementById('new_email').value = "";
-
           $('#email_change_modal').modal();
       }
+
+      document.getElementById('password_change_button').onclick = function(e) {
+          $('#password_change_modal').modal();
+      }
+
+
 
 
 

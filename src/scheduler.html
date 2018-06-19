@@ -210,33 +210,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
-                <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
-                <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
+                <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-key"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון סיסמה</h5>
             </div>
-            <div class="modal-body" style="text-align: right; height: 120px;">
-                <div class='row align-items-center' style="margin-bottom: 5px;">
-                    <div class = "col-sm-3">
-                        <div style="text-align: right;">כתובת נוכחית:</div>
-                    </div>
-                    <div class = "col-sm-9" style="padding-right: 0px;">
-                        <p class="text-right form-control-plaintext" id="current_password"></p>
-                    </div>
-                </div>
-                <div class='row align-items-center'>
-                    <div class = "col-sm-3">
-                        <div style="text-align: right">כתובת חדשה:</div>
-                    </div>
-                    <div class = "col-sm-9" style="padding-right: 0px;">
-                        <input type="text" class="form-control" id="new_password">
-                    </div>
-                </div>
-                <div class='row align-items-center'>
-                    <p class="text-right" id="password_change_error" style="font-size:13px; color: red; margin-top: 5px; padding-right: 15px"></p>
-                </div>
+            <div class="modal-body" style="text-align: right; height: 170px;">
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_1"></div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">אישור סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_2"></div>
+                <div class='row' id="password_change_message" style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"></div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
                 <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-                <button type="button" id="password_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
+                <button type="button" id="password_change_submit" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
             </div>
         </div>
     </div>
@@ -483,9 +469,10 @@
         }
     }
     var email_change_button = document.getElementById("email_change_button");
-    email_change_button. onclick = function(){
+    email_change_button.onclick = function(){
         update_email()
     };
+
 
 
 
@@ -572,6 +559,33 @@
         });
 
     }
+
+    document.getElementById('password_change_submit').onclick = function(e) {
+        let message =  document.getElementById('password_change_message');
+        let password1 = document.getElementById('new_password_1').value;
+        let password2 = document.getElementById('new_password_2').value;
+        if (password1.localeCompare(password2) !== 0) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמאות שהוזנו לא תואמות";
+            return;
+        }
+        if (password1.length < 8) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמה שהוזנה קצרה מדי";
+            return;
+        }
+        let json = {"new_password": password1, "retype_new_password": password2};
+        sendRequest('put', '/api/update_password', json, function () {
+            window.location.href = "/scheduler";
+        });
+        message.style.color = 'green';
+        message.innerHTML = "הסיסמה עודכנה בהצלחה";
+        setTimeout(function () {
+            $("#password_change_modal").modal('hide');
+        }, 1500);
+    }
+
+
 </script>
 </body>
 </html>
