@@ -47,41 +47,64 @@ exports.sendMessage = async function (req, res, next) {
     return res.status(401).send('Invalid moed.');
   }
 
-  Schedule.findOne({
-    semester: semester._id,
+  MessageList.findOne({
     faculty: course.faculty,
-    exams_a: {
-      $elemMatch: {
-        course: course._id
-      }
-    }
+    course: course._id
   })
-  .then(schedule => {
-    let to_parse;
-    if (!req.body.moed.localeCompare('A')) {
-      to_parse = schedule.exams_a;
+  .then (async message_list => {
+    if (!message_list) {
+      // create new message list
+      const date = await Schedule.findOne({
+        semester: semester._id,
+        faculty: course.faculty,
+        exams_a: {
+          $elemMatch: {
+            course: course._id
+          }
+        }
+      })
+      .then(schedule => {
+        let to_parse;
+        if (!req.body.moed.localeCompare('A')) {
+          to_parse = schedule.exams_a;
+        } else {
+          to_parse = schedule.exams_b;
+        }
+        let date = null;
+        to_parse.forEach(exam => {
+          if (date === null && exam.course.equals(course._id)) {
+            date = exam.date;
+          }
+        });
+        return date;
+      });
+
+      return MessageList.create({
+        faculty: course.faculty,
+        course: course._id,
+        schedule: date,
+        messages: [{
+          sender: req.faculty_id,
+          date: Date.now(),
+          text: req.body.message
+        }]
+      })
     } else {
-      to_parse = schedule.exams_b;
-    }
-    let date = null;
-    to_parse.forEach(exam => {
-      if (date === null && exam.course.equals(course._id)) {
-        date = exam.date;
-      }
-    });
-    return date;
-  })
-  .then (date => {
-    return MessageList.create({
-      faculty: course.faculty,
-      course: course._id,
-      schedule: date,
-      messages: [{
+      // append new message to message_list
+      let update = {
         sender: req.faculty_id,
         date: Date.now(),
         text: req.body.message
-      }]
-    })
+      };
+      return MessageList.update({
+        faculty: course.faculty,
+        course: course._id
+      }, {
+        $push: {
+          messages: update
+        }
+      })
+    }
   })
   .then(() => {
     return res.end();
