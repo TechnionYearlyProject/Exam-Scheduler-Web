@@ -170,6 +170,51 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="email_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="email_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 120px;">
+                    <div class='row'>
+                        <div class = "col-sm" style="width: 120px !important;">
+                            <label for="current_mail" style="text-align: right;">מייל עדכני:</label>
+                        </div>
+                        <div class = "col-sm" style="width: 380px !important;">
+                             <p class="text-right form-control-plaintext col-sm" id="current_mail"></p>
+                        </div>
+                    </div>
+                    <script type="module">
+                        import {sendRequest} from "./js/request";
+
+                        sendRequest('get', '/api/faculty/email', null, function (res) {
+                            let data = JSON.parse(res);
+                            let current = document.getElementById('current_mail');
+                            current.innerHTML = data.email;
+                        });
+                    </script>
+                    <div class='row'>
+                        <label for="new_email" class="col-sm-3 col-form-label" style="text-align: right">מייל חדש:</label>
+                        <input class="form-control col-sm-9" id="new_email">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px;"></p>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="email_change_button" class="btn btn-secondary" style="margin-left: inherit; color: white">עדכן</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
@@ -395,6 +440,26 @@
         } );
     }
     window.addEventListener('load', initSched, false);
+
+    function update_email() {
+        let error =  document.getElementById('email_change_error');
+        let email = document.getElementById('new_email').value;
+        if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+            error.innerHTML = 'כתובת הדוא"ל שהוקלדה אינה תקינה';
+        } else {
+            error.innerHTML = '';
+            let json = {"email": email};
+            console.log(json);
+            sendRequest('put', '/api/update_email', json, function () {
+                window.location.href = "/scheduler";
+            })
+        }
+    }
+    var email_change_button = document.getElementById("email_change_button");
+    email_change_button. onclick = function(){
+        update_email()
+    };
+
 
 
 
