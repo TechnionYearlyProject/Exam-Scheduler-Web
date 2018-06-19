@@ -17,6 +17,15 @@
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.datatables.net/fixedcolumns/3.2.5/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.6/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.4.0/js/dataTables.keyTable.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.5/css/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.4.0/css/keyTable.dataTables.min.css">
+    
+
+
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
@@ -305,6 +314,8 @@
             scrollY: 350,
             paging: false,
             info: false,
+            fixedColumns:   true,
+            select:         true,
             "dom": 'lrt',
             "language":  {
                 "emptyTable": "טוען רשימת קורסים...",
