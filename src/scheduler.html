@@ -118,15 +118,15 @@
 <div class="modal fade" id="conflicts_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
-                <span id="conflicts_icon" style="font-size: 30px;"><i class="fas fa-link"></i></span>
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="conflicts_icon" style="font-size: 20px;"><i class="fas fa-link"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;" id="conflicts_title"></h5>
             </div>
             <div class="modal-body" id="conflicts_body" style="text-align: right; height: 500px;">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-sm">
-                            <div>כל הקורסים</div>
+                            <h6>כל הקורסים</h6>
                             <input type="text" id="search_box_1" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
                             <table id="all_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
                                 <thead style="padding-left: 0px;">
@@ -143,7 +143,7 @@
                             <button type="button" id="conflict_remove" class="btn btn-secondary" style="margin-top: 2px;"><i class="fas fa-angle-double-right"></i></button>
                         </div>
                         <div class="col-sm">
-                            <div>קורסים בקונפליקט</div>
+                            <h6>קורסים מקושרים</h6>
                             <input type="text" id="search_box_2" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
                             <table id="conflicting_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
                                 <thead style="padding-left: 0px;">
@@ -158,7 +158,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm">
-                            <p class="text-right" id="conflict_error" style="color: red; margin-top: 5px"></p>
+                            <p class="text-right" id="conflict_error" style="font-size:13px; color: red; margin-top: 5px"></p>
                         </div>
                     </div>
                 </div>
@@ -363,7 +363,7 @@
             var error = document.getElementById("conflict_error");
             if (count1 == 0)
             {
-                error.innerHTML = "לא נבחר קורס בטבלה הימנית";
+                error.innerHTML = "לא נבחר קורס להוספה";
                 return;
             }
             error.innerHTML = "";
@@ -377,7 +377,7 @@
             var error = document.getElementById("conflict_error");
             if (count2 == 0)
             {
-                error.innerHTML = "לא נבחר קורס בטבלה השמאלית";
+                error.innerHTML = "לא נבחר קורס להסרה";
                 return;
             }
             error.innerHTML = "";
