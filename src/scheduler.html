@@ -114,12 +114,64 @@
     </div>
 </div>
 
+<div class="modal fade" id="conflicts_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="conflicts_icon" style="font-size: 30px;"><i class="fas fa-link"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;" id="conflicts_title"></h5>
+            </div>
+            <div class="modal-body" id="conflicts_body" style="text-align: right; height: 500px;">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm">
+                            <div>כל הקורסים</div>
+                            <input type="text" id="search_box_1" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+                            <table id="all_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
+                                <thead style="padding-left: 0px;">
+                                <tr>
+                                    <th style="padding-left: 0px">מספר</th>
+                                    <th>שם הקורס</th>
+                                    <th style="padding-left: 0px">פקולטה מנהלת</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-sm" style="padding: 0px;">
+                            <button type="button" class="btn btn-secondary" style="margin-bottom: 2px;"><i class="fas fa-angle-double-left"></i></button>
+                            <button type="button" class="btn btn-secondary" style="margin-top: 2px;"><i class="fas fa-angle-double-right"></i></button>
+                        </div>
+                        <div class="col-sm">
+                            <div>קורסים בקונפליקט</div>
+                            <input type="text" id="search_box_2" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+                            <table id="conflicting_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
+                                <thead style="padding-left: 0px;">
+                                <tr>
+                                    <th style="padding-left: 0px">מספר</th>
+                                    <th>שם הקורס</th>
+                                    <th style="padding-left: 0px">פקולטה מנהלת</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="conflicts_buttons" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
-    var dict = [];
+    var courses_dict = [];
+    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    var all_courses_dict = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
         for (let i = semesters.length - 1; i >= 0; i--) {
@@ -149,6 +201,7 @@
                 map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
                 load_courses_table();
+                load_all_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
         }
@@ -162,6 +215,7 @@
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         load_courses_table();
+        load_all_courses_table();
     });
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
@@ -247,12 +301,77 @@
                 document.body.removeChild(document.getElementById('test_tooltip_' + id));
             }
         };
+        var table1 = $('#all_courses').DataTable( {
+            scrollY: 350,
+            paging: false,
+            info: false,
+            "dom": 'lrt',
+            "language":  {
+                "emptyTable": "טוען רשימת קורסים...",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "faculty" },
+            ],
+            "order": [[1, 'asc']]
+        } );
+        $('#search_box_1').keyup(function(){
+            table1.search($(this).val()).draw() ;
+        });
+        var table2 = $('#conflicting_courses').DataTable( {
+            scrollY: 350,
+            paging: false,
+            info: false,
+            "dom": 'lrt',
+            "language":  {
+                "emptyTable": "רשימת הקשרים ריקה",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "faculty" },
+            ],
+            "order": [[1, 'asc']]
+        } );
+        $('#search_box_2').keyup(function(){
+            table2.search($(this).val()).draw() ;
+        });
+
+
     }
     window.addEventListener('load', initSched, false);
+
+
+
+    function load_all_courses_table() {
+        var table = $("#all_courses").DataTable();
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+            var courses = JSON.parse(res);
+            for (var i in courses) {
+                var entry = {
+                    "id": ("0" + courses[i]["id"]).slice(-6),
+                    "name": courses[i]["name"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                };
+                all_courses_dict.push(entry);
+                table.row.add(entry).draw();
+            }
+            localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        });
+    }
+
+
+
     function load_courses_table() {
         var table = $("#example").DataTable();
         table.clear().draw();
-        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
+        let req_path = "/course/list";
+        if (localStorage.getItem('faculty_name') == 'Administrator')
+            req_path = "/courses/list";
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + req_path, null, function (res) {
             var courses = JSON.parse(res);
             for (var i in courses) {
                 var pref = "אוטומטי";
@@ -261,7 +380,7 @@
                 if (courses[i]["is_last"])
                     pref = "סוף";
                 var entry = {
-                    "id": courses[i]["id"],
+                    "id": ("0" + courses[i]["id"]).slice(-6),
                     "name": courses[i]["name"],
                     "pref": pref,
                     "credit_points": courses[i]["credit_point"]["$numberDecimal"],
@@ -269,11 +388,12 @@
                     "has_exam": courses[i]["has_exam"],
                     "is_first" : courses[i]["is_first"],
                     "is_last" : courses[i]["is_last"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
                 };
-                dict.push(entry);
+                courses_dict.push(entry);
                 table.row.add(entry).draw();
             }
-            localStorage.setItem("courses_dict",JSON.stringify(dict));
+            localStorage.setItem("courses_dict",JSON.stringify(courses_dict));
             table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 let a = this.node();
                 this.node().draggable = true;
@@ -306,6 +426,7 @@
                 }
             } );
         });
+
     }
 </script>
 </body>

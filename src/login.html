@@ -20,6 +20,7 @@
 <script type="module">
     import { sendRequest } from './js/request';
     import { setCookie } from './js/cookie';
+    let faculties_dict = {};
     function getFaculties() {
         sendRequest('GET', '/api/faculty/list', null, function (res) {
             var faculties_grid = document.getElementById('faculties_grid');
@@ -28,6 +29,12 @@
             row.className = "row justify-content-md-center";
             row.style = "padding-top: 20px; padding-bottom: 20px;";
             for (var i in faculties) {
+                let entry = {
+                    "id": faculties[i]["_id"],
+                    "name": faculties[i]["name"],
+                    "image": faculties[i]["image"]
+                };
+                faculties_dict[faculties[i]["_id"]]=entry;
                 let name = faculties[i].name;
                 if (name == "Administrator") {
                     name = "לימודי הסמכה"
@@ -97,6 +104,7 @@
                     }
                 };
             }
+            localStorage.setItem("faculties_dict",JSON.stringify(faculties_dict));
         });
     }
     function login(name, password, error, image) {
