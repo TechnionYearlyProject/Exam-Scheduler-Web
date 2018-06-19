@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.5/css/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.4.0/css/keyTable.dataTables.min.css">
-    
+
 
 
     <meta charset="utf-8">
@@ -147,8 +147,8 @@
                             </table>
                         </div>
                         <div class="col-sm" style="padding: 0px;">
-                            <button type="button" class="btn btn-secondary" style="margin-bottom: 2px;"><i class="fas fa-angle-double-left"></i></button>
-                            <button type="button" class="btn btn-secondary" style="margin-top: 2px;"><i class="fas fa-angle-double-right"></i></button>
+                            <button type="button" id="conflict_add" class="btn btn-secondary" style="margin-bottom: 2px;"><i class="fas fa-angle-double-left"></i></button>
+                            <button type="button" id="conflict_remove" class="btn btn-secondary" style="margin-top: 2px;"><i class="fas fa-angle-double-right"></i></button>
                         </div>
                         <div class="col-sm">
                             <div>קורסים בקונפליקט</div>
@@ -350,8 +350,10 @@
         $('#search_box_2').keyup(function(){
             table2.search($(this).val()).draw() ;
         });
+        $('#conflict_add').click(function() {
 
-
+            table2.row.add(table1.row('.selected').data()).draw();
+        });
     }
     window.addEventListener('load', initSched, false);
 
