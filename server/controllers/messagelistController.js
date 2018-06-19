@@ -111,3 +111,35 @@ exports.sendMessage = async function (req, res, next) {
   })
   .catch(err => next(err));
 };
+
+exports.removeMessage = async function (req, res, next) {
+  const semester = await Semester.findOne({
+    year: req.params.year,
+    semester: req.params.semester
+  })
+  .then(semester => {
+    if (!semester) {
+      return res.status(404).send('Semester not found.');
+    }
+    return semester;
+  })
+  .catch(err => next(err));
+
+  Course.findOne({
+    id: req.body.course,
+    semester: semester._id
+  })
+  .then(course => {
+    if (!course) {
+      return res.status(401).send('Course does not exists.');
+    }
+    return MessageList.remove({
+      faculty: req.faculty_id,
+      course: course._id
+    });
+  })
+  .then(() => {
+    return res.end();
+  })
+  .catch(err => next(err));
+};

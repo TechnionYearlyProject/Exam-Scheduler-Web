@@ -44,6 +44,7 @@ router.get('/semester/list', semester_controller.semester_list);
 
 router.get('/message/list', message_list_controller.messageList);
 router.post(sem_regex + '/message/send', message_list_controller.sendMessage);
+router.delete(sem_regex + '/message/remove', message_list_controller.removeMessage);
 
 // User management routes
 
