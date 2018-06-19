@@ -197,15 +197,6 @@
                 <div class='row align-items-center'>
                     <p class="text-right" id="email_change_error" style="font-size:13px; color: red; margin-top: 5px; padding-right: 15px"></p>
                 </div>
-                <script type="module">
-                    import {sendRequest} from "./js/request";
-
-                    sendRequest('get', '/api/faculty/email', null, function (res) {
-                        let data = JSON.parse(res);
-                        let current = document.getElementById('current_mail');
-                        current.innerHTML = data.email;
-                    });
-                </script>
             </div>
             <div class="modal-footer" style="padding: 10px;">
                 <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
@@ -215,6 +206,41 @@
     </div>
 </div>
 
+<div class="modal fade" id="password_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 120px;">
+                <div class='row align-items-center' style="margin-bottom: 5px;">
+                    <div class = "col-sm-3">
+                        <div style="text-align: right;">כתובת נוכחית:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                        <p class="text-right form-control-plaintext" id="current_password"></p>
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <div class = "col-sm-3">
+                        <div style="text-align: right">כתובת חדשה:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                        <input type="text" class="form-control" id="new_password">
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <p class="text-right" id="password_change_error" style="font-size:13px; color: red; margin-top: 5px; padding-right: 15px"></p>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="password_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="module">
     import { sendRequest } from './js/request';
