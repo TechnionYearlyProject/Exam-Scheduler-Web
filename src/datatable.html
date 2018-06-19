@@ -112,6 +112,7 @@
             var table1 = $("#all_courses").DataTable();
             var table2 = $("#conflicting_courses").DataTable();
             table2.clear().draw();
+            document.getElementById("conflict_error").innerHTML = "";
             $('#conflicts_modal').modal();
         };
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
