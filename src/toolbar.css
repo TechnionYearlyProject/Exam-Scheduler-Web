@@ -41,16 +41,11 @@
 .buttons {
   float: left;
 }
-.userimage {
-  border-radius: 50%;
-  float: right;
-  cursor: pointer;
-  border-width: 3px;
-  border-style: solid;
-  border-color: #607D8B;
+
+.dropdown-item:hover {
+  background-color: #E5E8E8;
 }
 
-.userimage:hover {
-  border-color: #455A64;
-
+.dropdown-item:active  {
+  background-color: #CCD1D1;
 }
