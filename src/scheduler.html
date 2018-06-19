@@ -158,7 +158,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm">
-                            <p class="text-right" id="conflict_error" style="font-weight:bold; font-size:13px; color: red; margin-top: 5px"></p>
+                            <p class="text-right" id="conflict_error" style="color: red; margin-top: 5px"></p>
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <div class='row align-items-center'>
-                    <p class="text-right" id="email_change_error" style="font-size:13px; color: red; margin-top: 5px; padding-right: 15px"></p>
+                    <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px; padding-right: 15px"></p>
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
@@ -460,17 +460,17 @@
         let old = document.getElementById('current_mail');
 
         if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
-            error.style = "font-size:13px; color: red; margin-top: 5px; padding-right: 15px; font-weight: bold";
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
             error.innerHTML = 'כתובת הדוא"ל שהוקלדה אינה תקינה';
         } else if (email == old.innerHTML) {
-            error.style = "font-size:13px; color: red; margin-top: 5px; padding-right: 15px; font-weight: bold";
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
             error.innerHTML = 'כתובת הדוא"ל זהה לכתובת השמורה';
         }
         else {
                 let json = {"email": email};
                 console.log(json);
                 sendRequest('put', '/api/update_email', json, function () {
-                    error.style = "font-size:13px; color: green; margin-top: 5px; padding-right: 15px; font-weight: bold";
+                    error.style = "color: green; margin-top: 5px; padding-right: 15px;";
                     error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
                     setTimeout(function () {
                         $('#email_change_modal').modal('hide');
