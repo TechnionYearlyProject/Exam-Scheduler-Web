@@ -23,9 +23,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.5/css/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.4.0/css/keyTable.dataTables.min.css">
-
-
-
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
@@ -60,14 +57,12 @@
     <div id="moed_b" moed="b"></div>
   </div>
 </div>
-
 <div id="popover_comment" class="modal fade">
     <div class = "row">
         <div class="col 9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea></div>
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
     </div>
 </div>
-
 <div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="margin-top: 90px;">
         <div class="modal-content" style="width: 440px;">
@@ -80,7 +75,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -94,7 +88,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -122,7 +115,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="conflicts_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -164,6 +156,11 @@
                             </table>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-right" id="conflict_error" style="color: red; margin-top: 5px"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer" id="conflicts_buttons" style="padding: 10px;">
@@ -173,7 +170,6 @@
         </div>
     </div>
 </div>
-
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
@@ -314,8 +310,8 @@
             scrollY: 350,
             paging: false,
             info: false,
-            fixedColumns:   true,
-            select:         true,
+            select: true,
+            autoWidth: false,
             "dom": 'lrt',
             "language":  {
                 "emptyTable": "טוען רשימת קורסים...",
@@ -326,7 +322,12 @@
                 { "data": "name" },
                 { "data": "faculty" },
             ],
-            "order": [[1, 'asc']]
+            "columnDefs": [
+                { "width": "24%", "targets": 0 },
+                { "width": "43%", "targets": 1 },
+                { "width": "33%", "targets": 2 },
+            ],
+            "order": [[0, 'asc']]
         } );
         $('#search_box_1').keyup(function(){
             table1.search($(this).val()).draw() ;
@@ -335,6 +336,8 @@
             scrollY: 350,
             paging: false,
             info: false,
+            select: true,
+            autoWidth: false,
             "dom": 'lrt',
             "language":  {
                 "emptyTable": "רשימת הקשרים ריקה",
@@ -345,15 +348,51 @@
                 { "data": "name" },
                 { "data": "faculty" },
             ],
-            "order": [[1, 'asc']]
+            "columnDefs": [
+                { "width": "24%", "targets": 0 },
+                { "width": "43%", "targets": 1 },
+                { "width": "33%", "targets": 2 },
+            ],
+            "order": [[0, 'asc']]
         } );
         $('#search_box_2').keyup(function(){
             table2.search($(this).val()).draw() ;
         });
         $('#conflict_add').click(function() {
+            var count1 = table1.rows( { selected: true } ).count();
+            var error = document.getElementById("conflict_error");
+            if (count1 == 0)
+            {
+                error.innerHTML = "לא נבחר קורס בטבלה הימנית";
+                return;
+            }
+            error.innerHTML = "";
+            var selected_row = table1.row('.selected');
+            table2.row.add(selected_row.data()).draw();
+            selected_row.remove().draw();
 
-            table2.row.add(table1.row('.selected').data()).draw();
         });
+        $('#conflict_remove').click(function() {
+            var count2 = table2.rows( { selected: true } ).count();
+            var error = document.getElementById("conflict_error");
+            if (count2 == 0)
+            {
+                error.innerHTML = "לא נבחר קורס בטבלה השמאלית";
+                return;
+            }
+            error.innerHTML = "";
+            var selected_row = table2.row('.selected');
+            table1.row.add(selected_row.data()).draw();
+            selected_row.remove().draw();
+
+        });
+        $('#all_courses tbody').on( 'click', 'tr', function () {
+            table2.rows('.selected').deselect();
+        } );
+
+        $('#conflicting_courses tbody').on( 'click', 'tr', function () {
+            table1.rows('.selected').deselect();
+        } );
     }
     window.addEventListener('load', initSched, false);
 
