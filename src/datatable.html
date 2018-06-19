@@ -55,7 +55,11 @@
         input.setAttribute("step", "1");
         input.style = "padding-right: 2px; padding-left: 0px; border-color: #6c757d; font-size: 13px; height: 20px; width: 58px;border-radius: 0.2rem;";
         input.onchange = function(){
+            var d1 = row.data();
+            d1["days_before"] = input.value;
+            row.data(d1);
             save_changes_to_local(entry.id, "preparationTime", input.value);
+
         };
         pairs.push({text: 'ימי למידה:', elem: input, elem_is_text: false});
         var button_group = document.createElement('div');
