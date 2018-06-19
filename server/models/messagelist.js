@@ -11,6 +11,10 @@ const MessageListSchema = new mongoose.Schema({
     ref: 'Course',
     required: true
   },
+  schedule: {
+    type: Date,
+    required: true
+  },
   messages: [{
     sender: {
       type: mongoose.Schema.ObjectId,

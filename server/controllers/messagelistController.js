@@ -1,7 +1,7 @@
 const MessageList = require('../models/messagelist').model;
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
-const Faculty = require('../models/faculty').model;
+const Schedule = require('../models/schedule').model;
 
 exports.messageList = function (req, res, next) {
   MessageList.find({
@@ -31,7 +31,7 @@ exports.sendMessage = async function (req, res, next) {
   })
   .catch(err => next(err));
 
-  Course.findOne({
+  const course = await Course.findOne({
     id: req.body.course,
     semester: semester._id
   })
@@ -39,9 +39,43 @@ exports.sendMessage = async function (req, res, next) {
     if (!course) {
       return res.status(401).send('Course does not exists.');
     }
+    return course
+  })
+  .catch(err => next(err));
+
+  if (req.body.moed.localeCompare('A') && req.body.moed.localeCompare('B')) {
+    return res.status(401).send('Invalid moed.');
+  }
+
+  Schedule.findOne({
+    semester: semester._id,
+    faculty: course.faculty,
+    exams_a: {
+      $elemMatch: {
+        course: course._id
+      }
+    }
+  })
+  .then(schedule => {
+    let to_parse;
+    if (!req.body.moed.localeCompare('A')) {
+      to_parse = schedule.exams_a;
+    } else {
+      to_parse = schedule.exams_b;
+    }
+    let date = null;
+    to_parse.forEach(exam => {
+      if (date === null && exam.course.equals(course._id)) {
+        date = exam.date;
+      }
+    });
+    return date;
+  })
+  .then (date => {
     return MessageList.create({
       faculty: course.faculty,
       course: course._id,
+      schedule: date,
       messages: [{
         sender: req.faculty_id,
         date: Date.now(),
@@ -52,5 +86,5 @@ exports.sendMessage = async function (req, res, next) {
   .then(() => {
     return res.end();
   })
-  .catch(err => next(err))
+  .catch(err => next(err));
 };
