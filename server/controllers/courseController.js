@@ -1,6 +1,7 @@
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
 const Faculty = require('../models/faculty').model;
+const logging = require('../../logging');
 // const StudyProgram = require('../models/studyprogram').model;
 
 exports.faculty_course_list = function(req,res,next){
@@ -27,6 +28,7 @@ exports.faculty_course_list = function(req,res,next){
 };
 
 exports.course_create = async function (req, res, next) {
+  logging.db('Create course ' + req.body.id + '.');
   const semester = await Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
@@ -135,6 +137,7 @@ exports.faculty_course_update = function (req, res, next) {
  remove course.
  */
 exports.faculty_course_delete = async function (req, res, next) {
+  logging.db('Delete course ' + req.params.courseID + '.');
   const faculty = await Faculty.findOne({
     name: req.body.faculty
   })
@@ -142,6 +145,7 @@ exports.faculty_course_delete = async function (req, res, next) {
     return faculty;
   })
   .catch(err => {
+    logging.error(err);
     next(err);
   });
 
@@ -151,6 +155,7 @@ exports.faculty_course_delete = async function (req, res, next) {
   })
   .then(semester => {
     if (!semester) {
+      logging.error('Delete error: Semester not found.');
       return res.status(404).send('Semester not found.');
     }
     return Course.remove({
@@ -163,6 +168,7 @@ exports.faculty_course_delete = async function (req, res, next) {
     return res.end();
   })
   .catch(err => {
+    logging.error(err);
     next(err);
   });
 };

@@ -113,7 +113,7 @@ exports.faculty_update_password = function (req, res, next) {
   logging.db('Update faculty ' + req.faculty_name + ' password.');
   const conditions = {_id: req.faculty_id};
   if (req.body.new_password != req.body.retype_new_password) {
-    logging.db('Update error: passwords are not the same.');
+    logging.error('Update error: passwords are not the same.');
     return res.status(400).send('Passwords are not the same.');
   }
   const hash = bcrypt.hashSync(req.body.new_password, 12);
