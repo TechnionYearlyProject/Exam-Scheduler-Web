@@ -7,12 +7,10 @@ const app = express();
 const db = require('./database/database');
 const auth = require('./server/auth/authController');
 const scheduleMaker = require('./lib/algorithm/scheduleMaker');
-var logger = require('morgan');
 
 //Connection to database
 if (process.env.NODE_ENV && process.env.NODE_ENV.localeCompare('test')) {
     db.open();
-    app.use(logger('dev'));
 }
 
 app.use(bodyParser.json());
