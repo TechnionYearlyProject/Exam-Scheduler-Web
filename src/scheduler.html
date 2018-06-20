@@ -17,12 +17,33 @@
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
     <script type="text/javascript" src="funcs.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.datatables.net/fixedcolumns/3.2.5/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.6/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.4.0/js/dataTables.keyTable.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.5/css/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.4.0/css/keyTable.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
+
+<div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
+    <div class="row" style="height:100%">
+        <div class="col align-self-center" align="center">
+                <div>
+                    <img src="graphics/loading.gif">
+                </div>
+            <div style="font-size: 20px; font-weight: bold">
+                המערכת נטענת...
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toolbar"></div>
-<div class="dropdown navbar" style="padding-right: 15px; padding-left: 15px;">
+<div class="dropdown navbar" style="padding-top: 0px; padding-bottom: 0px; padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
     <div id= "sem_picker" class="dropdown-menu" aria-labelledby="semester_button" style="width: 350px; margin-top: -5px;"></div>
     <div>
@@ -40,7 +61,7 @@
         </div>
     </div>
 </div>
-<div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
+<div id="master" class="form-group row" style="background-color: white; text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
   <div class="container-fluid col">
     <div id="courses"></div>
   </div>
@@ -51,24 +72,10 @@
     <div id="moed_b" moed="b"></div>
   </div>
 </div>
-
 <div id="popover_comment" class="modal fade">
     <div class = "row">
-        <div class="col 9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea></div>
+        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
-    </div>
-</div>
-
-<div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="margin-top: 90px;">
-        <div class="modal-content" style="width: 440px;">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">בונה לוחות מבחנים</h5>
-            </div>
-            <div class="modal-body" align="center">
-                <img src="graphics/load.gif">
-            </div>
-        </div>
     </div>
 </div>
 
@@ -85,41 +92,241 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-cloud"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">העלאה לענן</h5>
             </div>
             <div class="modal-body" style="text-align: right; height: 90px;">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck1">מערכת קורסים</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_1">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_1">מערכת קורסים</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck2">מועד א'</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_2">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_2">מועד א'</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck3">מועד ב'</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_3">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_3">מועד ב'</label>
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">ביטול</button>
-                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="margin-left: inherit;">אישור</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 80px;">ביטול</button>
+                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="width: 80px; margin-right: 10px; margin-left: inherit;">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="conflicts_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="conflicts_icon" style="font-size: 20px;"><i class="fas fa-link"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;" id="conflicts_title"></h5>
+            </div>
+            <div class="modal-body" id="conflicts_body" style="text-align: right; height: 500px;">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm">
+                            <h6>כל הקורסים</h6>
+                            <input type="text" id="search_box_1" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+                            <table id="all_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
+                                <thead style="padding-left: 0px;">
+                                <tr>
+                                    <th style="padding-left: 0px">מספר</th>
+                                    <th>שם הקורס</th>
+                                    <th style="padding-left: 0px">פקולטה</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-sm" style="padding: 0px;">
+                            <button type="button" id="conflict_add" class="btn btn-secondary" style="margin-bottom: 2px;"><i class="fas fa-angle-double-left"></i></button>
+                            <button type="button" id="conflict_remove" class="btn btn-secondary" style="margin-top: 2px;"><i class="fas fa-angle-double-right"></i></button>
+                        </div>
+                        <div class="col-sm">
+                            <h6>קורסים מקושרים</h6>
+                            <input type="text" id="search_box_2" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+                            <table id="conflicting_courses" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
+                                <thead style="padding-left: 0px;">
+                                <tr>
+                                    <th style="padding-left: 0px">מספר</th>
+                                    <th>שם הקורס</th>
+                                    <th style="padding-left: 0px">פקולטה</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-right" id="conflict_error" style="color: red; margin-top: 5px"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="conflicts_buttons" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="email_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="email_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 120px;">
+                <div class='row align-items-center' style="margin-bottom: 5px;">
+                    <div class = "col-sm-3">
+                        <div style="text-align: right;">כתובת נוכחית:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                         <p class="text-right form-control-plaintext" id="current_mail"></p>
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <div class = "col-sm-3">
+                        <div style="text-align: right">כתובת חדשה:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                        <input type="text" class="form-control" id="new_email">
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px; padding-right: 15px"></p>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="email_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="password_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-key"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון סיסמה</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 170px;">
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_1"></div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">אישור סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_2"></div>
+                <div class='row' id="password_change_message" style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"></div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="password_change_submit" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="courses_management_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">ניהול קורסים</h5>
+            </div>
+            <div class="modal-body" id="courses_mangement_body" style="text-align: right; height: 520px;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <h6>יצירת קורס חדש</h6>
+                            <div style="font-size:13px; text-align: right; margin-top: 5px;">מספר הקורס:</div>
+                            <input type="text" class="form-control" id="new_course_num" style="font-size:13px; width: 336.8px;">
+                            <div style="font-size:13px; text-align: right; margin-top: 5px;">שם הקורס:</div>
+                            <input type="text" class="form-control" id="new_course_name" style="font-size:13px; width: 336.8px;">
+                            <div style="font-size:13px; text-align: right; margin-top: 5px;">נקודות זכות:</div>
+                            <input type="text" class="form-control" id="new_course_points" style="font-size:13px; width: 336.8px;">
+                            <div style="font-size:13px; text-align: right; margin-top: 5px;">פקולטה:</div>
+                            <input type="text" class="form-control" id="new_course_faculty" style="font-size:13px; width: 336.8px;">
+                            <button type="button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 336.8px;">שמירת הקורס</button>
+                        </div>
+                        <div class="col-sm">
+                            <h6>מחיקת קורסים</h6>
+                            <input type="text" id="courses_management_search" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+                            <table id="courses_management_table" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
+                                <thead style="padding-left: 0px;">
+                                <tr>
+                                    <th style="padding-left: 0px">מספר</th>
+                                    <th>שם הקורס</th>
+                                    <th style="padding-left: 0px">פקולטה</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <button type="button" class="btn btn-secondary" style="margin-top:10px; width: 336.8px;">מחיקת קורס</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-right" id="courses_mangement_error" style="color: red; margin-top: 5px"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="schedule_board_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-calendar-alt"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">שיבוץ אוטומטי</h5>
+            </div>
+            <div class="modal-body" id="schedule_board_body" style="text-align: right; height: 520px;">
+                <div class="row" style="height:100%">
+                    <div class="col align-self-center" align="center">
+                        <div>
+                            <img src="graphics/loading.gif">
+                        </div>
+                        <div style="font-size: 20px; font-weight: bold">
+                            בונה לוחות מבחנים פוטנציאליים...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="module">
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
-    var dict = [];
+    var courses_dict = [];
+    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    var all_courses_dict = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
         for (let i = semesters.length - 1; i >= 0; i--) {
@@ -149,6 +356,7 @@
                 map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
                 load_courses_table();
+                load_all_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
         }
@@ -162,9 +370,12 @@
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         load_courses_table();
+        load_all_courses_table();
     });
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
+            $('#schedule_board_modal').modal("hide");
+            localStorage.setItem("result", result);
             result = JSON.parse(result);
             console.log(result);
             for (var m = 0; m < moeds.length; m++){
@@ -174,15 +385,44 @@
                     var day = moed +'_day_' + examDay.index;
                     var day_elem = document.getElementById(day);
                     for (var j = 0; j < examDay.exams.length; j++){
-                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
+                        var test = create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                     }
                 }
             }
         }
     };
+    let makeSchedule = function (moeds){
+        $('#schedule_board_modal').modal("show");
+        localStorage.setItem("changesForSchedule", localStorage.getItem(changes_root_key));
+        setTimeout(function () {
+            $.ajax({
+                url: "/make-schedule",
+                type: "POST",
+                data: {
+                    occupied: JSON.stringify(occupied),
+                    semester: localStorage.semester_name,
+                    faculty: localStorage.faculty_name,
+                    changes: localStorage.getItem(changes_root_key),
+                },
+                success: fillScheduleWithCourses(moeds)
+            });
+        }, 5000);
+
+    };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
+    $('#upload_button').click(function () {
+        $.ajax({
+           url: "/save-schedule",
+           type: "POST",
+           data: {
+               schedule: localStorage.getItem("result"),
+               changes: localStorage.getItem("changesForSchedule"),
+               faculty: localStorage.faculty,
+           }
+        });
+    });
     $('body').on('click', function (e) {
         if (e.target.className == "popover-body" || e.target.id == "popover_input" || e.target.id == "popover_button")
             return;
@@ -197,34 +437,11 @@
       $('#scheduler_function_caller').click(function(){
           $("[id^='exam_for_']").remove();
           console.log(localStorage);
-          $('#exampleModal').modal("show");
-          setTimeout(function () {
-              $('#exampleModal').modal("hide");
-              $.ajax({
-                    url: "/make-schedule",
-                    type: "POST",
-                    data: {
-                        occupied: JSON.stringify(occupied),
-                        semester: localStorage.semester_name,
-                        faculty: localStorage.faculty_name,
-                        changes: localStorage.getItem(changes_root_key),
-                    },
-                    success: fillScheduleWithCourses(["moed_a", "moed_b"])
-              });
-          }, 5000);
+          makeSchedule(["moed_a", "moed_b"]);
       });
       $('#scheduler_function_caller_2').click(function(){
           $("[id^='exam_for_moed_a']").remove();
-          $.ajax({
-              url: "/make-schedule",
-              type: 'POST',
-              data: JSON.stringify({
-                  occupied: JSON.stringify(occupied),
-                  semester: localStorage.semester_name,
-                  faculty: localStorage.faculty_name
-              }),
-              success: fillScheduleWithCourses(["moed_a"]),
-          });
+          makeSchedule(["moed_a"]);
       });
       $("#schedule_clear").click(function(){
           $("[id^='exam_for_']").remove();
@@ -248,12 +465,185 @@
                 document.body.removeChild(document.getElementById('test_tooltip_' + id));
             }
         };
+        var table4 = $('#courses_management_table').DataTable( {
+            scrollY: 350,
+            paging: false,
+            info: false,
+            select: true,
+            autoWidth: false,
+            "dom": 'lrt',
+            "language":  {
+                "emptyTable": "הרשימה ריקה",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "faculty" },
+            ],
+            "columnDefs": [
+                { "width": "24%", "targets": 0 },
+                { "width": "43%", "targets": 1 },
+                { "width": "33%", "targets": 2 },
+            ],
+            "order": [[0, 'asc']]
+        } );
+        $('#courses_management_search').keyup(function(){
+            table4.search($(this).val()).draw() ;
+        });
+        var table1 = $('#all_courses').DataTable( {
+            scrollY: 350,
+            paging: false,
+            info: false,
+            select: true,
+            autoWidth: false,
+            "dom": 'lrt',
+            "language":  {
+                "emptyTable": "הרשימה ריקה",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "faculty" },
+            ],
+            "columnDefs": [
+                { "width": "24%", "targets": 0 },
+                { "width": "43%", "targets": 1 },
+                { "width": "33%", "targets": 2 },
+            ],
+            "order": [[0, 'asc']]
+        } );
+        $('#search_box_1').keyup(function(){
+            table1.search($(this).val()).draw() ;
+        });
+        var table2 = $('#conflicting_courses').DataTable( {
+            scrollY: 350,
+            paging: false,
+            info: false,
+            select: true,
+            autoWidth: false,
+            "dom": 'lrt',
+            "language":  {
+                "emptyTable": "רשימת הקשרים ריקה",
+                "zeroRecords": "לא נמצאו קורסים מתאימים",
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "faculty" },
+            ],
+            "columnDefs": [
+                { "width": "24%", "targets": 0 },
+                { "width": "43%", "targets": 1 },
+                { "width": "33%", "targets": 2 },
+            ],
+            "order": [[0, 'asc']]
+        } );
+        $('#search_box_2').keyup(function(){
+            table2.search($(this).val()).draw() ;
+        });
+        $('#conflict_add').click(function() {
+            var count1 = table1.rows( { selected: true } ).count();
+            var error = document.getElementById("conflict_error");
+            if (count1 == 0)
+            {
+                error.innerHTML = "לא נבחר קורס להוספה";
+                return;
+            }
+            error.innerHTML = "";
+            var selected_row = table1.row('.selected');
+            table2.row.add(selected_row.data()).draw();
+            selected_row.remove().draw();
+
+        });
+        $('#conflict_remove').click(function() {
+            var count2 = table2.rows( { selected: true } ).count();
+            var error = document.getElementById("conflict_error");
+            if (count2 == 0)
+            {
+                error.innerHTML = "לא נבחר קורס להסרה";
+                return;
+            }
+            error.innerHTML = "";
+            var selected_row = table2.row('.selected');
+            table1.row.add(selected_row.data()).draw();
+            selected_row.remove().draw();
+
+        });
+        $('#all_courses tbody').on( 'click', 'tr', function () {
+            table2.rows('.selected').deselect();
+        } );
+
+        $('#conflicting_courses tbody').on( 'click', 'tr', function () {
+            table1.rows('.selected').deselect();
+        } );
     }
     window.addEventListener('load', initSched, false);
+
+    function update_email() {
+        let error =  document.getElementById('email_change_error');
+        let email = document.getElementById('new_email').value;
+        let old = document.getElementById('current_mail');
+
+        if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'כתובת הדוא"ל שהוקלדה אינה תקינה';
+        } else if (email == old.innerHTML) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'כתובת הדוא"ל זהה לכתובת השמורה';
+        }
+        else {
+                let json = {"email": email};
+                console.log(json);
+                sendRequest('put', '/api/update_email', json, function () {
+                    error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+                    error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
+                    setTimeout(function () {
+                        $('#email_change_modal').modal('hide');
+                    }, 1500);
+                })
+            }
+
+    }
+    var email_change_button = document.getElementById("email_change_button");
+    email_change_button.onclick = function(){
+        update_email()
+    };
+
+
+
+
+
+    function load_all_courses_table() {
+        var table1 = $("#all_courses").DataTable();
+        var table2 = $("#courses_management_table").DataTable();
+
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+            var courses = JSON.parse(res);
+            for (var i in courses) {
+                var entry = {
+                    "id": ("0" + courses[i]["id"]).slice(-6),
+                    "name": courses[i]["name"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                };
+                all_courses_dict.push(entry);
+                table1.row.add(entry).draw();
+                table2.row.add(entry).draw();
+            }
+            localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        });
+    }
+
+
+
     function load_courses_table() {
         var table = $("#example").DataTable();
         table.clear().draw();
-        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/course/list", null, function (res) {
+        let req_path = "/course/list";
+        if (localStorage.getItem('faculty_name') == 'Administrator')
+            req_path = "/courses/list";
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + req_path, null, function (res) {
             var courses = JSON.parse(res);
             for (var i in courses) {
                 var pref = "אוטומטי";
@@ -262,7 +652,7 @@
                 if (courses[i]["is_last"])
                     pref = "סוף";
                 var entry = {
-                    "id": courses[i]["id"],
+                    "id": ("0" + courses[i]["id"]).slice(-6),
                     "name": courses[i]["name"],
                     "pref": pref,
                     "credit_points": courses[i]["credit_point"]["$numberDecimal"],
@@ -270,11 +660,12 @@
                     "has_exam": courses[i]["has_exam"],
                     "is_first" : courses[i]["is_first"],
                     "is_last" : courses[i]["is_last"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
                 };
-                dict.push(entry);
+                courses_dict.push(entry);
                 table.row.add(entry).draw();
             }
-            localStorage.setItem("courses_dict",JSON.stringify(dict));
+            localStorage.setItem("courses_dict",JSON.stringify(courses_dict));
             table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 let a = this.node();
                 this.node().draggable = true;
@@ -306,8 +697,37 @@
                     ev.dataTransfer.setData("list_drag", id);
                 }
             } );
+            $("#sys_loader").remove();
         });
+
     }
+
+    document.getElementById('password_change_submit').onclick = function(e) {
+        let message =  document.getElementById('password_change_message');
+        let password1 = document.getElementById('new_password_1').value;
+        let password2 = document.getElementById('new_password_2').value;
+        if (password1.localeCompare(password2) !== 0) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמאות שהוזנו לא תואמות";
+            return;
+        }
+        if (password1.length < 8) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמה שהוזנה קצרה מדי";
+            return;
+        }
+        let json = {"new_password": password1, "retype_new_password": password2};
+        sendRequest('put', '/api/update_password', json, function () {
+            window.location.href = "/scheduler";
+        });
+        message.style.color = 'green';
+        message.innerHTML = "הסיסמה עודכנה בהצלחה";
+        setTimeout(function () {
+            $("#password_change_modal").modal('hide');
+        }, 1500);
+    }
+
+
 </script>
 </body>
 </html>

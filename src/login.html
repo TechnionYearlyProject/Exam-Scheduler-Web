@@ -12,14 +12,51 @@
   <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;" id="login_body">
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px; height: 59px;">
+
+<div id="sys_loader_login" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
+  <div class="row" style="height:100%">
+    <div class="col align-self-center" align="center">
+      <div>
+        <img src="graphics/loading.gif">
+      </div>
+      <div style="font-size: 20px; font-weight: bold">
+        המערכת נטענת...
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px; height: 59px; z-index: 101;">
   <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
 </nav>
 <div class="container" id="faculties_grid" style="padding-top: 40px;">
 </div>
+
+<div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+        <span id="signin_icon" style="font-size: 20px;"><i class="fas fa-sign-in-alt"></i></span>
+        <h5 class="modal-title" style="margin-right: 5px;" id="signin_title">התחברות</h5>
+      </div>
+      <div class="modal-body"  align="center" style="height: 292px;">
+        <div id="signin_body"></div>
+        <div style="text-align: right; font-size: 14px">סיסמה:</div>
+        <input type="password" class="form-control" id="login_password" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">
+        <div id="login_error" style="text-align: right; color: red; font-size: 14px"></div>
+      </div>
+      <div class="modal-footer" style="padding: 10px;">
+        <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+        <button type="button" class="btn btn-secondary" id="login_button" style="width: 80px; margin-right:10px; margin-left: inherit; color: white;">התחבר</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
     import { sendRequest } from './js/request';
     import { setCookie } from './js/cookie';
+    let faculties_dict = {};
     function getFaculties() {
         sendRequest('GET', '/api/faculty/list', null, function (res) {
             var faculties_grid = document.getElementById('faculties_grid');
@@ -28,33 +65,19 @@
             row.className = "row justify-content-md-center";
             row.style = "padding-top: 20px; padding-bottom: 20px;";
             for (var i in faculties) {
-                let name = faculties[i].name;
+                let entry = {
+                    "id": faculties[i]["_id"],
+                    "name": faculties[i]["name"],
+                    "image": faculties[i]["image"]
+                };
+                faculties_dict[faculties[i]["_id"]]=entry;
+                let image = faculties[i]["image"];
+                let orig_name = faculties[i].name;
+                let name = orig_name;
                 if (name == "Administrator") {
                     name = "לימודי הסמכה"
                 }
                 let id = i;
-                var modal = document.createElement("div");
-                modal.innerHTML = '<div class="modal fade" id="user_modal_' + id + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\n' +
-                    '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
-                    '    <div class="modal-content">\n' +
-                    '      <div class="modal-header">\n' +
-                    '        <h5 class="modal-title" id="exampleModalLongTitle">התחברות</h5>\n' +
-                    '      </div>\n' +
-                    '      <div class="modal-body" align="center" style="height: 305px;">\n' +
-                    '<img src="' + faculties[i].image + '"style="border-radius: 50%; height: 120px; width: 120px;">\n' +
-                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;">\n' +
-                    name +
-                    '                  </div>' +
-                    '<input type="password" class="form-control" id="user_password_' + id + '" placeholder="הזן סיסמה" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">\n' +
-                    '                  <button type="button" class="btn btn-secondary btn-md" id="user_button_' + id + '" style="width: 100%; font-size: 14px;" onclick="myFunction()">\n' +
-                    '                      התחבר\n' +
-                    '                  </button>' +
-                    '            <div class="alert alert-danger col-sm-12" id="user_error_' + id + '" style="padding-top: 6px; padding-bottom: 6px; margin-bottom: 0px; margin-top: 10px; text-align: right; display: none; font-size: 14px;">הסיסמה שגויה</div>\n' +
-                    '      </div>\n' +
-                    '    </div>\n' +
-                    '  </div>\n' +
-                    '</div>';
-                document.getElementById("login_body").appendChild(modal);
                 var user = document.createElement("div");
                 user.className = "col-md-auto";
                 user.style.paddingLeft = "25px";
@@ -67,18 +90,39 @@
                     this.style.opacity = "1";
                 };
                 user.onclick = function () {
-                    $('#user_modal_' + id).modal();
+                    let signin_body = document.getElementById('signin_body');
+                    signin_body.innerHTML = '<img src="' + image + '"style="border-radius: 50%; height: 150px; width: 150px;">\n' +
+                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;">\n' +
+                    name +
+                    '                  </div>';
+                    let login_password = document.getElementById('login_password');
+                    login_password.className = "form-control";
+                    login_password.type = "password";
+                    login_password.value = "";
+                    document.getElementById('login_error').innerHTML = "";
+                    $('#signin_modal').modal();
+                    document.getElementById('login_button').onclick = function (e) {
+                        login(orig_name, document.getElementById('login_password').value, image);
+                    };
+                    document.getElementById('login_password').onkeydown = function (e) {
+                        if (e.keyCode == 13) {
+                            login(orig_name, document.getElementById('login_password').value, image);
+                        } else {
+                            let login_error = document.getElementById('login_error');
+                            login_error.innerHTML = "";
+                        }
+                    };
                 };
                 var lbl = document.createElement("div");
                 lbl.innerHTML = name;
-                lbl.style = "text-align: center; width:120px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;";
+                lbl.style = "text-align: center; width:150px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;";
                 var img = document.createElement("img");
                 img.src = faculties[i].image;
-                img.style = "border-radius: 50%; height: 120px; width: 120px;";
+                img.style = "border-radius: 50%; height: 150px; width: 150px;";
                 user.appendChild(img);
                 user.appendChild(lbl);
                 row.appendChild(user);
-                if (parseInt(i) % 5 == 4) {
+                if (parseInt(i) % 3 == 2) {
                     faculties_grid.appendChild(row);
                     row = document.createElement("div");
                     row.className = "row justify-content-md-center";
@@ -86,40 +130,29 @@
                 } else {
                     faculties_grid.appendChild(row);
                 }
-                document.getElementById('user_button_' + id).onclick = function (e) {
-                    login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id),faculties[id].image);
-                };
-                document.getElementById('user_password_' + id).onkeydown = function (e) {
-                    if (e.keyCode == 13) {
-                        login(faculties[id].name, document.getElementById('user_password_' + id).value, document.getElementById('user_error_' + id), faculties[id].image);
-                    } else {
-                        document.getElementById('user_error_' + id).style.display = 'none';
-                    }
-                };
             }
+            localStorage.setItem("faculties_dict",JSON.stringify(faculties_dict));
+            $("#sys_loader_login").remove();
+
         });
-    }
-    function login(name, password, error, image) {
-        error.style.display = 'none';
-        let json = {"name": name, "password": password};
+    };
+    function login(orig_name, password, image) {
+        let json = {"name": orig_name, "password": password};
         sendRequest('POST', '/api/login', json, function (res) {
             let data = JSON.parse(res);
+            let login_error = document.getElementById('login_error');
             if (data.auth) {
                 setCookie('token', data.token);
                 setCookie('faculty', data.username);
-                localStorage.setItem('faculty_name', name);
+                localStorage.setItem('faculty_name', orig_name);
                 localStorage.setItem('faculty_image', image);
                 window.location.href = "/scheduler";
             } else {
-                error.style.display = 'block';
+                login_error.innerHTML = "הסיסמה שגויה";
             }
         })
-    }
+    };
     window.addEventListener('load', getFaculties, false);
-    $("#login_form").submit (function (e) {
-        e.preventDefault();
-        login();
-    });
 </script>
 </body>
 </html>

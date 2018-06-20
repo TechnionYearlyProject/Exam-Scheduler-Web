@@ -5,6 +5,7 @@ const study_program_controller = require('../controllers/studyprogramController'
 const schedule_controller = require('../controllers/scheduleController');
 const course_controller = require('../controllers/courseController');
 const semester_controller = require('../controllers/semesterController');
+const message_list_controller = require('../controllers/messagelistController');
 const auth = require('../auth/authController');
 
 //
@@ -26,6 +27,8 @@ router.get('/program/list', study_program_controller.study_program_list_by_facul
 //router.delete('/program/delete', study_program_controller.study_program_delete);
 
 router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
+router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
+
 router.post(sem_regex + '/course/create',course_controller.course_create);
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
@@ -38,6 +41,11 @@ router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//cl
 // router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
 
 router.get('/semester/list', semester_controller.semester_list);
+
+router.get('/message/list', message_list_controller.messageList);
+router.post(sem_regex + '/message/send', message_list_controller.sendMessage);
+router.delete(sem_regex + '/message/remove', message_list_controller.removeMessage);
+
 // User management routes
 
 // Update user email
@@ -49,7 +57,6 @@ router.put('/update_password', faculty_controller.faculty_update_password);
 router.all('*', auth.verify_admin);
 router.post('/program/create', study_program_controller.study_program_create);
 router.get('/faculty/details_list', faculty_controller.faculty_list_details); // Admin only, return also emails
-router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
 router.post('/faculty/create', faculty_controller.faculty_create);
 router.delete('/faculty/delete', faculty_controller.faculty_delete);
 router.post('/faculty/update', faculty_controller.faculty_update);

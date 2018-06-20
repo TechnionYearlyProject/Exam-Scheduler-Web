@@ -17,6 +17,10 @@
     </tr>
     </thead>
 </table>
+
+
+
+
 <script type="module">
     import { sendRequest } from './js/request';
     function course_expand (row) {
@@ -41,7 +45,7 @@
         switcher.innerHTML = '<input type="checkbox" id="has_exam_checker_' + entry.id + '" ' + has_exam + '>\n' +
             '<span class="slider round"></span>\n';
         pairs.push({text: 'שבץ בלוח המבחנים:', elem: switcher, elem_is_text: false});
-        pairs.push({text: 'פקולטה:', elem: 'פקולטה גנרית', elem_is_text: true});
+        pairs.push({text: 'פקולטה:', elem: entry["faculty"], elem_is_text: true});
         pairs.push({text: 'נקודות זכות:', elem: entry['credit_points'], elem_is_text: true});
         var input = document.createElement("input");
         input.value = entry["days_before"];
@@ -51,7 +55,11 @@
         input.setAttribute("step", "1");
         input.style = "padding-right: 2px; padding-left: 0px; border-color: #6c757d; font-size: 13px; height: 20px; width: 58px;border-radius: 0.2rem;";
         input.onchange = function(){
+            var d1 = row.data();
+            d1["days_before"] = input.value;
+            row.data(d1);
             save_changes_to_local(entry.id, "preparationTime", input.value);
+
         };
         pairs.push({text: 'ימי למידה:', elem: input, elem_is_text: false});
         var button_group = document.createElement('div');
@@ -60,15 +68,18 @@
         var start_button = document.createElement('label');
         start_button.className = "btn btn-outline-secondary";
         start_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> התחלה\n';
+        start_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem;"
         start_button.onclick = row_changer(row, "pref", "התחלה");
         var auto_button = document.createElement('label');
         auto_button.className = "btn btn-outline-secondary active";
         auto_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> אוטומטי\n';
         auto_button.checked = "true";
+        auto_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;"
         auto_button.onclick = row_changer(row, "pref", "אוטומטי" );
         var end_button = document.createElement('label');
         end_button.className = "btn btn-outline-secondary";
         end_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> סוף\n';
+        end_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem;"
         end_button.onclick = row_changer(row, "pref", "סוף" );
         if (entry["is_first"]) {
             auto_button.className = "btn btn-outline-secondary";
@@ -96,28 +107,21 @@
         conbutton.style = "height: 20px; width: 20px; padding: 0px;"
         conbutton.innerHTML = '<i class="fas fa-link"></i>';
         conbutton.onclick = function() {
-          alert("hi");
+            var title = document.getElementById("conflicts_title");
+            title.innerHTML = 'ניהול קשרים עבור הקורס "' + entry["name"] + '"';
+            var table1 = $("#all_courses").DataTable();
+            var table2 = $("#conflicting_courses").DataTable();
+            table2.clear().draw();
+            document.getElementById("conflict_error").innerHTML = "";
+            $('#conflicts_modal').modal();
         };
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
-        var delbutton = document.createElement("button");
-        delbutton.type = "button";
-        delbutton.className = "btn btn-outline-secondary btn-sm";
-        delbutton.style = "height: 20px; width: 20px; padding: 0px;"
-        delbutton.innerHTML = '<i class="fas fa-trash"></i>';
-        delbutton.onclick = function() {
-            function del() {
-                row.remove();
-                row.node().parentNode.removeChild(row.node());
-            };
-            popup_modal("CONF", 'האם אתה בטוח שברצונך למחוק את הקורס "' + entry["name"] +'"?', del);
-        };
-        pairs.push({text: 'מחיקת הקורס:', elem: delbutton, elem_is_text: false});
         for (var i in pairs) {
             var td1 = document.createElement("td");
-            td1.style = "border-color: transparent !important;";
+            td1.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
             td1.innerHTML = pairs[i].text;
             var td2 = document.createElement("td");
-            td2.style = "border-color: transparent !important;";
+            td2.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
             if (pairs[i].elem_is_text)
                 td2.innerHTML = pairs[i].elem;
             else
@@ -142,7 +146,7 @@
             info: false,
             "dom": 'lrt',
             "language":  {
-              "emptyTable": "טוען רשימת קורסים...",
+              "emptyTable": "הרשימה ריקה",
                 "zeroRecords": "לא נמצאו קורסים מתאימים",
             },
             "columnDefs": [
@@ -189,6 +193,7 @@
         $('#search_box').keyup(function(){
             table.search($(this).val()).draw() ;
         })
+
     } );
 </script>
 </body>
