@@ -19,6 +19,14 @@ input[type="textarea"]:focus,
     outline: 0 none;
 }
 
+select[type="text"]:focus,
+.uneditable-select:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+
 textarea:focus {
     border-color: #ced4da !important;
     overflow: auto !important;
