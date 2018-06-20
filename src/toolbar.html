@@ -8,47 +8,11 @@
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px;">
     <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
     <div class="btn-toolbar" id="button_toolbar" role="toolbar" aria-label="Toolbar with button groups">
-      <div class="btn-group" id="messages_dropdown">
-          <div class="dropdown dropdown-accordion" data-accordion="#accordion">
-              <button type="button" class="btn btn-secondary btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 40px; width: 110px; margin-left: 5px;">
-                  <i class="fas fa-envelope" style="padding-left: 5px"></i>
-                  הודעות
-              </button>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                  <li>
-                      <div class="panel-group" id="accordion">
-                          <div class="panel panel-default">
-                              <div class="panel-heading">
-                                  <h4 class="panel-title">
-                                      <a href="#collapseOne" data-toggle="collapse" data-parent="#accordion">
-                                          כותרת 1
-                                      </a>
-                                  </h4>
-                              </div>
-                              <div class="panel-collapse collapse" id="collapseOne">
-                                  <div class="panel-body">
-                                      תוכן ההודעה
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="panel panel-default">
-                              <div class="panel-heading">
-                                  <h4 class="panel-title">
-                                      <a href="#collapseTwo" data-toggle="collapse" data-parent="#accordion">
-                                          כותרת 2
-                                      </a>
-                                  </h4>
-                              </div>
-                              <div class="panel-collapse collapse" id="collapseTwo">
-                                  <div class="panel-body">
-                                      תוכן ההודעה
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </li>
-              </ul>
-          </div>
+      <div class="btn-group">
+        <button id="message_button" type="button" class="btn btn-secondary btn-md" style="height: 40px; width: 110px; margin-left: 5px;">
+            <i class="fas fa-envelope" style="padding-left: 5px"></i>
+            הודעות
+        </button>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 40px; width: 110px; margin-left: 5px;">
@@ -86,20 +50,101 @@
       </li>
     </ul>
   </nav>
+  <div id="message_modal" class="modal right fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">הודעות</h5>
+        </div>
+        <div class="modal-body">
+          <div id="accordion" role="tablist">
+            <!--<div class="card">-->
+              <!--<div class="card-header" role="tab" id="headingOne">-->
+                <!--<div data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">-->
+                  <!--<div class="d-flex justify-content-between">-->
+                    <!--<h5 class="mb-0" style="text-align: right">Collapsible Group Item</h5>-->
+                    <!--<p class="mb-0" style="text-align: right">Schedule: Tralala</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">-->
+                <!--<ul class="list-group list-group-flush">-->
+                  <!--<li class="list-group-item">-->
+                    <!--<div class="d-flex justify-content-between">-->
+                      <!--<h5 class="mb-0">List group item heading</h5>-->
+                      <!--<p class="mb-0">Date</p>-->
+                    <!--</div>-->
+                    <!--<p class="mb-0" style="text-align: right">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+                  <!--</li>-->
+                <!--</ul>-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="module">
-      // Collapse accordion every time dropdown is shown
-      $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
-          var accordion = $(this).find($(this).data('accordion'));
-          accordion.find('.panel-collapse.in').collapse('hide');
-      });
+    import {sendRequest} from "./js/request";
 
-      // Prevent dropdown to be closed when we click on an accordion link
-      $('.dropdown-accordion').on('click', 'a[data-toggle="collapse"]', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          $($(this).data('parent')).find('.panel-collapse.in').collapse('hide');
-          $($(this).attr('href')).collapse('show');
-      });
+    function makeMessageCard(index, course, schedule, messages) {
+      let headerID = 'headeing_' + index.toString();
+      let collapseID = 'collapse_' + index.toString();
+      let card = '<div class="card">\n' +
+      '              <div class="card-header" role="tab" id="' + headerID + '">\n' +
+      '                <div data-toggle="collapse" href="#' + collapseID + '" aria-expanded="true" aria-controls="' + collapseID + '">\n' +
+      '                  <div class="d-flex justify-content-between">\n' +
+      '                    <h5 class="mb-0" style="text-align: right">' + course + '</h5>\n' +
+      '                    <p class="mb-0" style="text-align: right">Schedule: ' + schedule + '</p>\n' +
+      '                  </div>\n' +
+      '                </div>\n' +
+      '              </div>\n' +
+      '              <div id="' + collapseID + '" class="collapse" role="tabpanel" aria-labelledby="' + headerID + '" data-parent="#accordion">\n' +
+      '                <ul class="list-group list-group-flush">\n';
+      for (let i in messages) {
+        card += '' +
+
+        '                  <li class="list-group-item">\n' +
+        '                    <div class="d-flex justify-content-between">\n' +
+        '                      <h5 class="mb-0">' + messages[i].sender + '</h5>\n' +
+        '                      <p class="mb-0">' + messages[i].date + '</p>\n' +
+        '                    </div>\n' +
+        '                    <p class="mb-0" style="text-align: right">' + messages[i].text + '</p>\n' +
+        '                  </li>\n';
+      }
+      card += '' +
+      '                </ul>\n' +
+      '              </div>\n' +
+      '            </div>\n'
+      return card;
+    }
+
+    sendRequest('get', '/api/message/list', null, res => {
+      let data = JSON.parse(res);
+      for (let i in data) {
+        console.log(data[i]);
+        let course = data[i].course.name;
+        let schedule_date = data[i].schedule;
+        let messages = [];
+        for (let j in data[i].messages) {
+          messages.push({});
+          messages[j].sender = data[i].messages[j].sender.name;
+          messages[j].date = data[i].messages[j].date;
+          messages[j].text = data[i].messages[j].text;
+        }
+        let card = makeMessageCard(i, course, schedule_date, messages);
+        document.getElementById('accordion').innerHTML += card;
+      }
+    });
+
+    $('#message_button').click(() => {
+      $('#message_modal').modal('show');
+    });
+
+
+
       var name = localStorage.getItem('faculty_name');
       if (name == "Administrator") {
           name = "לימודי הסמכה";
