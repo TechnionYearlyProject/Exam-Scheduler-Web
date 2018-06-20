@@ -143,42 +143,50 @@
         };
         let route = '/api/' + event.data.year + '-' + event.data.sem + '/message/send';
         sendRequest('post', route, json, () => {
+          reload_message_list();
           $('#message_modal').modal('hide');
           document.getElementById(event.data.text_area).value = '';
         });
       }
     }
 
-
-    sendRequest('get', '/api/message/list', null, res => {
-      let data = JSON.parse(res);
-      for (let i in data) {
-        let course = data[i].course.name;
-        let schedule_date = data[i].schedule;
-        let moed = data[i].moed;
-        if (!moed.localeCompare('A')) {
-          moed = "א׳";
-        } else {
-          moed = "ב׳";
-        }
-        let messages = [];
-        for (let j in data[i].messages) {
-          messages.push({});
-          messages[j].sender = data[i].messages[j].sender.name;
-          messages[j].date = data[i].messages[j].date;
-          messages[j].text = data[i].messages[j].text;
-        }
-        let card = makeMessageCard(i, course, schedule_date, moed, messages);
-        document.getElementById('accordion').appendChild(card);
-        $('#message_button_' + i).click({
-          text_area: 'message_textbox_' + i,
-          moed: data[i].moed,
-          course_id: data[i].course.id,
-          year: data[i].semester.year,
-          sem: data[i].semester.semester
-        }, sendMessage);
+    function reload_message_list() {
+      let accordion = document.getElementById('accordion');
+      while (accordion.firstChild) {
+        accordion.removeChild(accordion.firstChild);
       }
-    });
+      sendRequest('get', '/api/message/list', null, res => {
+        let data = JSON.parse(res);
+        for (let i in data) {
+          let course = data[i].course.name;
+          let schedule_date = data[i].schedule;
+          let moed = data[i].moed;
+          if (!moed.localeCompare('A')) {
+            moed = "א׳";
+          } else {
+            moed = "ב׳";
+          }
+          let messages = [];
+          for (let j in data[i].messages) {
+            messages.push({});
+            messages[j].sender = data[i].messages[j].sender.name;
+            messages[j].date = data[i].messages[j].date;
+            messages[j].text = data[i].messages[j].text;
+          }
+          let card = makeMessageCard(i, course, schedule_date, moed, messages);
+          document.getElementById('accordion').appendChild(card);
+          $('#message_button_' + i).click({
+            text_area: 'message_textbox_' + i,
+            moed: data[i].moed,
+            course_id: data[i].course.id,
+            year: data[i].semester.year,
+            sem: data[i].semester.semester
+          }, sendMessage);
+        }
+      });
+    }
+
+    $(document).ready(reload_message_list);
 
     $('#message_button').click(() => {
       $('#message_modal').modal('show');
