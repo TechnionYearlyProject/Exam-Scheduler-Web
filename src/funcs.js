@@ -20,20 +20,20 @@ function popup_modal(type, text, func) {
         title.innerHTML = 'שגיאה';
         icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
         icon.style.color = '#dc3545';
-        buttons.innerHTML = '<button type="button" class="btn btn-danger" style="margin-left: inherit;" data-dismiss="modal">אישור</button>';
+        buttons.innerHTML = '<button type="button" class="btn btn-danger" style="width: 80px; margin-left: inherit;" data-dismiss="modal">אישור</button>';
     }
     if (type == 'INFO') {
         title.innerHTML = 'מידע';
         icon.innerHTML = '<i class="fas fa-info-circle"></i>';
         icon.style.color = '#ffc107';
-        buttons.innerHTML = '<button type="button" class="btn btn-warning" style="margin-left: inherit; color: white" data-dismiss="modal">אישור</button>';
+        buttons.innerHTML = '<button type="button" class="btn btn-warning" style="width: 80px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>';
     }
     if (type == 'CONF') {
         title.innerHTML = 'אישור';
         icon.innerHTML = '<i class="fas fa-check-circle"></i>';
         icon.style.color = '#17a2b8';
-        buttons.innerHTML = '<button type="button" class="btn btn-info" data-dismiss="modal">ביטול</button>\n' +
-            '<button type="button" id="alert_func" class="btn btn-info" data-dismiss="modal" style="margin-left: inherit;">אישור</button>';
+        buttons.innerHTML = '<button type="button" class="btn btn-info" data-dismiss="modal" style="width: 80px;">ביטול</button>\n' +
+            '<button type="button" id="alert_func" class="btn btn-info" data-dismiss="modal" style="width: 80px; margin-right:10px; margin-left: inherit;">אישור</button>';
     }
     $('#alert_modal').modal();
     if (type == 'CONF') {

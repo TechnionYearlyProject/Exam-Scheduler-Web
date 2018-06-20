@@ -39,12 +39,15 @@
         <span id="signin_icon" style="font-size: 20px;"><i class="fas fa-sign-in-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;" id="signin_title">התחברות</h5>
       </div>
-      <div class="modal-body" id="signin_body" align="center" style="height: 200px;"></div>
-      <div class="modal-footer" style="padding: 10px; padding-top: 0px;">
-        <input type="password" class="form-control" id="login_password" placeholder="הזן סיסמה" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">
+      <div class="modal-body"  align="center" style="height: 292px;">
+        <div id="signin_body"></div>
+        <div style="text-align: right; font-size: 14px">סיסמה:</div>
+        <input type="password" class="form-control" id="login_password" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">
+        <div id="login_error" style="text-align: right; color: red; font-size: 14px"></div>
       </div>
-      <div class="modal-body" style="margin-top: -20px; padding: 10px;">
-        <button type="button" class="btn btn-secondary btn-md" id="login_button" style="width: 100%; font-size: 14px;">התחבר</button>
+      <div class="modal-footer" style="padding: 10px;">
+        <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+        <button type="button" class="btn btn-secondary" id="login_button" style="width: 80px; margin-right:10px; margin-left: inherit; color: white;">התחבר</button>
       </div>
     </div>
   </div>
@@ -95,8 +98,8 @@
                     let login_password = document.getElementById('login_password');
                     login_password.className = "form-control";
                     login_password.type = "password";
-                    login_password.placeholder = "הזן סיסמה";
                     login_password.value = "";
+                    document.getElementById('login_error').innerHTML = "";
                     $('#signin_modal').modal();
                     document.getElementById('login_button').onclick = function (e) {
                         login(orig_name, document.getElementById('login_password').value, image);
@@ -105,9 +108,8 @@
                         if (e.keyCode == 13) {
                             login(orig_name, document.getElementById('login_password').value, image);
                         } else {
-                            let login_password = document.getElementById('login_password');
-                            login_password.className = "form-control";
-                            login_password.placeholder = "הזן סיסמה";
+                            let login_error = document.getElementById('login_error');
+                            login_error.innerHTML = "";
                         }
                     };
                 };
@@ -138,6 +140,7 @@
         let json = {"name": orig_name, "password": password};
         sendRequest('POST', '/api/login', json, function (res) {
             let data = JSON.parse(res);
+            let login_error = document.getElementById('login_error');
             if (data.auth) {
                 setCookie('token', data.token);
                 setCookie('faculty', data.username);
@@ -145,10 +148,7 @@
                 localStorage.setItem('faculty_image', image);
                 window.location.href = "/scheduler";
             } else {
-                let login_password = document.getElementById('login_password');
-                login_password.value = "";
-                login_password.placeholder = "הסיסמה שגויה";
-                login_password.className = "form-control warn_red";
+                login_error.innerHTML = "הסיסמה שגויה";
             }
         })
     };
