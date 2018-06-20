@@ -84,7 +84,8 @@
                       <!--<div class="col-2" style="padding-left: 11px; padding-right: 7px">-->
                         <!--<button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;">-->
                           <!--<i class="fas fa-flag"></i>-->
-                        <!--</button></div>-->
+                        <!--</button>-->
+                      <!--</div>-->
                     <!--</div>-->
                   <!--</li>-->
                 <!--</ul>-->
@@ -98,6 +99,16 @@
   <script type="module">
     import {sendRequest} from "./js/request";
 
+    function formatDate(string) {
+      let date = new Date(string);
+      return date.getDay() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+    }
+
+    function formatDateTime(string) {
+      let date = new Date(string);
+      return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDay() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+    }
+
     function makeMessageCard(index, course, schedule, messages) {
       let headerID = 'headeing_' + index.toString();
       let collapseID = 'collapse_' + index.toString();
@@ -108,7 +119,7 @@
       '                <div data-toggle="collapse" href="#' + collapseID + '" aria-expanded="true" aria-controls="' + collapseID + '">\n' +
       '                  <div class="d-flex justify-content-between">\n' +
       '                    <h5 class="mb-0" style="text-align: right">' + course + '</h5>\n' +
-      '                    <p class="mb-0" style="text-align: right">Schedule: ' + schedule + '</p>\n' +
+      '                    <p class="mb-0" style="text-align: right">Schedule: ' + formatDate(schedule) + '</p>\n' +
       '                  </div>\n' +
       '                </div>\n' +
       '              </div>\n' +
@@ -120,7 +131,7 @@
         '                  <li class="list-group-item">\n' +
         '                    <div class="d-flex justify-content-between">\n' +
         '                      <h5 class="mb-0">' + messages[i].sender + '</h5>\n' +
-        '                      <p class="mb-0">' + messages[i].date + '</p>\n' +
+        '                      <p class="mb-0">' + formatDateTime(messages[i].date) + '</p>\n' +
         '                    </div>\n' +
         '                    <p class="mb-0" style="text-align: right">' + messages[i].text + '</p>\n' +
         '                  </li>\n';
@@ -144,6 +155,15 @@
       return card;
     }
 
+    function sendMessage(event) {
+      let text = document.getElementById(event.data.text_area).value;
+      if (text.localeCompare('')) {
+        console.log(text);
+        $('#message_modal').modal('hide');
+        document.getElementById(event.data.text_area).value = '';
+      }
+    }
+
     sendRequest('get', '/api/message/list', null, res => {
       let data = JSON.parse(res);
       for (let i in data) {
@@ -158,6 +178,7 @@
         }
         let card = makeMessageCard(i, course, schedule_date, messages);
         document.getElementById('accordion').innerHTML += card;
+        $('#message_button_' + i.toString()).click({text_area: 'message_textbox_' + i.toString()}, sendMessage);
       }
     });
 
