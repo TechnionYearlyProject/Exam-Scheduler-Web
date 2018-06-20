@@ -28,7 +28,6 @@
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
-
 <div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
     <div class="row" style="height:100%">
         <div class="col align-self-center" align="center">
@@ -41,7 +40,6 @@
         </div>
     </div>
 </div>
-
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding-top: 0px; padding-bottom: 0px; padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
@@ -78,7 +76,6 @@
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
     </div>
 </div>
-
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -219,7 +216,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="password_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -241,7 +237,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="courses_management_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -293,7 +288,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="schedule_board_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -319,6 +313,66 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="semesters_management_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">ניהול סמסטרים</h5>
+            </div>
+            <div class="modal-body" id="faculties_mangement_body" style="text-align: right; height: 520px;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <h6>יצירת סמסטר חדש</h6>
+                            <div style="text-align: right; margin-top: 5px;">תקופה:</div>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+                                <label class="btn btn-outline-secondary" style="width: 50%;">
+                                    <input type="radio" name="options" id="option2" autocomplete="off">חורף
+                                </label>
+                                <label class="btn btn-outline-secondary" style="width: 50%;">
+                                    <input type="radio" name="options" id="option3" autocomplete="off">אביב
+                                </label>
+                            </div>
+                            <div style="text-align: right; margin-top: 5px;">שנה:</div>
+                            <input type="text" class="form-control yearpicker" id="year_input" style="text-align: right">
+                            <div style="text-align: right; margin-top: 5px;">מועד א':</div>
+                            <div style="text-align: right; margin-top: 5px;">תאריך התחלה:</div>
+                            <input type="text" class="form-control datepicker" id="a_start_input" style="text-align: right">
+                            <div style="text-align: right; margin-top: 5px;">תאריך סיום:</div>
+                            <input type="text" class="form-control datepicker" id="a_end_input" style="text-align: right">
+                            <div style="text-align: right; margin-top: 5px;">מועד ב':</div>
+                            <div style="text-align: right; margin-top: 5px;">תאריך התחלה:</div>
+                            <input type="text" class="form-control datepicker" id="b_start_input" style="text-align: right">
+                            <div style="text-align: right; margin-top: 5px;">תאריך סיום:</div>
+                            <input type="text" class="form-control datepicker" id="b_end_input" style="text-align: right">
+                            <button type="button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 355px; margin-top: 10px;">הוספת הסמסטר החדש</button>
+                        </div>
+                        <div class="col-sm">
+                            <h6>מחיקת סמסטרים</h6>
+                            <select multiple="" class="form-control" id="semesters_management_all" style="height:400px;  padding: 0px; overflow-y: scroll;">
+                            </select>
+                            <button type="button" class="btn btn-secondary" style="width:100%; margin-top:10px;">מחיקת הסמסטר המסומן</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-right" id="faculties_mangement_error" style="color: red; margin-top: 5px"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <script type="module">
     import { sendRequest } from './js/request';
@@ -717,6 +771,45 @@
             $("#password_change_modal").modal('hide');
         }, 1500);
     }
+    $('.datepicker').datepicker({
+        format: "dd/mm/yyyy",
+        language: "he",
+        orientation: "auto",
+        autoclose: true,
+        fontSize: "8"
+    });
+
+    $('.yearpicker').datepicker({
+        format: "yyyy",
+        language: "he",
+        orientation: "auto",
+        autoclose: true,
+        fontSize: "8",
+        startView: 2,
+        minViewMode: 2,
+        maxViewMode: 2
+    });
+
+    let sem_list = document.getElementById('semesters_management_all');
+    sendRequest('get', 'api/semester/list', null, res => {
+        let data = JSON.parse(res);
+        for (let i in data) {
+            let li = document.createElement('option');
+            let semester = "חורף";
+            if (!data[i].semester.localeCompare("spring")) {
+                semester = "אביב"
+            }
+            let name = semester + " " + data[i].year;
+            li.innerHTML = name;
+            li.style = "height: 40px; padding-right: 10px; padding-top: 10px;";
+            sem_list.appendChild(li);
+        }
+    });
+
+    $(".list-group list-group-item").click(function(e) {
+        $(".list-group list-group-item").removeClass("active");
+        $(e.target).addClass("active");
+    });
 
 
 </script>
