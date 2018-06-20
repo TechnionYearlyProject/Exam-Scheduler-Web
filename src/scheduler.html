@@ -112,16 +112,25 @@
             </div>
             <div class="modal-body" style="text-align: right; height: 90px;">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck1">מערכת קורסים</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_1">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_1">מערכת קורסים</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck2">מועד א'</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_2">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_2">מועד א'</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                    <label class="form-check-label" style="margin-right: 20px;" for="exampleCheck3">מועד ב'</label>
+                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
+                        <input type="checkbox" id="upload_switch_3">
+                        <span class="slider round"></span>
+                    </label>
+                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_3">מועד ב'</label>
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
@@ -355,8 +364,7 @@
         localStorage.setItem('semester_name', top.getAttribute('semester_name'));
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
-        //load_courses_table();
-        $("#sys_loader").remove();
+        load_courses_table();
         load_all_courses_table();
     });
     var fillScheduleWithCourses = function (moeds) {
