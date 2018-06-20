@@ -9,6 +9,7 @@ exports.messageList = function (req, res, next) {
   })
   .populate('faculty', 'name')
   .populate('course', 'name id')
+  .populate('semester', 'year semester')
   .populate('messages.sender', 'name')
   .then(message_lists => {
     return res.json(message_lists);
@@ -83,6 +84,7 @@ exports.sendMessage = async function (req, res, next) {
         faculty: course.faculty,
         course: course._id,
         schedule: date,
+        semester: semester._id,
         moed: req.body.moed,
         messages: [{
           sender: req.faculty_id,
@@ -99,7 +101,9 @@ exports.sendMessage = async function (req, res, next) {
       };
       return MessageList.update({
         faculty: course.faculty,
-        course: course._id
+        course: course._id,
+        moed: req.body.moed,
+        semester: semester._id
       }, {
         $push: {
           messages: update
