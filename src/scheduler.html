@@ -23,10 +23,25 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.5/css/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.4.0/css/keyTable.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
     <meta charset="utf-8">
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
+
+<div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
+    <div class="row" style="height:100%">
+        <div class="col align-self-center" align="center">
+                <div>
+                    <img src="graphics/loading.gif">
+                </div>
+            <div style="font-size: 20px; font-weight: bold">
+                המערכת נטענת...
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding-top: 0px; padding-bottom: 0px; padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
@@ -46,7 +61,7 @@
         </div>
     </div>
 </div>
-<div class="form-group row" style="text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
+<div id="master" class="form-group row" style="background-color: white; text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
   <div class="container-fluid col">
     <div id="courses"></div>
   </div>
@@ -59,7 +74,7 @@
 </div>
 <div id="popover_comment" class="modal fade">
     <div class = "row">
-        <div class="col 9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea></div>
+        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
     </div>
 </div>
@@ -70,7 +85,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">בונה לוחות מבחנים</h5>
             </div>
             <div class="modal-body" align="center">
-                <img src="graphics/load.gif">
+                <img src="graphics/loading.gif">
             </div>
         </div>
     </div>
@@ -91,7 +106,8 @@
 <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-cloud"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">העלאה לענן</h5>
             </div>
             <div class="modal-body" style="text-align: right; height: 90px;">
@@ -109,8 +125,8 @@
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">ביטול</button>
-                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="margin-left: inherit;">אישור</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 80px;">ביטול</button>
+                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="width: 80px; margin-right: 10px; margin-left: inherit;">אישור</button>
             </div>
         </div>
     </div>
@@ -133,7 +149,7 @@
                                 <tr>
                                     <th style="padding-left: 0px">מספר</th>
                                     <th>שם הקורס</th>
-                                    <th style="padding-left: 0px">פקולטה מנהלת</th>
+                                    <th style="padding-left: 0px">פקולטה</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -150,7 +166,7 @@
                                 <tr>
                                     <th style="padding-left: 0px">מספר</th>
                                     <th>שם הקורס</th>
-                                    <th style="padding-left: 0px">פקולטה מנהלת</th>
+                                    <th style="padding-left: 0px">פקולטה</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -158,19 +174,86 @@
                     </div>
                     <div class="row">
                         <div class="col-sm">
-                            <p class="text-right" id="conflict_error" style="font-size:13px; color: red; margin-top: 5px"></p>
+                            <p class="text-right" id="conflict_error" style="color: red; margin-top: 5px"></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer" id="conflicts_buttons" style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-                <button type="button" class="btn btn-secondary" style="margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
             </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="email_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="email_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 120px;">
+                <div class='row align-items-center' style="margin-bottom: 5px;">
+                    <div class = "col-sm-3">
+                        <div style="text-align: right;">כתובת נוכחית:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                         <p class="text-right form-control-plaintext" id="current_mail"></p>
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <div class = "col-sm-3">
+                        <div style="text-align: right">כתובת חדשה:</div>
+                    </div>
+                    <div class = "col-sm-9" style="padding-right: 0px;">
+                        <input type="text" class="form-control" id="new_email">
+                    </div>
+                </div>
+                <div class='row align-items-center'>
+                    <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px; padding-right: 15px"></p>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="email_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="password_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-key"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">עדכון סיסמה</h5>
+            </div>
+            <div class="modal-body" style="text-align: right; height: 170px;">
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_1"></div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">אישור סיסמה חדשה:</div>
+                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_2"></div>
+                <div class='row' id="password_change_message" style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"></div>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+                <button type="button" id="password_change_submit" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="module">
+
+
+    // setTimeout(function () {
+    //     var loader = document.getElementById("sys_loader");
+    //     loader.style.visibility = "hidden";
+    // }, 5000);
+
+
+
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
@@ -314,7 +397,7 @@
             autoWidth: false,
             "dom": 'lrt',
             "language":  {
-                "emptyTable": "טוען רשימת קורסים...",
+                "emptyTable": "הרשימה ריקה",
                 "zeroRecords": "לא נמצאו קורסים מתאימים",
             },
             "columns": [
@@ -395,6 +478,38 @@
         } );
     }
     window.addEventListener('load', initSched, false);
+
+    function update_email() {
+        let error =  document.getElementById('email_change_error');
+        let email = document.getElementById('new_email').value;
+        let old = document.getElementById('current_mail');
+
+        if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'כתובת הדוא"ל שהוקלדה אינה תקינה';
+        } else if (email == old.innerHTML) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'כתובת הדוא"ל זהה לכתובת השמורה';
+        }
+        else {
+                let json = {"email": email};
+                console.log(json);
+                sendRequest('put', '/api/update_email', json, function () {
+                    error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+                    error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
+                    setTimeout(function () {
+                        $('#email_change_modal').modal('hide');
+                    }, 1500);
+                })
+            }
+
+    }
+    var email_change_button = document.getElementById("email_change_button");
+    email_change_button.onclick = function(){
+        update_email()
+    };
+
+
 
 
 
@@ -477,9 +592,37 @@
                     ev.dataTransfer.setData("list_drag", id);
                 }
             } );
+            $("#sys_loader").remove();
         });
 
     }
+
+    document.getElementById('password_change_submit').onclick = function(e) {
+        let message =  document.getElementById('password_change_message');
+        let password1 = document.getElementById('new_password_1').value;
+        let password2 = document.getElementById('new_password_2').value;
+        if (password1.localeCompare(password2) !== 0) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמאות שהוזנו לא תואמות";
+            return;
+        }
+        if (password1.length < 8) {
+            message.style.color = "red";
+            message.innerHTML = "הסיסמה שהוזנה קצרה מדי";
+            return;
+        }
+        let json = {"new_password": password1, "retype_new_password": password2};
+        sendRequest('put', '/api/update_password', json, function () {
+            window.location.href = "/scheduler";
+        });
+        message.style.color = 'green';
+        message.innerHTML = "הסיסמה עודכנה בהצלחה";
+        setTimeout(function () {
+            $("#password_change_modal").modal('hide');
+        }, 1500);
+    }
+
+
 </script>
 </body>
 </html>

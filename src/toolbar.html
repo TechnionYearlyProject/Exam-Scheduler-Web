@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="toolbar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <link rel="stylesheet" href="toolbar.css">
   <meta charset="UTF-8">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px;">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px; z-index: 101;">
     <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
     <div class="btn-toolbar" id="button_toolbar" role="toolbar" aria-label="Toolbar with button groups">
       <div class="btn-group">
@@ -30,10 +31,9 @@
           יצוא
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
-          <a class="dropdown-item" href="#">בתור Excel</a>
-          <a class="dropdown-item" href="#">בתור XML</a>
-          <a class="dropdown-item" href="#">בתור Calendar</a>
-          <a class="dropdown-item" href="#">בתור PNG</a>
+          <a class="dropdown-item" href="#">בתור xls</a>
+          <a class="dropdown-item" href="#">בתור txt</a>
+          <a class="dropdown-item" id="png_export_button" href="#">בתור png</a>
         </div>
       </div>
     </div>
@@ -43,9 +43,9 @@
           <img id="faculty_image" height="45" width="45" style="border-radius: 50%; margin-right: 5px;">
         </a>
         <div class="dropdown-menu dropdown-menu-left" style="margin-top: 4px; margin-left:5px;">
-          <a class="dropdown-item" href="/edit_email">שינוי מייל</a>
-          <a class="dropdown-item" href="/edit_password">שינוי סיסמה</a>
-          <a class="dropdown-item" href="/logout">התנתק</a>
+          <a class="dropdown-item" href="#" id="email_change_button" style="height: 27.8px;">עדכון כתובת דוא"ל</a>
+          <a class="dropdown-item" href="#" id="password_change_button" style="height: 27.8px;">עדכון סיסמה</a>
+          <a class="dropdown-item" href="/logout" style="height: 27.8px;">התנתק</a>
         </div>
       </li>
     </ul>
@@ -97,7 +97,16 @@
     </div>
   </div>
   <script type="module">
-    import {sendRequest} from "./js/request";
+      import {sendRequest} from "./js/request";
+      document.getElementById('png_export_button').onclick = function(e) {
+          html2canvas($("#master"),{
+              onrendered: function(canvas) {
+                  var a = document.createElement('a');
+                  a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                  a.download = 'exam_schedule.jpg';
+                  a.click();
+              }});
+      };
 
     function formatDate(string) {
       let date = new Date(string);
@@ -235,6 +244,25 @@
           $('#upload_modal').modal();
 
       };
+      document.getElementById('email_change_button').onclick = function(e) {
+          sendRequest('get', '/api/faculty/email', null, function (res) {
+              let data = JSON.parse(res);
+              document.getElementById('current_mail').innerHTML = data.email;
+          });
+          document.getElementById('email_change_error').innerHTML = "";
+          document.getElementById('new_email').value = "";
+          $('#email_change_modal').modal();
+      }
+
+      document.getElementById('password_change_button').onclick = function(e) {
+          $('#password_change_modal').modal();
+      }
+
+
+
+
+
+
   </script>
 </body>
 </html>
