@@ -78,18 +78,7 @@
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
     </div>
 </div>
-<div class="modal fade" data-backdrop="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="margin-top: 90px;">
-        <div class="modal-content" style="width: 440px;">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">בונה לוחות מבחנים</h5>
-            </div>
-            <div class="modal-body" align="center">
-                <img src="graphics/loading.gif">
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -253,7 +242,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="courses_management_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -306,16 +294,33 @@
     </div>
 </div>
 
+<div class="modal fade" id="schedule_board_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+                <span style="font-size: 20px;"><i class="fas fa-calendar-alt"></i></span>
+                <h5 class="modal-title" style="margin-right: 5px;">שיבוץ אוטומטי</h5>
+            </div>
+            <div class="modal-body" id="schedule_board_body" style="text-align: right; height: 520px;">
+                <div class="row" style="height:100%">
+                    <div class="col align-self-center" align="center">
+                        <div>
+                            <img src="graphics/loading.gif">
+                        </div>
+                        <div style="font-size: 20px; font-weight: bold">
+                            בונה לוחות מבחנים פוטנציאליים...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"style="padding: 10px;">
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="module">
-
-
-    // setTimeout(function () {
-    //     var loader = document.getElementById("sys_loader");
-    //     loader.style.visibility = "hidden";
-    // }, 5000);
-
-
-
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
@@ -401,9 +406,9 @@
       $('#scheduler_function_caller').click(function(){
           $("[id^='exam_for_']").remove();
           console.log(localStorage);
-          $('#exampleModal').modal("show");
+          $('#schedule_board_modal').modal("show");
           setTimeout(function () {
-              $('#exampleModal').modal("hide");
+              $('#schedule_board_modal').modal("hide");
               $.ajax({
                     url: "/make-schedule",
                     type: "POST",
