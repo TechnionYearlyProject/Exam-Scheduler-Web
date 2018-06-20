@@ -648,6 +648,7 @@
                 "id" : course_num.value,
                 "name" : course_name.value,
                 "faculty" : course_faculty.value,
+                "credit_point" : course_points.value,
             };
         all_courses_dict.push(entry);
         var t = $('#courses_management_table').DataTable();
@@ -692,10 +693,12 @@
     };
     var course_save_button = document.getElementById("course_save_button");
     course_save_button.onclick = function () {
+
         for(var i in course_management_to_db)
         {
             if (course_management_to_db[i][1] == "add")
             {
+                console.log(course_management_to_db[i][0]);
                 sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
                 console.log(123);
                 });
