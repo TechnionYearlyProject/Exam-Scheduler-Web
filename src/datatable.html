@@ -116,19 +116,6 @@
             $('#conflicts_modal').modal();
         };
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
-        var delbutton = document.createElement("button");
-        delbutton.type = "button";
-        delbutton.className = "btn btn-outline-secondary btn-sm";
-        delbutton.style = "height: 20px; width: 20px; padding: 0px;"
-        delbutton.innerHTML = '<i class="fas fa-trash"></i>';
-        delbutton.onclick = function() {
-            function del() {
-                row.remove();
-                row.node().parentNode.removeChild(row.node());
-            };
-            popup_modal("CONF", 'האם אתה בטוח שברצונך למחוק את הקורס "' + entry["name"] +'"?', del);
-        };
-        pairs.push({text: 'מחיקת הקורס:', elem: delbutton, elem_is_text: false});
         for (var i in pairs) {
             var td1 = document.createElement("td");
             td1.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
