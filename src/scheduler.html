@@ -203,12 +203,12 @@
               $.ajax({
                     url: "/make-schedule",
                     type: "POST",
-                    data: JSON.stringify({
-                        occupied: occupied,
+                    data: {
+                        occupied: JSON.stringify(occupied),
                         semester: localStorage.semester_name,
                         faculty: localStorage.faculty_name,
                         changes: localStorage.getItem(changes_root_key),
-                    }),
+                    },
                     success: fillScheduleWithCourses(["moed_a", "moed_b"])
               });
           }, 5000);
@@ -219,7 +219,7 @@
               url: "/make-schedule",
               type: 'POST',
               data: JSON.stringify({
-                  occupied: occupied,
+                  occupied: JSON.stringify(occupied),
                   semester: localStorage.semester_name,
                   faculty: localStorage.faculty_name
               }),

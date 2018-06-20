@@ -23,7 +23,7 @@ app.use('/js/request', express.static(path.join(__dirname, '/src/js/request.js')
 app.use('/js/cookie', express.static(path.join(__dirname, '/src/js/cookie.js')));
 app.use('/api', api);
 
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'src/login.html')));
+app.get('/login', (req, res) => {console.log("Got here");res.sendFile(path.join(__dirname, 'src/login.html'));});
 app.get('/logout', (req, res) => res.sendFile(path.join(__dirname, 'src/logout.html')));
 
 // DEBUG ONLY
