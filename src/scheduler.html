@@ -704,7 +704,9 @@
                 });
             }
             else {
-                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', course_management_to_db[i][0]["faculty"], function (out) {
+                var elem =  {"faculty" : course_management_to_db[i][0]["faculty"]};
+                console.log(elem);
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', elem, function (out) {
                     console.log(321);
                 });
             }
