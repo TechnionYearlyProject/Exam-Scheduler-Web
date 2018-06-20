@@ -28,6 +28,20 @@
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
+
+<div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
+    <div class="row" style="height:100%">
+        <div class="col align-self-center" align="center">
+                <div>
+                    <img src="graphics/loading.gif">
+                </div>
+            <div style="font-size: 20px; font-weight: bold">
+                המערכת נטענת...
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding-top: 0px; padding-bottom: 0px; padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
@@ -71,7 +85,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">בונה לוחות מבחנים</h5>
             </div>
             <div class="modal-body" align="center">
-                <img src="graphics/load.gif">
+                <img src="graphics/T3Ht7S3.gif">
             </div>
         </div>
     </div>
@@ -230,6 +244,15 @@
 </div>
 
 <script type="module">
+
+
+    // setTimeout(function () {
+    //     var loader = document.getElementById("sys_loader");
+    //     loader.style.visibility = "hidden";
+    // }, 5000);
+
+
+
     import { sendRequest } from './js/request';
     var map_a = {};
     var map_b = {};
@@ -373,7 +396,7 @@
             autoWidth: false,
             "dom": 'lrt',
             "language":  {
-                "emptyTable": "טוען רשימת קורסים...",
+                "emptyTable": "הרשימה ריקה",
                 "zeroRecords": "לא נמצאו קורסים מתאימים",
             },
             "columns": [
@@ -568,6 +591,7 @@
                     ev.dataTransfer.setData("list_drag", id);
                 }
             } );
+            $("#sys_loader").remove();
         });
 
     }
