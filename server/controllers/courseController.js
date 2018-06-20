@@ -1,6 +1,6 @@
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
-const Faculty = require()
+const Faculty = require('../models/faculty').model;
 // const StudyProgram = require('../models/studyprogram').model;
 
 exports.faculty_course_list = function(req,res,next){
