@@ -76,12 +76,21 @@
                     <!--</div>-->
                     <!--<p class="mb-0" style="text-align: right">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
                   <!--</li>-->
+                  <!--<li class="list-group-item">-->
+                    <!--<div class = "row">-->
+                      <!--<div class="col-10" style="padding-left: 0px; padding-right: 11px">-->
+                        <!--<textarea id="popover_input" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea>-->
+                      <!--</div>-->
+                      <!--<div class="col-2" style="padding-left: 11px; padding-right: 7px">-->
+                        <!--<button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;">-->
+                          <!--<i class="fas fa-flag"></i>-->
+                        <!--</button></div>-->
+                    <!--</div>-->
+                  <!--</li>-->
                 <!--</ul>-->
               <!--</div>-->
             <!--</div>-->
           </div>
-        </div>
-        <div class="modal-footer">
         </div>
       </div>
     </div>
@@ -92,6 +101,8 @@
     function makeMessageCard(index, course, schedule, messages) {
       let headerID = 'headeing_' + index.toString();
       let collapseID = 'collapse_' + index.toString();
+      let message_textboxID = 'message_textbox_' + index.toString();
+      let buttonID = 'message_button_' + index.toString();
       let card = '<div class="card">\n' +
       '              <div class="card-header" role="tab" id="' + headerID + '">\n' +
       '                <div data-toggle="collapse" href="#' + collapseID + '" aria-expanded="true" aria-controls="' + collapseID + '">\n' +
@@ -115,16 +126,27 @@
         '                  </li>\n';
       }
       card += '' +
+      '                  <li class="list-group-item">\n' +
+      '                    <div class = "row">\n' +
+      '                      <div class="col-10" style="padding-left: 0px; padding-right: 11px">\n' +
+      '                        <textarea id="' + message_textboxID + '" rows = "2" type="text" style="resize: none;  font-size: 13px" class="form-control"></textarea>\n' +
+      '                      </div>\n' +
+      '                      <div class="col-2" style="padding-left: 11px; padding-right: 7px">\n' +
+      '                        <button id="' + buttonID + '" class="btn btn-secondary" style="height: 100%; width: 100%;">\n' +
+      '                          <i class="fas fa-flag"></i>\n' +
+      '                        </button></div>\n' +
+      '                    </div>\n' +
+      '                  </li>';
+      card += '' +
       '                </ul>\n' +
       '              </div>\n' +
-      '            </div>\n'
+      '            </div>\n';
       return card;
     }
 
     sendRequest('get', '/api/message/list', null, res => {
       let data = JSON.parse(res);
       for (let i in data) {
-        console.log(data[i]);
         let course = data[i].course.name;
         let schedule_date = data[i].schedule;
         let messages = [];
