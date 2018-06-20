@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="resources/bootstrap.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
   <link rel="stylesheet" href="resources/bootstrap-rtl.css">
-  <link rel="stylesheet" href="../../../../Users/Tal/Downloads/styles.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="resources/bootstrap.js"></script>
   <link rel="shortcut icon" type="image/png" href="graphics/favicon.ico"/>
   <meta charset="utf-8">
@@ -94,6 +94,7 @@
                     '                  </div>';
                     let login_password = document.getElementById('login_password');
                     login_password.className = "form-control";
+                    login_password.type = "password";
                     login_password.placeholder = "הזן סיסמה";
                     login_password.value = "";
                     $('#signin_modal').modal();
