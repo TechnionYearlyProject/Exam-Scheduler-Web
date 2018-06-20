@@ -679,7 +679,12 @@
             if (all_courses_dict[i]["id"] == selected_row.data()["id"])
                 all_courses_dict.splice(i,1);
         }
-        course_management_to_db.push([selected_row.data()["id"], "remove"]);
+        var entry =
+            {
+                "id" : selected_row.data()["id"],
+                "faculty" : selected_row.data()["faculty"],
+            };
+        course_management_to_db.push([entry, "remove"]);
         error.style = "color: green; margin-top: 5px; padding-right: 15px;";
         error.innerHTML = 'הקורס "' + selected_row.data()["name"] + '" נמחק בהצלחה.';
         selected_row.remove().draw();
@@ -687,7 +692,6 @@
     };
     var course_save_button = document.getElementById("course_save_button");
     course_save_button.onclick = function () {
-        console.log(course_management_to_db);
         for(var i in course_management_to_db)
         {
             if (course_management_to_db[i][1] == "add")
@@ -697,8 +701,7 @@
                 });
             }
             else {
-                alert(1);
-                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0] +'/delete', null, function (out) {
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', course_management_to_db[i][0]["faculty"], function (out) {
                     console.log(321);
                 });
             }
