@@ -249,11 +249,11 @@
                 <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">ניהול קורסים</h5>
             </div>
-            <div class="modal-body" id="courses_mangement_body" style="text-align: right; height: 520px;">
+            <div class="modal-body" id="courses_management_body" style="text-align: right; height: 540px;">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
-                            <h6>יצירת קורס חדש</h6>
+                            <h6>יצירת קורסים</h6>
                             <div style="font-size:13px; text-align: right; margin-top: 5px;">מספר הקורס:</div>
                             <input type="text" class="form-control" id="new_course_num" style="font-size:13px; width: 336.8px;">
                             <div style="font-size:13px; text-align: right; margin-top: 5px;">שם הקורס:</div>
@@ -261,8 +261,10 @@
                             <div style="font-size:13px; text-align: right; margin-top: 5px;">נקודות זכות:</div>
                             <input type="text" class="form-control" id="new_course_points" style="font-size:13px; width: 336.8px;">
                             <div style="font-size:13px; text-align: right; margin-top: 5px;">פקולטה:</div>
-                            <input type="text" class="form-control" id="new_course_faculty" style="font-size:13px; width: 336.8px;">
-                            <button type="button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 336.8px;">שמירת הקורס</button>
+                            <select type="text" class="form-control" id="new_course_faculty" style="font-size:13px; width: 336.8px; text-align: right">
+                                <option>בחירת פקולטה...</option>
+                            </select>
+                            <button type="button" id="course_add_button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 336.8px;">שמירת הקורס</button>
                         </div>
                         <div class="col-sm">
                             <h6>מחיקת קורסים</h6>
@@ -276,19 +278,19 @@
                                 </tr>
                                 </thead>
                             </table>
-                            <button type="button" class="btn btn-secondary" style="margin-top:10px; width: 336.8px;">מחיקת קורס</button>
+                            <button type="button" id="course_remove_button" class="btn btn-secondary" style="margin-top:10px; width: 336.8px;">מחיקת קורס</button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm">
-                            <p class="text-right" id="courses_mangement_error" style="color: red; margin-top: 5px"></p>
+                            <p class="text-right" id="courses_management_error" style="color: red; margin-top: 5px"></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer"style="padding: 10px;">
                 <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+                <button type="button" id="course_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
             </div>
         </div>
     </div>
@@ -325,6 +327,8 @@
     var map_a = {};
     var map_b = {};
     var courses_dict = [];
+    var course_management_to_db = [];
+
     var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
     var all_courses_dict = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
@@ -372,6 +376,8 @@
         load_courses_table();
         load_all_courses_table();
     });
+    all_courses_dict =  JSON.parse(localStorage.getItem('all_courses_dict'));
+
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
             result = JSON.parse(result);
@@ -456,7 +462,7 @@
                 document.body.removeChild(document.getElementById('test_tooltip_' + id));
             }
         };
-        var table4 = $('#courses_management_table').DataTable( {
+            var table4 = $('#courses_management_table').DataTable( {
             scrollY: 350,
             paging: false,
             info: false,
@@ -601,12 +607,106 @@
     email_change_button.onclick = function(){
         update_email()
     };
+    var course_add_button = document.getElementById("course_add_button");
+    course_add_button.onclick = function () {
+        var course_num = document.getElementById("new_course_num");
+        var course_name = document.getElementById("new_course_name");
+        var course_points = document.getElementById("new_course_points");
+        var course_faculty = document.getElementById("new_course_faculty");
+        var error = document.getElementById("courses_management_error");
+        if (course_num.value.length != 6 || isNaN(course_num.value))
+        {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'מספר הקורס שהוזן אינו תקין.';
+            return;
+
+        }
+        for (var i in all_courses_dict)
+        {
+            if (all_courses_dict[i]["id"] == course_num.value)
+            {
+                error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+                error.innerHTML = 'מספר הקורס קיים במערכת.';
+                return;
+            }
+        }
+        if (!(course_points.value % 1 == 0.5 || course_points.value % 1 == 0))
+        {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נקודות הזכות שהוזנו אינם תקינות.';
+            return;
+
+        }
+        if (course_faculty.value == "בחירת פקולטה...")
+        {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נא לבחור פקולטה מהרשימה.';
+            return;
+        }
+        var entry =
+            {
+                "id" : course_num.value,
+                "name" : course_name.value,
+                "faculty" : course_faculty.value,
+            };
+        all_courses_dict.push(entry);
+        var t = $('#courses_management_table').DataTable();
+        t.row.add(entry).draw();
+        entry["programs"] = [];
+        course_management_to_db.push([entry,"add"]);
+        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
+        course_num.value = "";
+        course_name.value = "";
+        course_points.value = "";
+        course_faculty.value = "בחירת פקולטה...";
+    }
 
 
+    var course_remove_button = document.getElementById("course_remove_button");
+    course_remove_button.onclick = function () {
+        var t = $('#courses_management_table').DataTable();
+        var count = t.rows( { selected: true } ).count();
+        var error = document.getElementById("courses_management_error");
+        if (count == 0)
+        {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נא לבחור פקולטה מרשימת הקורסים.';
+            return;
+        }
+        var selected_row = t.row('.selected');
+        for (var i in all_courses_dict) {
+            if (all_courses_dict[i]["id"] == selected_row.data()["id"])
+                all_courses_dict.splice(i,1);
+        }
+        course_management_to_db.push([selected_row.data()["id"], "remove"]);
+        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.innerHTML = 'הקורס "' + selected_row.data()["name"] + '" נמחק בהצלחה.';
+        selected_row.remove().draw();
 
+    };
+    var course_save_button = document.getElementById("course_save_button");
+    course_save_button.onclick = function () {
+        console.log(course_management_to_db);
+        for(var i in course_management_to_db)
+        {
+            if (course_management_to_db[i][1] == "add")
+            {
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
+                console.log(123);
+                });
+            }
+            else {
+                alert(1);
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0] +'/delete', null, function (out) {
+                    console.log(321);
+                });
+            }
+        }
+        course_management_to_db = [];
+    };
 
-
-    function load_all_courses_table() {
+        function load_all_courses_table() {
         var table1 = $("#all_courses").DataTable();
         var table2 = $("#courses_management_table").DataTable();
 
