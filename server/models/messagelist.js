@@ -15,11 +15,14 @@ const MessageListSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  moed: {
+    type: String,
+    enum: ['A', 'B']
+  },
   messages: [{
     sender: {
       type: mongoose.Schema.ObjectId,
       ref: 'Faculty',
-      required: true
     },
     date: {
       type: Date,
