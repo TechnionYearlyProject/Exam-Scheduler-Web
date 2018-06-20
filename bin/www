@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const app = require('../app');
-const debug = require('debug')('exam-scheduler:server');
+const logging = require('../logging');
 const http = require('http');
 
 /**
@@ -81,5 +81,5 @@ function onListening() {
   let bind = typeof addr === 'string'
   ? 'pipe ' + addr
   : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  logging.info('Listening on ' + bind);
 }

@@ -36,6 +36,13 @@ select[multiple]:focus option:hover {
     background: #E5E8E8 linear-gradient(0deg, #E5E8E8 0%, #E5E8E8 100%);
 }
 
+select[type="text"]:focus,
+.uneditable-select:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+    outline: 0 none;
+}
+
 
 textarea:focus {
     border-color: #ced4da !important;
