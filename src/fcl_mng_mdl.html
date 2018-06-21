@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+
+<div class="modal fade" id="fcl_mng_mdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+        <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
+        <h5 class="modal-title" style="margin-right: 5px;">ניהול פקולטות</h5>
+      </div>
+      <div class="modal-body" id="courses_management_body" style="text-align: right; height: 390px;">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">יצירת פקולטה חדשה:</div>
+              <div style="text-align: right; margin-top: 5px;">תמונה:</div>
+              <button type="button" id="fcl_img_btn" class="btn btn-outline-secondary" style="width: 336.8px;"><i class="fas fa-camera" style="padding-left:10px;"></i>העלאת תמונה</button>
+              <div style="text-align: right; margin-top: 5px;">שם הפקולטה:</div>
+              <input type="text" class="form-control" id="new_faculty_name" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">כתובת דוא"ל:</div>
+              <input type="text" class="form-control" id="new_faculty_email" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">סיסמה:</div>
+              <input type="text" class="form-control" id="new_faculty_password" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">אישור סיסמה:</div>
+              <input type="text" class="form-control" id="new_faculty_password_verify" style="width: 336.8px;">
+              <button type="button" id="fcl_add_btn" class="btn btn-outline-secondary" style="position: absolute; bottom:0px; width: 336.8px;"><i class="fas fa-plus" style="padding-left:10px;"></i>הוספת הפקולטה</button>
+            </div>
+            <div class="col-sm">
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">כל הפקולטות:</div>
+              <ul class="list-group list-group-flush" id="fcl_mng_lst" style="margin-top: 5px; height: 334px; border: 1px solid #ced4da; overflow-y: scroll;">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"style="padding: 10px;">
+        <p class="text-right" id="faculty_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
+        <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
+        <button type="button" id="course_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+    import {sendRequest} from "./js/request";
+    let fcl_mng_lst = document.getElementById('fcl_mng_lst');
+    sendRequest('get', 'api/faculty/details_list', null, res => {
+        let data = JSON.parse(res);
+        for (let i in data) {
+            if (data[i].name == "Administrator") {
+                continue;
+            }
+            let li = document.createElement('li');
+            li.className = "list-group-item";
+            li.innerHTML = data[i].name + '<button type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
+            li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+            fcl_mng_lst.appendChild(li);
+        }
+    });
+
+</script>
+</body>
+</html>

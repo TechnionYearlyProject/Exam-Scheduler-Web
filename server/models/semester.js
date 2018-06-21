@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Course = require('./course').model;
+const Schedule = require('./schedule').model;
+const MessageList = require('./messagelist').model;
 
 const SemesterModel = new mongoose.Schema({
   year: {
@@ -27,6 +30,19 @@ const SemesterModel = new mongoose.Schema({
     type: Date,
     required: true
   },
+});
+
+SemesterModel.pre('remove', function (next) {
+  Course.remove({
+    semester: this._id
+  }).exec();
+  Schedule.remove({
+    semester: this._id
+  }).exec();
+  MessageList.remove({
+    semester: this._id
+  }).exec();
+  next();
 });
 
 exports.model = mongoose.model('Semester', SemesterModel);

@@ -19,6 +19,31 @@ input[type="textarea"]:focus,
     outline: 0 none;
 }
 
+select:focus {
+    border-color: #ced4da !important;
+    overflow: auto !important;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+select[multiple]:focus option:checked {
+    background: #CCD1D1 linear-gradient(0deg, #CCD1D1 0%, #CCD1D1 100%);
+}
+
+select[multiple]:focus option:hover {
+    background: #E5E8E8 linear-gradient(0deg, #E5E8E8 0%, #E5E8E8 100%);
+}
+
+select[type="text"]:focus,
+.uneditable-select:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+
 textarea:focus {
     border-color: #ced4da !important;
     overflow: auto !important;

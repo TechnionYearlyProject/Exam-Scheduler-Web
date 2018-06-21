@@ -1,6 +1,8 @@
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
-const StudyProgram = require('../models/studyprogram').model;
+const Faculty = require('../models/faculty').model;
+const logging = require('../../logging');
+// const StudyProgram = require('../models/studyprogram').model;
 
 exports.faculty_course_list = function(req,res,next){
   Semester.findOne({
@@ -26,6 +28,7 @@ exports.faculty_course_list = function(req,res,next){
 };
 
 exports.course_create = async function (req, res, next) {
+  logging.db('Create course ' + req.body.id + '.');
   const semester = await Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
@@ -39,35 +42,46 @@ exports.course_create = async function (req, res, next) {
   .catch(err => {
     next(err);
   });
-  if(req.body.id.length != 6){
+
+  if(req.body.id.length !== 6){
       return res.status(400).send('Course ID must be 6 digits.');
   }
 
-  const faculty_programs = await StudyProgram.find({
-        faculty: req.faculty_id
-    }).then(programs => {
-        return programs;
-    }).catch(err => {
-        next(err);
-    });
-  var i;
-  var programs = [];
-    for(i =0;i<req.body.programs.length;i++){
-        var flag = false;
-        for(let j in faculty_programs){
-        if(faculty_programs[j].name == req.body.programs[i].study_program){
-          flag = true;
-          var p = {
-              "study_program":faculty_programs[j]._id,
-              "semester":req.body.programs[i].semester
-          };
-          programs.push(p);
-        }
-      }
-      if(flag === false ){
-        return res.status(400).send('Study program does not exist.');
-      }
-    }
+  const faculty = await Faculty.findOne({
+    name: req.body.faculty
+  })
+  .then(faculty => {
+    return faculty;
+  })
+  .catch(err => {
+    next(err);
+  });
+
+  // const faculty_programs = await StudyProgram.find({
+  //       faculty: req.faculty_id
+  //   }).then(programs => {
+  //       return programs;
+  //   }).catch(err => {
+  //       next(err);
+  //   });
+  // var i;
+  // var programs = [];
+  //   for(i =0;i<req.body.programs.length;i++){
+  //       var flag = false;
+  //       for(let j in faculty_programs){
+  //       if(faculty_programs[j].name == req.body.programs[i].study_program){
+  //         flag = true;
+  //         var p = {
+  //             "study_program":faculty_programs[j]._id,
+  //             "semester":req.body.programs[i].semester
+  //         };
+  //         programs.push(p);
+  //       }
+  //     }
+  //     if(flag === false ){
+  //       return res.status(400).send('Study program does not exist.');
+  //     }
+  //   }
 
   Course.findOne({
     id: req.body.id,
@@ -81,10 +95,10 @@ exports.course_create = async function (req, res, next) {
     return Course.create({
       id: req.body.id,
       name: req.body.name,
-      faculty: req.faculty_id,
+      faculty: faculty._id,
       semester: semester._id,
       credit_point: req.body.credit_point,
-      registrations: programs
+      // registrations: programs
     });
   })
   .then(() => {
@@ -122,25 +136,39 @@ exports.faculty_course_update = function (req, res, next) {
 /*
  remove course.
  */
-exports.faculty_course_delete = function (req, res, next) {
+exports.faculty_course_delete = async function (req, res, next) {
+  logging.db('Delete course ' + req.params.courseID + '.');
+  const faculty = await Faculty.findOne({
+    name: req.body.faculty
+  })
+  .then(faculty => {
+    return faculty;
+  })
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
+
   Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
   })
   .then(semester => {
     if (!semester) {
+      logging.error('Delete error: Semester not found.');
       return res.status(404).send('Semester not found.');
     }
     return Course.remove({
       id: req.params.courseID,
       semester: semester._id,
-      faculty: req.faculty_id
+      faculty: faculty._id
     });
   })
   .then(() => {
     return res.end();
   })
   .catch(err => {
+    logging.error(err);
     next(err);
   });
 };
