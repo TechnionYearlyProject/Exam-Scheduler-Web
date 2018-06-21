@@ -9,11 +9,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40; padding: 0px; z-index: 101;">
     <span class="navbar-brand mb-0 h1" style="margin-left: 20px; font-size: 22px;">מערכת שיבוץ לוח מבחנים</span>
     <div class="btn-toolbar" id="button_toolbar" role="toolbar" aria-label="Toolbar with button groups">
-      <div class="btn-group">
-        <button id="message_button" type="button" class="btn btn-secondary btn-md" style="height: 40px; width: 110px; margin-left: 5px;">
+      <div class="btn-group"style="position:relative;">
+        <button id="messages_button" type="button" class="btn btn-danger btn-md dropdown-toggle" style="height: 40px; width: 110px; margin-left: 5px;">
             <i class="fas fa-envelope" style="padding-left: 5px"></i>
             הודעות
         </button>
+        <div id="msgs_cntr" style="color: black; border-radius: 0.25rem; display:none; height:400px; width: 360px; z-index: 200; position: absolute; top:54px; right: 0px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.15)">
+          <ul class="list-group list-group-flush" id="msgs_cntr_lst" style="height: 397px; overflow-y: scroll;"></ul>
+        </div>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 40px; width: 110px; margin-left: 5px;">
@@ -65,6 +68,24 @@
   </div>
   <script type="module">
       import {sendRequest} from "./js/request";
+      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
+      let mine = ["שלום גלית החמוד. דודה שלך מוסרת דש. אשמח היפגש ולדון","message2","message3"];
+      for (let i in mine) {
+          let li = document.createElement('li');
+          li.className = "list-group-item";
+          li.innerHTML = mine[i];
+          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+          msgs_cntr_lst.appendChild(li);
+      }
+      document.getElementById('messages_button').onclick = function (e) {
+          if (this.className == "btn btn-danger btn-md dropdown-toggle")
+              this.className = "btn btn-secondary btn-md dropdown-toggle"
+          let msgs_cntr = document.getElementById('msgs_cntr');
+          if (msgs_cntr.style.display == 'block')
+              msgs_cntr.style.display = 'none';
+          else
+              msgs_cntr.style.display = 'block';
+      };
       document.getElementById('png_export_button').onclick = function(e) {
           html2canvas($("#master"),{
               onrendered: function(canvas) {
@@ -269,7 +290,8 @@
           }
           var error = document.getElementById("courses_management_error");
           error.innerHTML = "";
-      }
+      };
+
 
 
 

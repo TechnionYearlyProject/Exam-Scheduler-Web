@@ -19,6 +19,12 @@ input[type="textarea"]:focus,
     outline: 0 none;
 }
 
+
+.popover .arrow {
+    display: none;
+}
+
+
 select:focus {
     border-color: #ced4da !important;
     overflow: auto !important;
