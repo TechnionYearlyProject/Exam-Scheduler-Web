@@ -206,11 +206,13 @@
               '        </button>\n' +
               '        <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;)">\n' +
               '          <a class="dropdown-item" onclick="location.href=\'/faculties\'">פקולטות</a>\n' +
-              '          <a class="dropdown-item" onclick="location.href=\'/semesters\'">מועדים</a>\n' +
-              '          <a class="dropdown-item" id="course_management_item" data-toggle="modal" data-target="#courses_management_modal" href="#">קורסים</a>\n' +
+              '          <a class="dropdown-item" data-toggle="modal" data-target="#sem_mng_mdl" href="#">סמסטרים</a>\n' +
+              '          <a class="dropdown-item" data-toggle="modal" data-target="#courses_management_modal" href="#">קורסים</a>\n' +
               '        </div>';
           document.getElementById("button_toolbar").appendChild(sep);
           document.getElementById("button_toolbar").appendChild(mng);
+          $('#sem_mng_ldr').load('sem_mng_mdl.html');
+          $('#crs_mng_ldr').load('crs_mng_mdl.html');
       } else {
           name = "הפקולטה ל" + name;
       }

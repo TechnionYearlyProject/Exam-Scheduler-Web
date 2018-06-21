@@ -28,7 +28,6 @@
     <title>Technion Exam Scheduler</title>
 </head>
 <body style="overflow-x: hidden;">
-
 <div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
     <div class="row" style="height:100%">
         <div class="col align-self-center" align="center">
@@ -41,7 +40,6 @@
         </div>
     </div>
 </div>
-
 <div id="toolbar"></div>
 <div class="dropdown navbar" style="padding-top: 0px; padding-bottom: 0px; padding-right: 15px; padding-left: 15px;">
     <label class="dropdown-toggle" id="semester_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 32px; padding-right: 16px; padding-top: 10px;"></label>
@@ -78,7 +76,6 @@
         <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" ont-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
     </div>
 </div>
-
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -219,7 +216,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="password_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -241,7 +237,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="courses_management_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -295,7 +290,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="schedule_board_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -321,6 +315,11 @@
         </div>
     </div>
 </div>
+
+
+<div id="sem_mng_ldr"></div>
+<div id="crs_mng_ldr"></div>
+
 
 <script type="module">
     import { sendRequest } from './js/request';
@@ -834,6 +833,8 @@
             $("#password_change_modal").modal('hide');
         }, 1500);
     }
+
+
 
 
 </script>
