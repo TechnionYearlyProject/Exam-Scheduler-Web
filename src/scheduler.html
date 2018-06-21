@@ -330,7 +330,8 @@
     var course_management_to_db = [];
 
     var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
-    var all_courses_dict = [];
+    let all_courses_dict = [];
+    let temp_all_courses = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
         for (let i = semesters.length - 1; i >= 0; i--) {
@@ -376,7 +377,7 @@
         load_courses_table();
         load_all_courses_table();
     });
-    all_courses_dict =  JSON.parse(localStorage.getItem('all_courses_dict'));
+
 
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
@@ -614,6 +615,7 @@
         var course_points = document.getElementById("new_course_points");
         var course_faculty = document.getElementById("new_course_faculty");
         var error = document.getElementById("courses_management_error");
+
         if (course_num.value.length != 6 || isNaN(course_num.value))
         {
             error.style = "color: red; margin-top: 5px; padding-right: 15px;";
@@ -621,9 +623,9 @@
             return;
 
         }
-        for (var i in all_courses_dict)
+        for (var i in temp_all_courses)
         {
-            if (all_courses_dict[i]["id"] == course_num.value)
+            if (temp_all_courses[i]["id"] == course_num.value)
             {
                 error.style = "color: red; margin-top: 5px; padding-right: 15px;";
                 error.innerHTML = 'מספר הקורס קיים במערכת.';
@@ -650,7 +652,7 @@
                 "faculty" : course_faculty.value,
                 "credit_point" : course_points.value,
             };
-        all_courses_dict.push(entry);
+        temp_all_courses.push(entry);
         var t = $('#courses_management_table').DataTable();
         t.row.add(entry).draw();
         entry["programs"] = [];
@@ -676,9 +678,10 @@
             return;
         }
         var selected_row = t.row('.selected');
-        for (var i in all_courses_dict) {
-            if (all_courses_dict[i]["id"] == selected_row.data()["id"])
-                all_courses_dict.splice(i,1);
+
+        for (var i in temp_all_courses) {
+            if (temp_all_courses[i]["id"] == selected_row.data()["id"])
+                temp_all_courses.splice(i,1);
         }
         var entry =
             {
@@ -693,6 +696,12 @@
     };
     var course_save_button = document.getElementById("course_save_button");
     course_save_button.onclick = function () {
+        console.log(course_management_to_db);
+        for (var i = course_management_to_db.length - 1; i >= 1; --i)
+            if (course_management_to_db[i][1] == "remove")
+                for (var j = i-1; j>=0; j--)
+                    if (course_management_to_db[j][0]["id"] == course_management_to_db[i][0]["id"])
+                        course_management_to_db.splice(j,1);
 
         for(var i in course_management_to_db)
         {
@@ -717,7 +726,6 @@
         function load_all_courses_table() {
         var table1 = $("#all_courses").DataTable();
         var table2 = $("#courses_management_table").DataTable();
-
         var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
             var courses = JSON.parse(res);
             for (var i in courses) {
@@ -731,6 +739,7 @@
                 table2.row.add(entry).draw();
             }
             localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+            temp_all_courses = all_courses_dict;
         });
     }
 
