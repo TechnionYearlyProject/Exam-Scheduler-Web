@@ -102,7 +102,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
         document.body.appendChild(test2);
         ev.dataTransfer.setDragImage(test2, 0, 0);
         ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
-    }
+    };
     target.appendChild(test);
     $('#' + test.id).tooltip({
         trigger: 'hover',
@@ -114,6 +114,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
 }
 
 function make_calendar(start, end, moed) {
+    occupied = {};
     var schedule = document.getElementById("schedule_" + moed);
     schedule.innerHTML = '    <div class="row">\n' +
         '      <div class="col" style="background-color: #CFD8DC; border: 1px solid #CFD8DC; padding-right: 5px">א\'</div>\n' +

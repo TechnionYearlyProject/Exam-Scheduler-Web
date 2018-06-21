@@ -34,8 +34,17 @@
         };
         let entry = get_course_entry(row.data().id);
         let has_exam = '';
+        let changes = JSON.parse(localStorage.getItem(changes_root_key));
+        let course_changes = changes[entry.id];
         if (entry["has_exam"] == true)
             has_exam = 'checked';
+        if (course_changes && course_changes.hasOwnProperty("has_exam")){
+            if(course_changes["has_exam"]){
+                has_exam = 'checked';
+            } else {
+                has_exam = '';
+            }
+        }
         var mini_table = document.createElement('table');
         mini_table.style = "padding-left:50px; border: 0px ; cellspacing: 0px; cellpadding: 5px";
         var pairs = [];
@@ -49,6 +58,9 @@
         pairs.push({text: 'נקודות זכות:', elem: entry['credit_points'], elem_is_text: true});
         var input = document.createElement("input");
         input.value = entry["days_before"];
+        if (course_changes && course_changes["preparationTime"]){
+            input.value = course_changes["preparationTime"];
+        }
         input.className = "form-control";
         input.setAttribute("type", "number");
         input.setAttribute("min", "0");

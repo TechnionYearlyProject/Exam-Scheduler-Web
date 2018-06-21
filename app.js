@@ -21,7 +21,7 @@ app.use('/js/request', express.static(path.join(__dirname, '/src/js/request.js')
 app.use('/js/cookie', express.static(path.join(__dirname, '/src/js/cookie.js')));
 app.use('/api', api);
 
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'src/login.html')));
+app.get('/login', (req, res) => {console.log("Got here");res.sendFile(path.join(__dirname, 'src/login.html'));});
 app.get('/logout', (req, res) => res.sendFile(path.join(__dirname, 'src/logout.html')));
 
 // DEBUG ONLY
@@ -33,6 +33,7 @@ app.get('/scheduler', (req, res) => res.sendFile(path.join(__dirname, 'src/sched
 app.get('/edit_email', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_email.html')));
 app.get('/edit_password', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_password.html')));
 app.post('/make-schedule', (req, res) => scheduleMaker.tryToSchedule(req, res));
+app.post('/save-schedule', (req, res) => scheduleMaker.saveSchedule(req, res));
 app.get('/', (req, res) => res.redirect('/scheduler'));
 
 app.all('*', auth.verify_admin_front);

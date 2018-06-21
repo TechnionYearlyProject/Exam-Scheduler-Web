@@ -31,9 +31,9 @@
 <div id="sys_loader" class="container-fluid" style="height:100%; width: 100%; background-color: white; z-index: 100; position: absolute;">
     <div class="row" style="height:100%">
         <div class="col align-self-center" align="center">
-                <div>
-                    <img src="graphics/loading.gif">
-                </div>
+            <div>
+                <img src="graphics/loading.gif">
+            </div>
             <div style="font-size: 20px; font-weight: bold">
                 המערכת נטענת...
             </div>
@@ -60,15 +60,15 @@
     </div>
 </div>
 <div id="master" class="form-group row" style="background-color: white; text-align: right; padding-right: 50px; padding-left: 50px; padding-top: 0px; margin-top: 0px !important;">
-  <div class="container-fluid col">
-    <div id="courses"></div>
-  </div>
-  <div class="container-fluid col">
-    <div id="moed_a" moed="a"></div>
-  </div>
-  <div class="container-fluid col">
-    <div id="moed_b" moed="b"></div>
-  </div>
+    <div class="container-fluid col">
+        <div id="courses"></div>
+    </div>
+    <div class="container-fluid col">
+        <div id="moed_a" moed="a"></div>
+    </div>
+    <div class="container-fluid col">
+        <div id="moed_b" moed="b"></div>
+    </div>
 </div>
 <div id="popover_comment">
     <div class = "row">
@@ -194,7 +194,7 @@
                         <div style="text-align: right;">כתובת נוכחית:</div>
                     </div>
                     <div class = "col-sm-9" style="padding-right: 0px;">
-                         <p class="text-right form-control-plaintext" id="current_mail"></p>
+                        <p class="text-right form-control-plaintext" id="current_mail"></p>
                     </div>
                 </div>
                 <div class='row align-items-center'>
@@ -325,6 +325,8 @@
 
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
+            $('#schedule_board_modal').modal("hide");
+            localStorage.setItem("result", result);
             result = JSON.parse(result);
             console.log(result);
             for (var m = 0; m < moeds.length; m++){
@@ -334,15 +336,44 @@
                     var day = moed +'_day_' + examDay.index;
                     var day_elem = document.getElementById(day);
                     for (var j = 0; j < examDay.exams.length; j++){
-                        var test = create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
+                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                     }
                 }
             }
         }
     };
+    let makeSchedule = function (moeds){
+        $('#schedule_board_modal').modal("show");
+        localStorage.setItem("changesForSchedule", localStorage.getItem(changes_root_key));
+        setTimeout(function () {
+            $.ajax({
+                url: "/make-schedule",
+                type: "POST",
+                data: {
+                    occupied: JSON.stringify(occupied),
+                    semester: localStorage.semester_name,
+                    faculty: localStorage.faculty_name,
+                    changes: localStorage.getItem(changes_root_key),
+                },
+                success: fillScheduleWithCourses(moeds)
+            });
+        }, 5000);
+
+    };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
+    $('#upload_button').click(function () {
+        $.ajax({
+            url: "/save-schedule",
+            type: "POST",
+            data: {
+                schedule: localStorage.getItem("result"),
+                changes: localStorage.getItem("changesForSchedule"),
+                faculty: localStorage.faculty,
+            }
+        });
+    });
     $('body').on('click', function (e) {
         if (e.target.className == "popover-body" || e.target.id == "popover_input" || e.target.id == "popover_button")
             return;
@@ -354,41 +385,23 @@
     $('#moed_a').load('moed_a.html');
     $('#moed_b').load('moed_b.html');
     $('#courses').load('datatable.html', function () {
-      $('#scheduler_function_caller').click(function(){
-          $("[id^='exam_for_']").remove();
-          console.log(localStorage);
-          $('#schedule_board_modal').modal("show");
-          setTimeout(function () {
-              $('#schedule_board_modal').modal("hide");
-              $.ajax({
-                    url: "/make-schedule",
-                    type: "POST",
-                    data: JSON.stringify({
-                        occupied: occupied,
-                        semester: localStorage.semester_name,
-                        faculty: localStorage.faculty_name
-                    }),
-                    success: fillScheduleWithCourses(["moed_a", "moed_b"])
-              });
-          }, 5000);
-      });
-      $('#scheduler_function_caller_2').click(function(){
-          $("[id^='exam_for_moed_a']").remove();
-          $.ajax({
-              url: "/make-schedule",
-              type: 'POST',
-              data: JSON.stringify({
-                  occupied: occupied,
-                  semester: localStorage.semester_name,
-                  faculty: localStorage.faculty_name
-              }),
-              success: fillScheduleWithCourses(["moed_a"]),
-          });
-      });
-      $("#schedule_clear").click(function(){
-          $("[id^='exam_for_']").remove();
-      })
-  });
+        $('#scheduler_function_caller').click(function(){
+            $("[id^='exam_for_']").remove();
+            console.log(localStorage);
+            makeSchedule(["moed_a", "moed_b"]);
+        });
+        $('#scheduler_function_caller_2').click(function(){
+            $("[id^='exam_for_moed_a']").remove();
+            makeSchedule(["moed_a"]);
+        });
+        $('#scheduler_function_caller_3').click(function(){
+            $("[id^='exam_for_moed_b']").remove();
+            makeSchedule(["moed_b"]);
+        });
+        $("#schedule_clear").click(function(){
+            $("[id^='exam_for_']").remove();
+        })
+    });
     function initSched() {
         var top = document.getElementById('sem_picker');
         document.getElementById('semester_button').innerHTML = top.innerHTML;
@@ -511,16 +524,16 @@
             error.innerHTML = 'כתובת הדוא"ל זהה לכתובת השמורה';
         }
         else {
-                let json = {"email": email};
-                console.log(json);
-                sendRequest('put', '/api/update_email', json, function () {
-                    error.style = "color: green; margin-top: 5px; padding-right: 15px;";
-                    error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
-                    setTimeout(function () {
-                        $('#email_change_modal').modal('hide');
-                    }, 1500);
-                })
-            }
+            let json = {"email": email};
+            console.log(json);
+            sendRequest('put', '/api/update_email', json, function () {
+                error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+                error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
+                setTimeout(function () {
+                    $('#email_change_modal').modal('hide');
+                }, 1500);
+            })
+        }
 
     }
     var email_change_button = document.getElementById("email_change_button");
