@@ -35,6 +35,7 @@ app.get('/scheduler', (req, res) => res.sendFile(path.join(__dirname, 'src/sched
 app.get('/edit_email', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_email.html')));
 app.get('/edit_password', (req, res) => res.sendFile(path.join(__dirname, 'src/edit_password.html')));
 app.post('/make-schedule', (req, res) => scheduleMaker.tryToSchedule(req, res));
+app.post('/save-schedule', (req, res) => scheduleMaker.saveSchedule(req, res));
 app.get('/', (req, res) => res.redirect('/scheduler'));
 
 app.all('*', auth.verify_admin_front);

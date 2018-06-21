@@ -32,7 +32,8 @@ describe('Schedule', function() {
                 agent
                     .post('/make-schedule')
                     .send({
-                        "{semester:'2018-spring', faculty: 'מדעי המחשב',}" : ""
+                        semester:'2018-spring',
+                        faculty: 'מדעי המחשב',
                     })
                     .set("Cookie", "token="+token)
                     .end((err, res) => {
