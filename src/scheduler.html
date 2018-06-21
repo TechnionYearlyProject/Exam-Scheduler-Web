@@ -707,16 +707,12 @@
         {
             if (course_management_to_db[i][1] == "add")
             {
-                console.log(course_management_to_db[i][0]);
                 sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
-                console.log(123);
                 });
             }
             else {
                 var elem =  {"faculty" : course_management_to_db[i][0]["faculty"]};
-                console.log(elem);
                 sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', elem, function (out) {
-                    console.log(321);
                 });
             }
         }
