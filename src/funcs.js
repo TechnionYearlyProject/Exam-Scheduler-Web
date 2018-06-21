@@ -43,17 +43,21 @@ function popup_modal(type, text, func) {
 }
 
 
-function popover_comment(elem_id, course_name) {
+function popover_comment(elem_id, semester, moed, course_id) {
     var test = document.getElementById(elem_id);
     test.setAttribute("data-toggle", "popover");
     var input = document.getElementById("popover_input");
     var button = document.getElementById("popover_button");
+    var popover = document.getElementById('popover_comment');
     $('#' + elem_id).popover({
         trigger: 'focus',
         placement: 'right',
         html:true,
-        content:  $('#popover_comment').html()
-    })
+        content: popover
+    });
+    button.onclick = function() {
+        console.log([input.value, semester, moed, course_id]);
+    };
 }
 
 
@@ -198,7 +202,7 @@ function make_calendar(start, end, moed) {
                 var test = create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
                 let constraint = ev.target.getAttribute("date");
                 save_changes_to_local(course_id, moed.getAttribute("moed") + "_constraint", constraint);
-                popover_comment(test.id, entry["name"]);
+                popover_comment(test.id, localStorage.getItem('semester_name'), moed.getAttribute("moed"), entry["id"]);
                 test.ondblclick = function () {
                     $('#' + test.id).popover("show");
                 }

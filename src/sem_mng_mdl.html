@@ -12,50 +12,46 @@
         <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;">ניהול סמסטרים</h5>
       </div>
-      <div class="modal-body" id="faculties_mangement_body" style="text-align: right; height: 526px;">
+      <div class="modal-body" id="faculties_mangement_body" style="text-align: right; height: 500px;">
         <div class="container">
           <div class="row">
             <div class="col-sm">
-              <h6>יצירת סמסטר חדש</h6>
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">יצירת סמסטר חדש:</div>
               <div style="text-align: right; margin-top: 5px;">תקופה:</div>
               <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-                <label class="btn btn-outline-secondary" style="width: 50%;">
-                  <input type="radio" name="options" id="option2" autocomplete="off">חורף
+                <label id = "semester_winter_button" class="btn btn-outline-secondary" style="width: 50%;">
+                  <input  type="radio" name="options" id="option2" autocomplete="off">חורף
                 </label>
-                <label class="btn btn-outline-secondary" style="width: 50%;">
+                <label id = "semester_spring_button" class="btn btn-outline-secondary" style="width: 50%;">
                   <input type="radio" name="options" id="option3" autocomplete="off">אביב
                 </label>
               </div>
               <div style="text-align: right; margin-top: 5px;">שנה:</div>
-              <input type="text" class="form-control yearpicker" id="year_input" style="text-align: right">
+              <input id= "semester_year" type="text" class="form-control yearpicker" id="year_input" style="text-align: right">
               <div style="text-align: right; margin-top: 5px;">מועד א':</div>
               <div style="text-align: right; margin-top: 5px;">תאריך התחלה:</div>
-              <input type="text" class="form-control datepicker" id="a_start_input" style="text-align: right">
+              <input id= "semester_moeda_start" type="text" class="form-control datepicker" id="a_start_input" style="text-align: right">
               <div style="text-align: right; margin-top: 5px;">תאריך סיום:</div>
-              <input type="text" class="form-control datepicker" id="a_end_input" style="text-align: right">
+              <input id= "semester_moeda_end" type="text" class="form-control datepicker" id="a_end_input" style="text-align: right">
               <div style="text-align: right; margin-top: 5px;">מועד ב':</div>
               <div style="text-align: right; margin-top: 5px;">תאריך התחלה:</div>
-              <input type="text" class="form-control datepicker" id="b_start_input" style="text-align: right">
+              <input id= "semester_moedb_start" type="text" class="form-control datepicker" id="b_start_input" style="text-align: right">
               <div style="text-align: right; margin-top: 5px;">תאריך סיום:</div>
-              <input type="text" class="form-control datepicker" id="b_end_input" style="text-align: right">
-              <button type="button" class="btn btn-secondary" style="width: 355px; margin-top: 20px;"><i class="fas fa-plus" style="padding-left:5px;"></i>הוספת הסמסטר החדש</button>
+              <input id= "semester_moedb_end" type="text" class="form-control datepicker" id="b_end_input" style="text-align: right">
+              <button type="button" id='semester_add_button' class="btn btn-outline-secondary" style="position:absolute; bottom:0px; width: 355px; margin-top: 20px;"><i class="fas fa-plus" style="padding-left:5px;"></i>הוספת הסמסטר החדש</button>
             </div>
             <div class="col-sm">
-              <h6>כל הסמסטרים</h6>
-              <ul class="list-group" id="sem_mng_lst" style="height: 456px; border: 1px solid #ced4da; overflow-y: scroll;">
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">כל הסמסטרים:</div>
+              <ul class="list-group list-group-flush" id="sem_mng_lst" style="margin-top: 5px; height: 444px; border: 1px solid #ced4da; overflow-y: scroll;">
               </ul>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm">
-              <p class="text-right" id="faculties_mangement_error" style="color: red; margin-top: 5px"></p>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer"style="padding: 10px;">
+        <p class="text-right" id="semester_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-        <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+        <button type="button" id="semester_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
       </div>
     </div>
   </div>
@@ -81,8 +77,11 @@
         maxViewMode: 2
     });
     let sem_mng_lst = document.getElementById('sem_mng_lst');
+    let semester_list = [];
+    let changes_to_db = [];
     sendRequest('get', 'api/semester/list', null, res => {
         let data = JSON.parse(res);
+        var error = document.getElementById("semester_management_error");
         for (let i in data) {
             let li = document.createElement('li');
             let semester = "חורף";
@@ -90,11 +89,168 @@
                 semester = "אביב"
             }
             let name = semester + " " + data[i].year;
+            semester_list.push(name);
+            li.id = "li_"+name;
             li.className = "list-group-item";
-            li.innerHTML = name + '<button type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
+            li.innerHTML = name + '<button  id="btn_'+name +'" type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
+            li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
             sem_mng_lst.appendChild(li);
+            let trash = document.getElementById("btn_"+name);
+            trash.onclick = function(){
+                let json = {year: data[i].year, semester: data[i].semester};
+                changes_to_db.push([json,"remove"]);
+                sem_mng_lst.removeChild(li);
+                semester_list.splice(semester_list.indexOf(name), 1);
+                error.style.color = "green";
+                error.innerHTML = 'הסמסטר "' + semester + "-" + data[i].year + '" נמחק בהצלחה.';
+            };
         }
     });
+
+    function parseDate(str) {
+        if (str === "") {
+            return -1;
+        }
+        let values = str.split("/");
+        let day =  parseInt(values[0]);
+        let month = parseInt(values[1]);
+        let year = parseInt(values[2]);
+        let date = new Date;
+        date.setTime(0);
+        date.setFullYear(year, month, day);
+        return date.getTime();
+    }
+
+    var semester_add_button = document.getElementById("semester_add_button");
+    semester_add_button.onclick = function () {
+        var semester_winter_button = document.getElementById("semester_winter_button");
+        var semester_spring_button = document.getElementById("semester_spring_button");
+        var semester_year = document.getElementById("semester_year").value;
+        var start_a = parseDate(document.getElementById("semester_moeda_start").value);
+        var end_a = parseDate(document.getElementById("semester_moeda_end").value);
+        var start_b = parseDate(document.getElementById("semester_moedb_start").value);
+        var end_b = parseDate(document.getElementById("semester_moedb_end").value);
+        var error = document.getElementById("semester_management_error");
+        console.log(semester_list);
+        var current_text_btn_group = $('.btn-group > .btn.active').text();
+        current_text_btn_group = current_text_btn_group.replace(/\s/g, '');
+        var current_text_btn_group_eng = "spring";
+        if (current_text_btn_group == "חורף")
+            current_text_btn_group_eng = "winter";
+        if (current_text_btn_group.length == 0)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחרה תקופה לסמסטר.';
+            return;
+        }
+        if (semester_year.length == 0)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחרה שנה לסמסטר.';
+            return;
+        }
+        for (var i in semester_list) {
+            var res = semester_list[i].split(" ");
+            if (res[0] == current_text_btn_group && res[1] == semester_year) {
+                error.style.color = "red";
+                error.innerHTML = 'הסמסטר כבר קיים במערכת.';
+                return;
+            }
+        }
+        if(start_a == -1)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחר תאריך התחלה מועד א' + "' ";
+            return;
+        }
+        if(end_a == -1)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחר תאריך סיום מועד א' + "' ";
+            return;
+        }
+        if(start_b == -1)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחר תאריך התחלה מועד ב' + "' ";
+            return;
+        }
+        if(end_b == -1)
+        {
+            error.style.color = "red";
+            error.innerHTML = 'לא נבחר תאריך סיום מועד ב' + "' ";
+            return;
+        }
+        if (start_a >= end_a) {
+            error.style.color = "red";
+            error.innerHTML = "מועד א': תאריך התחלה הוא אחרי תאריך סיום.";
+            return;
+        }
+        if (end_a >= start_b) {
+            error.style.color = "red";
+            error.innerHTML = "תאריך התחלה של מועד ב' הוא אחרי התאריך סיום של מועד א'.";
+            return;
+        }
+        if (start_b >= end_b) {
+            error.style.color = "red";
+            error.innerHTML = "מועד ב': תאריך התחלה הוא אחרי תאריך סיום.";
+            return;
+        }
+        let json = {year: semester_year, semester: current_text_btn_group_eng, start_a: start_a, end_a: end_a, start_b: start_b, end_b: end_b};
+        changes_to_db.push([json,"add"]);
+        error.style.color = "green";
+        error.innerHTML = 'הסמסטר "' + current_text_btn_group + "-" + semester_year + '" נוסף בהצלחה.';
+        document.getElementById("semester_winter_button").className = "btn btn-outline-secondary";
+        document.getElementById("semester_spring_button").className = "btn btn-outline-secondary";
+        document.getElementById("semester_year").value = "";
+        document.getElementById("semester_moeda_start").value = "";
+        document.getElementById("semester_moeda_end").value = "";
+        document.getElementById("semester_moedb_start").value = "";
+        document.getElementById("semester_moedb_end").value = "";
+        let li = document.createElement('li');
+        let name = current_text_btn_group + " " + semester_year;
+        semester_list.push(name);
+        li.id = "li_"+name;
+        li.className = "list-group-item";
+        li.innerHTML = name + '<button  id="btn_'+name +'" type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
+        li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+        sem_mng_lst.appendChild(li);
+        var trash = document.getElementById("btn_"+name);
+        trash.onclick = function() {
+            let json = {year: semester_year, semester: current_text_btn_group_eng};
+            changes_to_db.push([json, "remove"]);
+            sem_mng_lst.removeChild(li);
+            error.style.color = "green";
+            error.innerHTML = 'הסמסטר "' + current_text_btn_group + "-" + semester_year + '" נמחק בהצלחה.';
+        }
+    };
+
+    var semester_save = document.getElementById("semester_save_button");
+    semester_save.onclick = function () {
+        for (var i = changes_to_db.length - 1; i >= 1; --i)
+            if (changes_to_db[i][1] == "remove")
+                for (var j = i-1; j>=0; j--)
+                    if (changes_to_db[j][0]["year"] == changes_to_db[i][0]["year"] && changes_to_db[j][0]["semester"] == changes_to_db[i][0]["semester"])
+                        changes_to_db.splice(j,1);
+
+        for(var i in changes_to_db) {
+            if (changes_to_db[i][1] == "add") {
+                sendRequest('POST', '/api/semester/create', changes_to_db[i][0], () => {
+                  console.log(123);
+                });
+            }
+            else {
+                sendRequest('DELETE', '/api/semester/delete', changes_to_db[i][0], () => {
+                    console.log(321);
+                });
+            }
+        }
+        changes_to_db = [];
+    };
+
+
+
+
 </script>
 </body>
 </html>

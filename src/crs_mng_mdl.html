@@ -12,26 +12,25 @@
         <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;">ניהול קורסים</h5>
       </div>
-      <div class="modal-body" id="courses_management_body" style="text-align: right; height: 540px;">
+      <div class="modal-body" id="courses_management_body" style="text-align: right; height: 534px;">
         <div class="container">
           <div class="row">
             <div class="col-sm">
               <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">יצירת קורס חדש:</div>
-              <div style="font-size:13px; text-align: right; margin-top: 5px;">מספר הקורס:</div>
-              <input type="text" class="form-control" id="new_course_num" style="font-size:13px; width: 336.8px;">
-              <div style="font-size:13px; text-align: right; margin-top: 5px;">שם הקורס:</div>
-              <input type="text" class="form-control" id="new_course_name" style="font-size:13px; width: 336.8px;">
-              <div style="font-size:13px; text-align: right; margin-top: 5px;">נקודות זכות:</div>
-              <input type="text" class="form-control" id="new_course_points" style="font-size:13px; width: 336.8px;">
-              <div style="font-size:13px; text-align: right; margin-top: 5px;">פקולטה:</div>
-              <select type="text" class="form-control" id="new_course_faculty" style="font-size:13px; width: 336.8px; text-align: right">
-                <option>בחירת פקולטה...</option>
+              <div style="text-align: right; margin-top: 5px;">מספר הקורס:</div>
+              <input type="text" class="form-control" id="new_course_num" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">שם הקורס:</div>
+              <input type="text" class="form-control" id="new_course_name" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">נקודות זכות:</div>
+              <input type="text" class="form-control" id="new_course_points" style="width: 336.8px;">
+              <div style="text-align: right; margin-top: 5px;">פקולטה:</div>
+              <select multiple="multiple" size="12" type="text" class="form-control" id="new_course_faculty" style="overflow-y:scroll; padding: 0px; width: 336.8px; text-align: right">
               </select>
-              <button type="button" id="course_add_button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 336.8px;">שמירת הקורס</button>
+              <button type="button" id="course_add_button" class="btn btn-outline-secondary" style="margin-top: 10px; width: 336.8px;"><i class="fas fa-plus" style="padding-left:10px;"></i>הוספת הקורס</button>
             </div>
             <div class="col-sm">
               <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">כל הקורסים:</div>
-              <input type="text" id="courses_management_search" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+              <input type="text" id="courses_management_search" style="margin-top: 5px;height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
               <table id="courses_management_table" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
                 <thead style="padding-left: 0px;">
                 <tr>
@@ -41,7 +40,7 @@
                 </tr>
                 </thead>
               </table>
-              <button type="button" id="course_remove_button" class="btn btn-secondary" style="margin-top:10px; width: 336.8px;">מחיקת קורס</button>
+              <button type="button" id="course_remove_button" class="btn btn-outline-secondary" style="position:absolute; bottom:0px; width: 336.8px;"><i class="fas fa-trash" style="padding-left:10px;"></i>מחיקת הקורס המסומן</button>
             </div>
           </div>
           <div class="row">
@@ -77,7 +76,7 @@
     var error = document.getElementById("courses_management_error");
     error.innerHTML = "";
     var courses_management_table = $('#courses_management_table').DataTable( {
-        scrollY: 350,
+        scrollY: 354,
         paging: false,
         info: false,
         select: true,
@@ -141,7 +140,7 @@
             return;
 
         }
-        if (course_faculty.value == "בחירת פקולטה...") {
+        if (course_faculty.value == "") {
             error.style.color = "red";
             error.innerHTML = 'נא לבחור פקולטה מהרשימה.';
             return;
@@ -162,7 +161,7 @@
         course_num.value = "";
         course_name.value = "";
         course_points.value = "";
-        course_faculty.value = "בחירת פקולטה...";
+        course_faculty.value = "";
     };
     var course_remove_button = document.getElementById("course_remove_button");
     course_remove_button.onclick = function () {
