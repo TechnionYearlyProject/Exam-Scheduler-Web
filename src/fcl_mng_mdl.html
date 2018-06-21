@@ -12,7 +12,7 @@
         <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;">ניהול פקולטות</h5>
       </div>
-      <div class="modal-body" id="courses_management_body" style="text-align: right; height: 410px;">
+      <div class="modal-body" id="courses_management_body" style="text-align: right; height: 390px;">
         <div class="container">
           <div class="row">
             <div class="col-sm">
@@ -27,18 +27,18 @@
               <input type="text" class="form-control" id="new_faculty_password" style="width: 336.8px;">
               <div style="text-align: right; margin-top: 5px;">אישור סיסמה:</div>
               <input type="text" class="form-control" id="new_faculty_password_verify" style="width: 336.8px;">
-              <button type="button" id="fcl_add_btn" class="btn btn-outline-secondary" style="margin-top:20px; width: 336.8px;"><i class="fas fa-plus" style="padding-left:10px;"></i>הוספת הפקולטה</button>
+              <button type="button" id="fcl_add_btn" class="btn btn-outline-secondary" style="position: absolute; bottom:0px; width: 336.8px;"><i class="fas fa-plus" style="padding-left:10px;"></i>הוספת הפקולטה</button>
             </div>
             <div class="col-sm">
               <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">כל הפקולטות:</div>
-              <ul class="list-group list-group-flush" id="fcl_mng_lst" style="margin-top: 5px; height: 346px; border: 1px solid #ced4da; overflow-y: scroll;">
+              <ul class="list-group list-group-flush" id="fcl_mng_lst" style="margin-top: 5px; height: 334px; border: 1px solid #ced4da; overflow-y: scroll;">
               </ul>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer"style="padding: 10px;">
-        <p class="text-right" id="courses_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;">הערה</p>
+        <p class="text-right" id="faculty_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
         <button type="button" id="course_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
       </div>
