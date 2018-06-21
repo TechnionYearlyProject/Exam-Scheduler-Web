@@ -530,7 +530,6 @@
         update_email()
     };
 
-
         function load_all_courses_table() {
         var table1 = $("#all_courses").DataTable();
         var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
