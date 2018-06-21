@@ -46,12 +46,12 @@
           </div>
           <div class="row">
             <div class="col-sm">
-              <p class="text-right" id="courses_management_error" style="color: red; margin-top: 5px"></p>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer"style="padding: 10px;">
+        <p class="text-right" id="courses_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
         <button type="button" id="course_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
       </div>
@@ -124,25 +124,25 @@
         var course_faculty = document.getElementById("new_course_faculty");
         var error = document.getElementById("courses_management_error");
         if (course_num.value.length != 6 || isNaN(course_num.value)) {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'מספר הקורס שהוזן אינו תקין.';
             return;
         }
         for (var i in temp_all_courses) {
             if (temp_all_courses[i]["id"] == course_num.value) {
-                error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+                error.style.color = "red";
                 error.innerHTML = 'מספר הקורס קיים במערכת.';
                 return;
             }
         }
         if (!(course_points.value % 1 == 0.5 || course_points.value % 1 == 0)) {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'נקודות הזכות שהוזנו אינם תקינות.';
             return;
 
         }
         if (course_faculty.value == "בחירת פקולטה...") {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'נא לבחור פקולטה מהרשימה.';
             return;
         }
@@ -157,7 +157,7 @@
         t.row.add(entry).draw();
         entry["programs"] = [];
         course_management_to_db.push([entry,"add"]);
-        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.style.color = "green";
         error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
         course_num.value = "";
         course_name.value = "";
@@ -170,7 +170,7 @@
         var count = t.rows( { selected: true } ).count();
         var error = document.getElementById("courses_management_error");
         if (count == 0) {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'נא לבחור פקולטה מרשימת הקורסים.';
             return;
         }
@@ -185,7 +185,7 @@
                 "faculty" : selected_row.data()["faculty"],
             };
         course_management_to_db.push([entry, "remove"]);
-        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.style.color = "green";
         error.innerHTML = 'הקורס "' + selected_row.data()["name"] + '" נמחק בהצלחה.';
         selected_row.remove().draw();
     };
