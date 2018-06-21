@@ -26,7 +26,7 @@ const MessageListSchema = new mongoose.Schema({
   messages: [{
     sender: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Faculty',
+      ref: 'Faculty'
     },
     date: {
       type: Date,
@@ -34,7 +34,7 @@ const MessageListSchema = new mongoose.Schema({
     },
     text: {
       type: String,
-      required: true,
+      required: true
     }
   }]
 });
