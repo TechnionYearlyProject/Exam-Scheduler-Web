@@ -34,14 +34,11 @@ FacultySchema.pre('remove', function (next) {
     faculty: this._id
   }).exec();
   MessageList.remove({
-    faculty: this._id
-  }).exec();
-  MessageList.update({}, {
-    $pull: {
-      messages: {
-        sender: this._id
-      }
-    }
+    $or: [{
+      sender: this._id
+    }, {
+      receiver: this._id
+    }]
   }).exec();
   StudyProgram.update({}, {
     $pull: {

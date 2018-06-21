@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const MessageListSchema = new mongoose.Schema({
-  faculty: {
+  sender: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Faculty",
+    required: true
+  },
+  receiver: {
     type: mongoose.Schema.ObjectId,
     ref: "Faculty",
     required: true
@@ -23,20 +28,14 @@ const MessageListSchema = new mongoose.Schema({
     type: String,
     enum: ['A', 'B']
   },
-  messages: [{
-    sender: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Faculty'
-    },
-    date: {
-      type: Date,
-      required: true
-    },
-    text: {
-      type: String,
-      required: true
-    }
-  }]
+  date: {
+    type: Date,
+    required: true
+  },
+  text: {
+    type: String,
+    required: true
+  }
 });
 
 exports.model = mongoose.model('MessageList', MessageListSchema);
