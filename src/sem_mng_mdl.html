@@ -12,7 +12,7 @@
         <span style="font-size: 20px;"><i class="fas fa-pencil-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;">ניהול סמסטרים</h5>
       </div>
-      <div class="modal-body" id="faculties_mangement_body" style="text-align: right; height: 520px;">
+      <div class="modal-body" id="faculties_mangement_body" style="text-align: right; height: 526px;">
         <div class="container">
           <div class="row">
             <div class="col-sm">
@@ -38,13 +38,12 @@
               <input type="text" class="form-control datepicker" id="b_start_input" style="text-align: right">
               <div style="text-align: right; margin-top: 5px;">תאריך סיום:</div>
               <input type="text" class="form-control datepicker" id="b_end_input" style="text-align: right">
-              <button type="button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 355px; margin-top: 10px;">הוספת הסמסטר החדש</button>
+              <button type="button" class="btn btn-secondary" style="width: 355px; margin-top: 20px;"><i class="fas fa-plus" style="padding-left:5px;"></i>הוספת הסמסטר החדש</button>
             </div>
             <div class="col-sm">
-              <h6>מחיקת סמסטרים</h6>
-              <select multiple="" class="form-control" id="semesters_management_all" style="height:400px;  padding: 0px; overflow-y: scroll;">
-              </select>
-              <button type="button" class="btn btn-secondary" style="width:100%; margin-top:10px;">מחיקת הסמסטר המסומן</button>
+              <h6>כל הסמסטרים</h6>
+              <ul class="list-group" id="sem_mng_lst" style="height: 456px; border: 1px solid #ced4da; overflow-y: scroll;">
+              </ul>
             </div>
           </div>
           <div class="row">
@@ -81,19 +80,19 @@
         minViewMode: 2,
         maxViewMode: 2
     });
-    let sem_list = document.getElementById('semesters_management_all');
+    let sem_mng_lst = document.getElementById('sem_mng_lst');
     sendRequest('get', 'api/semester/list', null, res => {
         let data = JSON.parse(res);
         for (let i in data) {
-            let li = document.createElement('option');
+            let li = document.createElement('li');
             let semester = "חורף";
             if (!data[i].semester.localeCompare("spring")) {
                 semester = "אביב"
             }
             let name = semester + " " + data[i].year;
-            li.innerHTML = name;
-            li.style = "height: 40px; padding-right: 10px; padding-top: 10px;";
-            sem_list.appendChild(li);
+            li.className = "list-group-item";
+            li.innerHTML = name + '<button type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
+            sem_mng_lst.appendChild(li);
         }
     });
 </script>
