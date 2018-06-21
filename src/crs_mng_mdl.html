@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<div class="modal fade" id="crs_mnagement_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="crs_mng_mdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
@@ -16,7 +16,7 @@
         <div class="container">
           <div class="row">
             <div class="col-sm">
-              <h6>יצירת קורסים</h6>
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">יצירת קורס חדש:</div>
               <div style="font-size:13px; text-align: right; margin-top: 5px;">מספר הקורס:</div>
               <input type="text" class="form-control" id="new_course_num" style="font-size:13px; width: 336.8px;">
               <div style="font-size:13px; text-align: right; margin-top: 5px;">שם הקורס:</div>
@@ -30,7 +30,7 @@
               <button type="button" id="course_add_button" class="btn btn-secondary" style="position:absolute; bottom:0; width: 336.8px;">שמירת הקורס</button>
             </div>
             <div class="col-sm">
-              <h6>מחיקת קורסים</h6>
+              <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">כל הקורסים:</div>
               <input type="text" id="courses_management_search" style="height: 30px; width: 337px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
               <table id="courses_management_table" class="mdl-data-table" style="max-width:318px; min-width: 318px; table-layout: fixed">
                 <thead style="padding-left: 0px;">
@@ -61,38 +61,159 @@
 
 <script type="module">
     import {sendRequest} from "./js/request";
-    $('.datepicker').datepicker({
-        format: "dd/mm/yyyy",
-        language: "he",
-        orientation: "auto",
-        autoclose: true,
-        fontSize: "8"
+    var course_management_to_db = [];
+    let all_courses_dict = [];
+    let temp_all_courses = [];
+    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    var manager = document.getElementById("new_course_faculty");
+    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    for(var key in faculties_dict) {
+        if (faculties_dict[key]["name"] == "Administrator")
+            continue;
+        var option = document.createElement("option");
+        option.innerHTML = faculties_dict[key]["name"];
+        manager.appendChild(option);
+    }
+    var error = document.getElementById("courses_management_error");
+    error.innerHTML = "";
+    var courses_management_table = $('#courses_management_table').DataTable( {
+        scrollY: 350,
+        paging: false,
+        info: false,
+        select: true,
+        autoWidth: false,
+        "dom": 'lrt',
+        "language":  {
+            "emptyTable": "הרשימה ריקה",
+            "zeroRecords": "לא נמצאו קורסים מתאימים",
+        },
+        "columns": [
+            { "data": "id" },
+            { "data": "name" },
+            { "data": "faculty" },
+        ],
+        "columnDefs": [
+            { "width": "24%", "targets": 0 },
+            { "width": "43%", "targets": 1 },
+            { "width": "33%", "targets": 2 },
+        ],
+        "order": [[0, 'asc']]
+    } );
+    $('#courses_management_search').keyup(function(){
+        courses_management_table.search($(this).val()).draw() ;
     });
-    $('.yearpicker').datepicker({
-        format: "yyyy",
-        language: "he",
-        orientation: "auto",
-        autoclose: true,
-        fontSize: "8",
-        startView: 2,
-        minViewMode: 2,
-        maxViewMode: 2
-    });
-    let sem_list = document.getElementById('semesters_management_all');
-    sendRequest('get', 'api/semester/list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-            let li = document.createElement('option');
-            let semester = "חורף";
-            if (!data[i].semester.localeCompare("spring")) {
-                semester = "אביב"
-            }
-            let name = semester + " " + data[i].year;
-            li.innerHTML = name;
-            li.style = "height: 40px; padding-right: 10px; padding-top: 10px;";
-            sem_list.appendChild(li);
+    sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+        var courses = JSON.parse(res);
+        for (var i in courses) {
+            var entry = {
+                "id": ("0" + courses[i]["id"]).slice(-6),
+                "name": courses[i]["name"],
+                "faculty": faculties_dict[courses[i]["faculty"]]['name']
+            };
+            all_courses_dict.push(entry);
+            courses_management_table.row.add(entry).draw();
         }
+        localStorage.setItem("all_courses_dict", JSON.stringify(all_courses_dict));
+        temp_all_courses = all_courses_dict;
     });
+    var course_add_button = document.getElementById("course_add_button");
+    course_add_button.onclick = function () {
+        var course_num = document.getElementById("new_course_num");
+        var course_name = document.getElementById("new_course_name");
+        var course_points = document.getElementById("new_course_points");
+        var course_faculty = document.getElementById("new_course_faculty");
+        var error = document.getElementById("courses_management_error");
+        if (course_num.value.length != 6 || isNaN(course_num.value)) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'מספר הקורס שהוזן אינו תקין.';
+            return;
+        }
+        for (var i in temp_all_courses) {
+            if (temp_all_courses[i]["id"] == course_num.value) {
+                error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+                error.innerHTML = 'מספר הקורס קיים במערכת.';
+                return;
+            }
+        }
+        if (!(course_points.value % 1 == 0.5 || course_points.value % 1 == 0)) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נקודות הזכות שהוזנו אינם תקינות.';
+            return;
+
+        }
+        if (course_faculty.value == "בחירת פקולטה...") {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נא לבחור פקולטה מהרשימה.';
+            return;
+        }
+        var entry = {
+                "id" : course_num.value,
+                "name" : course_name.value,
+                "faculty" : course_faculty.value,
+                "credit_point" : course_points.value,
+            };
+        temp_all_courses.push(entry);
+        var t = $('#courses_management_table').DataTable();
+        t.row.add(entry).draw();
+        entry["programs"] = [];
+        course_management_to_db.push([entry,"add"]);
+        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
+        course_num.value = "";
+        course_name.value = "";
+        course_points.value = "";
+        course_faculty.value = "בחירת פקולטה...";
+    };
+    var course_remove_button = document.getElementById("course_remove_button");
+    course_remove_button.onclick = function () {
+        var t = $('#courses_management_table').DataTable();
+        var count = t.rows( { selected: true } ).count();
+        var error = document.getElementById("courses_management_error");
+        if (count == 0) {
+            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.innerHTML = 'נא לבחור פקולטה מרשימת הקורסים.';
+            return;
+        }
+        var selected_row = t.row('.selected');
+        for (var i in temp_all_courses) {
+            if (temp_all_courses[i]["id"] == selected_row.data()["id"])
+                temp_all_courses.splice(i,1);
+        }
+        var entry =
+            {
+                "id" : selected_row.data()["id"],
+                "faculty" : selected_row.data()["faculty"],
+            };
+        course_management_to_db.push([entry, "remove"]);
+        error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+        error.innerHTML = 'הקורס "' + selected_row.data()["name"] + '" נמחק בהצלחה.';
+        selected_row.remove().draw();
+    };
+    document.getElementById("course_save_button").onclick = function () {
+        console.log(course_management_to_db);
+        for (var i = course_management_to_db.length - 1; i >= 1; --i)
+            if (course_management_to_db[i][1] == "remove")
+                for (var j = i-1; j>=0; j--)
+                    if (course_management_to_db[j][0]["id"] == course_management_to_db[i][0]["id"])
+                        course_management_to_db.splice(j,1);
+
+        for(var i in course_management_to_db) {
+            if (course_management_to_db[i][1] == "add") {
+                console.log(course_management_to_db[i][0]);
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
+                    console.log(123);
+                });
+            }
+            else {
+                var elem =  {"faculty" : course_management_to_db[i][0]["faculty"]};
+                console.log(elem);
+                sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', elem, function (out) {
+                    console.log(321);
+                });
+            }
+        }
+        course_management_to_db = [];
+    };
 </script>
 </body>
 </html>

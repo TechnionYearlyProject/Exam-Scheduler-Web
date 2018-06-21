@@ -39,13 +39,13 @@
         <span id="signin_icon" style="font-size: 20px;"><i class="fas fa-sign-in-alt"></i></span>
         <h5 class="modal-title" style="margin-right: 5px;" id="signin_title">התחברות</h5>
       </div>
-      <div class="modal-body"  align="center" style="height: 292px;">
+      <div class="modal-body"  align="center" style="height: 276px;">
         <div id="signin_body"></div>
-        <div style="text-align: right; font-size: 14px">סיסמה:</div>
-        <input type="password" class="form-control" id="login_password" style="margin-top:10px; margin-bottom: 10px; width: 100% !important; font-size: 14px;">
-        <div id="login_error" style="text-align: right; color: red; font-size: 14px"></div>
+        <div style="text-align: right;">סיסמה:</div>
+        <input type="password" class="form-control" id="login_password" style="margin-top:10px; margin-bottom: 10px; width: 100% !important;">
       </div>
       <div class="modal-footer" style="padding: 10px;">
+        <p class="text-right" id="login_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
         <button type="button" class="btn btn-secondary" id="login_button" style="width: 80px; margin-right:10px; margin-left: inherit; color: white;">התחבר</button>
       </div>
@@ -92,7 +92,7 @@
                 user.onclick = function () {
                     let signin_body = document.getElementById('signin_body');
                     signin_body.innerHTML = '<img src="' + image + '"style="border-radius: 50%; height: 150px; width: 150px;">\n' +
-                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;">\n' +
+                    '                  <div style="text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold;">\n' +
                     name +
                     '                  </div>';
                     let login_password = document.getElementById('login_password');
@@ -115,7 +115,7 @@
                 };
                 var lbl = document.createElement("div");
                 lbl.innerHTML = name;
-                lbl.style = "text-align: center; width:150px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: bold;";
+                lbl.style = "text-align: center; width:150px;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold;";
                 var img = document.createElement("img");
                 img.src = faculties[i].image;
                 img.style = "border-radius: 50%; height: 150px; width: 150px;";
