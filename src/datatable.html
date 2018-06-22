@@ -23,11 +23,18 @@
 
 <script type="module">
     import { sendRequest } from './js/request';
+    let res = localStorage.getItem("all_courses_dict");
+    let courses = JSON.parse(res);
+    var conflicts = {};
+    var localConflicts = localStorage.getItem("local_conflicts");
+    if (localConflicts){
+        conflicts = JSON.parse(localConflicts);
+    }
     function course_expand (row) {
         console.log(row);
         let row_changer = function (row, field, value) {
           return function(){
-              var d1 = row.data();
+              let d1 = row.data();
               d1[field] = value;
               row.data(d1);
               save_changes_to_local(d1.id, field, value);
@@ -119,94 +126,107 @@
         button_group.appendChild(auto_button);
         button_group.appendChild(end_button);
         pairs.push({text: 'העדפת שיבוץ:', elem: button_group, elem_is_text: false});
-        let res = localStorage.getItem("all_courses_dict");
-        let courses = JSON.parse(res);
-        let conflicts = {};
-        let localConflicts = localStorage.getItem("local_conflicts");
-        if (localConflicts){
-            conflicts = JSON.parse(localConflicts);
-        }
-        if (!conflicts[entry.id]){
-            conflicts[entry.id] = {};
-        }
-        function reloadLocalCourses(table1, table2){
-            table1.clear();
-            table2.clear();
-            for (let i in courses) {
-                if (courses[i].id == entry.id){
-                    continue;
-                }
-                if (conflicts[entry.id][courses[i].id]){
-                    table2.row.add(courses[i]).draw();
-                } else {
-                    table1.row.add(courses[i]).draw();
-                }
-            }
-        }
-        var conbutton = document.createElement("button");
+        let conbutton = document.createElement("button");
         conbutton.type = "button";
         conbutton.className = "btn btn-outline-secondary btn-sm";
         conbutton.style = "height: 20px; width: 20px; padding: 0px;"
         conbutton.innerHTML = '<i class="fas fa-link"></i>';
-        conbutton.onclick = function() {
-            var title = document.getElementById("conflicts_title");
-            title.innerHTML = 'ניהול קשרים עבור הקורס "' + entry["name"] + '"';
-            var table1 = $("#all_courses").DataTable();
-            var table2 = $("#conflicting_courses").DataTable();
-            reloadLocalCourses(table1, table2);
-            $('#conflict_add').click(function() {
-                var count1 = table1.rows( { selected: true } ).count();
-                var error = document.getElementById("conflict_error");
-                if (count1 == 0)
-                {
-                    error.innerHTML = "לא נבחר קורס להוספה";
-                    return;
-                }
-                error.innerHTML = "";
-                var selected_row = table1.row('.selected');
-                table2.row.add(selected_row.data()).draw();
-                conflicts[entry.id][selected_row.data().id] = "1";
-                if (!conflicts[selected_row.data().id]){
-                    conflicts[selected_row.data().id] = {};
-                }
-                conflicts[selected_row.data().id][entry.id] = "1";
-                selected_row.remove().draw();
-            });
-            $('#conflict_remove').click(function() {
-                var count2 = table2.rows( { selected: true } ).count();
-                var error = document.getElementById("conflict_error");
-                if (count2 == 0)
-                {
-                    error.innerHTML = "לא נבחר קורס להסרה";
-                    return;
-                }
-                error.innerHTML = "";
-                var selected_row = table2.row('.selected');
-                table1.row.add(selected_row.data()).draw();
-                console.log(conflicts);
-                delete conflicts[entry.id][selected_row.data().id];
-                delete conflicts[selected_row.data().id][entry.id];
-                selected_row.remove().draw();
-
-            });
-            $('#save_local_conflicts').click(function () {
-                localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
-            });
-            $('#discard_conflict_changes').click(function () {
-                conflicts = {};
-                localConflicts = localStorage.getItem("local_conflicts");
-                if (localConflicts){
-                    conflicts = JSON.parse(localConflicts);
-                }
-                if (!conflicts[entry.id]){
-                    conflicts[entry.id] = {};
-                }
-            });
-            table1.draw();
-            table2.draw();
-            document.getElementById("conflict_error").innerHTML = "";
-            $('#conflicts_modal').modal();
+        console.log("Entry");
+        console.log(entry);
+        let showConflictsButton = function (entry) {
+           return function () {
+               localConflicts = localStorage.getItem("local_conflicts");
+               if (localConflicts){
+                   conflicts = JSON.parse(localConflicts);
+               }
+               if (!conflicts[entry.id]){
+                   conflicts[entry.id] = {};
+               }
+               function reloadLocalCourses(table1, table2){
+                   table1.clear();
+                   table2.clear();
+                   for (let i in courses) {
+                       if (courses[i].id == entry.id){
+                           continue;
+                       }
+                       if (conflicts[entry.id][courses[i].id]){
+                           table2.row.add(courses[i]).draw();
+                       } else {
+                           table1.row.add(courses[i]).draw();
+                       }
+                   }
+               }
+               let title = document.getElementById("conflicts_title");
+               title.innerHTML = 'ניהול קשרים עבור הקורס "' + entry["name"] + '"';
+               let table1 = $("#all_courses").DataTable();
+               let table2 = $("#conflicting_courses").DataTable();
+               reloadLocalCourses(table1, table2);
+               let addConflict = function (id) {
+                  return function () {
+                      let count1 = table1.rows( { selected: true } ).count();
+                      let error = document.getElementById("conflict_error");
+                      if (count1 == 0)
+                      {
+                          error.innerHTML = "לא נבחר קורס להוספה";
+                          return;
+                      }
+                      error.innerHTML = "";
+                      let selected_row = table1.row('.selected');
+                      table2.row.add(selected_row.data()).draw();
+                      conflicts[id][selected_row.data().id] = "1";
+                      if (!conflicts[selected_row.data().id]){
+                          conflicts[selected_row.data().id] = {};
+                      }
+                      conflicts[selected_row.data().id][id] = "1";
+                      selected_row.remove().draw();
+                  }
+               };
+               $('#conflict_add').unbind('click');
+               $('#conflict_remove').unbind('click');
+               $('#save_local_conflicts').unbind('click');
+               $('#discard_conflict_changes').unbind('click');
+               $('#conflict_add').click(addConflict(entry.id));
+               let removeConflict = function (id) {
+                   return function () {
+                       let count2 = table2.rows( { selected: true } ).count();
+                       let error = document.getElementById("conflict_error");
+                       if (count2 == 0)
+                       {
+                           error.innerHTML = "לא נבחר קורס להסרה";
+                           return;
+                       }
+                       error.innerHTML = "";
+                       let selected_row = table2.row('.selected');
+                       delete conflicts[id][selected_row.data().id];
+                       delete conflicts[selected_row.data().id][id];
+                       table1.row.add(selected_row.data()).draw();
+                       selected_row.remove().draw();
+                   };
+               };
+               $('#conflict_remove').click(removeConflict(entry.id));
+               $('#save_local_conflicts').click(function () {
+                   localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
+               });
+               let discardChanges = function (id) {
+                   return function () {
+                       conflicts = {};
+                       localConflicts = localStorage.getItem("local_conflicts");
+                       if (localConflicts){
+                           conflicts = JSON.parse(localConflicts);
+                       }
+                       if (!conflicts[id]){
+                           conflicts[id] = {};
+                       }
+                   }
+               };
+               $('#discard_conflict_changes').click(discardChanges(entry.id));
+               table1.draw();
+               table2.draw();
+               document.getElementById("conflict_error").innerHTML = "";
+               $('#conflicts_modal').modal();
+           }
         };
+        conbutton.onclick = showConflictsButton(entry);
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
         for (var i in pairs) {
             var td1 = document.createElement("td");

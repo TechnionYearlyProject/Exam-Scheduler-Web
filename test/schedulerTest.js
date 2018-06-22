@@ -6,7 +6,6 @@ chai.use(chai_http);
 chai.should();
 
 describe('Schedule', function() {
-    this.timeout(150000);
     before(async () => {
         await db.open();
     });

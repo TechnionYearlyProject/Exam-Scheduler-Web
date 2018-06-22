@@ -296,6 +296,7 @@
                     semester: localStorage.semester_name,
                     faculty: localStorage.faculty_name,
                     changes: localStorage.getItem(changes_root_key),
+                    conflicts: localStorage.getItem("local_conflicts"),
                 },
                 success: fillScheduleWithCourses(moeds)
             });
@@ -387,8 +388,10 @@
 
     function reload_message_list() {
       let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      while (msgs_cntr_lst.firstChild) {
-        msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+      if (msgs_cntr_lst){
+          while (msgs_cntr_lst.firstChild) {
+              msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+          }
       }
       sendRequest('get', '/api/message/list', null, res => {
         let data = JSON.parse(res);
