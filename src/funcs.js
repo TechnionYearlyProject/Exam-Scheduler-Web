@@ -1,6 +1,17 @@
 var occupied = {};
 var changes_root_key = "local_course_changes";
 
+function faculty_name_to_id(name) {
+    let faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    for (let key in faculties_dict) {
+        if (faculties_dict[key]['name'] == name) {
+            let k = key;
+            return k;
+        }
+    }
+    return "";
+}
+
 function save_changes_to_local(id, field, value) {
     let changes = JSON.parse(localStorage.getItem(changes_root_key)) || {};
     if (!changes.hasOwnProperty(id)){
