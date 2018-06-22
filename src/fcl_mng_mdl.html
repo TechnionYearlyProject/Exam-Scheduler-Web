@@ -41,7 +41,7 @@
       <div class="modal-footer"style="padding: 10px;">
         <p class="text-right" id="faculty_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-        <button type="button" id="faculty_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+        <button type="button" id="faculty_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">שמירה</button>
       </div>
     </div>
   </div>
@@ -248,6 +248,15 @@
             }
             localStorage.setItem("faculties_dict", JSON.stringify(shared_faculties_dict));
         });
+        faculty_management_error.style.color = "green";
+        faculty_management_error.innerHTML = "השינויים נשמרים לשרת.";
+        setTimeout(function () {
+            $("#sys_loader").show();
+            $('#fcl_mng_mdl').modal('hide');
+            setTimeout(function () {
+                $("#sys_loader").hide();
+            }, 1000);
+        }, 2500);
     };
 
     document.getElementById('fcl_img_btn').onclick = function() {
