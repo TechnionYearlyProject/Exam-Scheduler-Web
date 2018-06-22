@@ -51,7 +51,7 @@
       <div class="modal-footer"style="padding: 10px;">
         <p class="text-right" id="semester_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-        <button type="button" id="semester_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+        <button type="button" id="semester_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">שמירה</button>
       </div>
     </div>
   </div>
@@ -319,7 +319,11 @@
             }
             localStorage.setItem("semesters_dict", JSON.stringify(shared_semesters_dict));
         });
+
+        semester_management_error.style.color = "green";
+        semester_management_error.innerHTML = "השינויים נשמרים לשרת.";
         setTimeout(function () {
+            $('#sem_mng_mdl').modal('hide');
             window.location.href = '/scheduler';
         }, 3000);
     };
