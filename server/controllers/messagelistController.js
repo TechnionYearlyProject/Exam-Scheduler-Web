@@ -18,12 +18,12 @@ exports.messageList = async function (req, res, next) {
     next(err);
   });
 
-  MessageList.update({
+  MessageList.updateMany({
     receiver: req.faculty_id
   }, {
     read: true
   })
-  .then(messages => {
+  .then(() => {
     return res.json(messages);
   })
   .catch(err => {
@@ -70,6 +70,9 @@ exports.sendMessage = async function (req, res, next) {
     }
   })
   .then(schedule => {
+    if (schedule === null) {
+      return null;
+    }
     let to_parse;
     if (!req.body.moed.localeCompare('A')) {
       to_parse = schedule.exams_a;

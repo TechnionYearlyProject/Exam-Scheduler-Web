@@ -49,8 +49,8 @@
       </div>
       <div class="modal-footer" id="conflicts_buttons" style="padding: 10px;">
         <p class="text-right" id="conflict_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
-        <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-        <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+        <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal" id="discard_conflict_changes">ביטול</button>
+        <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal" id="save_local_conflicts">אישור</button>
       </div>
     </div>
   </div>
@@ -108,34 +108,6 @@
     } );
     $('#search_box_2').keyup(function(){
         table2.search($(this).val()).draw() ;
-    });
-    $('#conflict_add').click(function() {
-        var count1 = table1.rows( { selected: true } ).count();
-        var error = document.getElementById("conflict_error");
-        if (count1 == 0)
-        {
-            error.innerHTML = "לא נבחר קורס להוספה";
-            return;
-        }
-        error.innerHTML = "";
-        var selected_row = table1.row('.selected');
-        table2.row.add(selected_row.data()).draw();
-        selected_row.remove().draw();
-
-    });
-    $('#conflict_remove').click(function() {
-        var count2 = table2.rows( { selected: true } ).count();
-        var error = document.getElementById("conflict_error");
-        if (count2 == 0)
-        {
-            error.innerHTML = "לא נבחר קורס להסרה";
-            return;
-        }
-        error.innerHTML = "";
-        var selected_row = table2.row('.selected');
-        table1.row.add(selected_row.data()).draw();
-        selected_row.remove().draw();
-
     });
     $('#all_courses tbody').on( 'click', 'tr', function () {
         table2.rows('.selected').deselect();

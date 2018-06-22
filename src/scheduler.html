@@ -70,12 +70,7 @@
         <div id="moed_b" moed="b"></div>
     </div>
 </div>
-<div id="popover_comment">
-    <div class = "row">
-        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>
-        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
-    </div>
-</div>
+
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -322,7 +317,7 @@
         });
     });
     $('body').on('click', function (e) {
-        if (e.target.className == "popover-body" || e.target.id == "popover_input" || e.target.id == "popover_button")
+        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input"))
             return;
         $('[data-toggle="popover"]').each(function () {
             $(this).popover('hide');
@@ -350,6 +345,108 @@
             $("[id^='exam_for_']").remove();
         })
     });
+
+
+    //rafa its here
+
+    document.addEventListener("send_msg", send_msg_handler , false);
+    function send_msg_handler(e) {
+        let params = JSON.parse(localStorage.getItem("popover_data"));
+        if (!params["moed"].localeCompare("a")) {
+          params["moed"] = 'A';
+        } else {
+          params["moed"] = 'B';
+        }
+        let json = {
+          course: params["course_id"],
+          message: params["msg"],
+          moed: params["moed"]
+        };
+        let route = '/api/' + params["semester"] + '/message/send';
+        sendRequest('post', route, json, () => {
+            reload_message_list();
+        });
+    }
+
+    // function sendMessage(event) {
+    //   let text = document.getElementById(event.data.text_area).value;
+    //   if (text.localeCompare('')) {
+    //     let json = {
+    //       course: event.data.course_id,
+    //       message: text,
+    //       moed: event.data.moed
+    //     };
+    //     let route = '/api/' + event.data.year + '-' + event.data.sem + '/message/send';
+    //     sendRequest('post', route, json, () => {
+    //       reload_message_list();
+    //       $('#message_modal').modal('hide');
+    //       document.getElementById(event.data.text_area).value = '';
+    //     });
+    //   }
+    // }
+
+    function reload_message_list() {
+      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
+      while (msgs_cntr_lst.firstChild) {
+        msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+      }
+      sendRequest('get', '/api/message/list', null, res => {
+        let data = JSON.parse(res);
+        for (let i in data) {
+          let li = document.createElement('li');
+          li.className = "list-group-item";
+          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+
+          let id = document.createElement('p');
+          id.innerHTML = data[i].course.id;
+          li.appendChild(id);
+
+          let course = document.createElement('p');
+          course.innerHTML = data[i].course.name;
+          li.appendChild(course);
+
+          let year = document.createElement('p');
+          year.innerHTML = data[i].semester.year;
+          li.appendChild(year);
+
+          let semester = document.createElement('p');
+          semester.innerHTML = data[i].semester.semester;
+          li.appendChild(semester);
+
+          let schedule = document.createElement('p');
+          schedule.innerHTML = data[i].schedule;
+          li.appendChild(schedule);
+
+          let moed = document.createElement('p');
+          moed.innerHTML = data[i].moed;
+          li.appendChild(moed);
+
+          let sender = document.createElement('p');
+          sender.innerHTML = data[i].sender.name;
+          li.appendChild(sender);
+
+          let date = document.createElement('p');
+          date.innerHTML = data[i].date;
+          li.appendChild(date);
+
+          let text = document.createElement('p');
+          text.innerHTML = data[i].text;
+          li.appendChild(text);
+
+          let read = document.createElement('p');
+          read.innerHTML = data[i].read;
+          li.appendChild(read);
+
+          msgs_cntr_lst.appendChild(li);
+        }
+      });
+    }
+
+    $(document).ready(reload_message_list);
+
+    //
+
+
     function initSched() {
         var top = document.getElementById('sem_picker');
         document.getElementById('semester_button').innerHTML = top.innerHTML;
@@ -368,7 +465,8 @@
                 document.body.removeChild(document.getElementById('test_tooltip_' + id));
             }
         };
-
+        localStorage.setItem("local_conflicts", "{}");
+        console.log(localStorage);
     }
     window.addEventListener('load', initSched, false);
 
