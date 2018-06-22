@@ -76,36 +76,67 @@
         minViewMode: 2,
         maxViewMode: 2
     });
+    let temp_semesters_dict = {};
+    let shared_semesters_dict = localStorage.getItem("semesters_dict");
     let sem_mng_lst = document.getElementById('sem_mng_lst');
-    let semester_list = [];
-    let changes_to_db = [];
-    sendRequest('get', 'api/semester/list', null, res => {
-        let data = JSON.parse(res);
-        var error = document.getElementById("semester_management_error");
-        for (let i in data) {
-            let li = document.createElement('li');
-            let semester = "חורף";
-            if (!data[i].semester.localeCompare("spring")) {
-                semester = "אביב"
+    let semester_management_error = document.getElementById("semester_management_error");
+    let semester_actions = [];
+
+
+    document.getElementById('sem_mng_btn').onclick = function() {
+        semester_management_error.innerHTML = "";
+        document.getElementById("semester_winter_button").className = "btn btn-outline-secondary";
+        document.getElementById("semester_spring_button").className = "btn btn-outline-secondary";
+        document.getElementById("semester_year").value = "";
+        document.getElementById("semester_moeda_start").value = "";
+        document.getElementById("semester_moeda_end").value = "";
+        document.getElementById("semester_moedb_start").value = "";
+        document.getElementById("semester_moedb_end").value = "";
+        sem_mng_lst.innerHTML = "";
+        shared_semesters_dict = {};
+        temp_semesters_dict= {};
+        sendRequest('get', 'api/semester/list', null, res => {
+            let data = JSON.parse(res);
+            for (let i in data) {
+                let semester = "חורף";
+                if (!data[i].semester.localeCompare("spring")) {
+                    semester = "אביב"
+                }
+                let name = semester + " " + data[i].year;
+                let eng_semester = data[i]["semester"];
+                data[i]["semester"] = semester;
+                console.log(data[i]);
+                shared_semesters_dict[name] = data[i];
+                temp_semesters_dict[name] = data[i];
+                // semester_list.push(name);
+                let li = document.createElement('li');
+                li.className = "list-group-item";
+                li.innerHTML = name;
+                li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+                sem_mng_lst.appendChild(li);
+                let trash = document.createElement("button");
+                trash.type = "button";
+                trash.className = "btn btn-outline-secondary";
+                trash.style = "float: left";
+                trash.innerHTML = "<i class=\"fas fa-trash\"></i>";
+                trash.onclick = function(){
+                    let json = {year: data[i].year, semester: eng_semester};
+                    semester_actions.push([json,"remove"]);
+                    sem_mng_lst.removeChild(li);
+                    semester_management_error.style.color = "green";
+                    semester_management_error.innerHTML = 'הסמסטר "' + semester + "-" + data[i].year + '" נמחק בהצלחה.';
+                    delete temp_semesters_dict[name];
+
+                };
+                li.appendChild(trash);
+                sem_mng_lst.appendChild(li);
             }
-            let name = semester + " " + data[i].year;
-            semester_list.push(name);
-            li.id = "li_"+name;
-            li.className = "list-group-item";
-            li.innerHTML = name + '<button  id="btn_'+name +'" type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
-            li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-            sem_mng_lst.appendChild(li);
-            let trash = document.getElementById("btn_"+name);
-            trash.onclick = function(){
-                let json = {year: data[i].year, semester: data[i].semester};
-                changes_to_db.push([json,"remove"]);
-                sem_mng_lst.removeChild(li);
-                semester_list.splice(semester_list.indexOf(name), 1);
-                error.style.color = "green";
-                error.innerHTML = 'הסמסטר "' + semester + "-" + data[i].year + '" נמחק בהצלחה.';
-            };
-        }
-    });
+            localStorage.setItem("semesters_dict",JSON.stringify(shared_semesters_dict));
+        });
+        semester_actions = [];
+        $('#sem_mng_mdl').modal();
+    };
+
 
     function parseDate(str) {
         if (str === "") {
@@ -131,7 +162,6 @@
         var start_b = parseDate(document.getElementById("semester_moedb_start").value);
         var end_b = parseDate(document.getElementById("semester_moedb_end").value);
         var error = document.getElementById("semester_management_error");
-        console.log(semester_list);
         var current_text_btn_group = $('.btn-group > .btn.active').text();
         current_text_btn_group = current_text_btn_group.replace(/\s/g, '');
         var current_text_btn_group_eng = "spring";
@@ -149,9 +179,8 @@
             error.innerHTML = 'לא נבחרה שנה לסמסטר.';
             return;
         }
-        for (var i in semester_list) {
-            var res = semester_list[i].split(" ");
-            if (res[0] == current_text_btn_group && res[1] == semester_year) {
+        for (var i in temp_semesters_dict) {
+            if (temp_semesters_dict[i]["semester"] == current_text_btn_group && temp_semesters_dict[i]["year"] == semester_year) {
                 error.style.color = "red";
                 error.innerHTML = 'הסמסטר כבר קיים במערכת.';
                 return;
@@ -196,8 +225,41 @@
             error.innerHTML = "מועד ב': תאריך התחלה הוא אחרי תאריך סיום.";
             return;
         }
+
         let json = {year: semester_year, semester: current_text_btn_group_eng, start_a: start_a, end_a: end_a, start_b: start_b, end_b: end_b};
-        changes_to_db.push([json,"add"]);
+        semester_actions.push([json,"add"]);
+        let name = current_text_btn_group + " " + semester_year;
+        let li = document.createElement('li');
+        li.className = "list-group-item";
+        li.innerHTML = name;
+        li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+        sem_mng_lst.appendChild(li);
+        let trash = document.createElement("button");
+        trash.type = "button";
+        trash.className = "btn btn-outline-secondary";
+        trash.style = "float: left";
+        trash.innerHTML = "<i class=\"fas fa-trash\"></i>";
+        trash.onclick = function(){
+            let json = {year: semester_year, semester: current_text_btn_group_eng};
+            semester_actions.push([json,"remove"]);
+            sem_mng_lst.removeChild(li);
+            semester_management_error.style.color = "green";
+            semester_management_error.innerHTML = 'הסמסטר "' + current_text_btn_group_eng + "-" + semester_year + '" נמחק בהצלחה.';
+            delete temp_semesters_dict[name];
+
+        };
+        li.appendChild(trash);
+        sem_mng_lst.appendChild(li);
+        var entry = {
+            "end_a": "",
+            "end_b": "",
+            "semester": current_text_btn_group_eng,
+            "start_a": "",
+            "start_b": "",
+            "year": semester_year,
+            "_id": "",
+        };
+       temp_semesters_dict[name] = entry;
         error.style.color = "green";
         error.innerHTML = 'הסמסטר "' + current_text_btn_group + "-" + semester_year + '" נוסף בהצלחה.';
         document.getElementById("semester_winter_button").className = "btn btn-outline-secondary";
@@ -207,48 +269,60 @@
         document.getElementById("semester_moeda_end").value = "";
         document.getElementById("semester_moedb_start").value = "";
         document.getElementById("semester_moedb_end").value = "";
-        let li = document.createElement('li');
-        let name = current_text_btn_group + " " + semester_year;
-        semester_list.push(name);
-        li.id = "li_"+name;
-        li.className = "list-group-item";
-        li.innerHTML = name + '<button  id="btn_'+name +'" type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
-        li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-        sem_mng_lst.appendChild(li);
-        var trash = document.getElementById("btn_"+name);
-        trash.onclick = function() {
-            let json = {year: semester_year, semester: current_text_btn_group_eng};
-            changes_to_db.push([json, "remove"]);
-            sem_mng_lst.removeChild(li);
-            error.style.color = "green";
-            error.innerHTML = 'הסמסטר "' + current_text_btn_group + "-" + semester_year + '" נמחק בהצלחה.';
-        }
     };
+
+
 
     var semester_save = document.getElementById("semester_save_button");
     semester_save.onclick = function () {
-        for (var i = changes_to_db.length - 1; i >= 1; --i)
-            if (changes_to_db[i][1] == "remove")
+        for (var i = semester_actions.length - 1; i >= 1; --i)
+            if (semester_actions[i][1] == "remove")
                 for (var j = i-1; j>=0; j--)
-                    if (changes_to_db[j][0]["year"] == changes_to_db[i][0]["year"] && changes_to_db[j][0]["semester"] == changes_to_db[i][0]["semester"])
-                        changes_to_db.splice(j,1);
+                    if (semester_actions[j][0]["year"] == semester_actions[i][0]["year"] && semester_actions[j][0]["semester"] == semester_actions[i][0]["semester"])
+                        semester_actions.splice(j,1);
 
-        for(var i in changes_to_db) {
-            if (changes_to_db[i][1] == "add") {
-                sendRequest('POST', '/api/semester/create', changes_to_db[i][0], () => {
-                  console.log(123);
+
+        for(var i in semester_actions) {
+            if (semester_actions[i][1] == "add") {
+                console.log("pre_add");
+
+                sendRequest('POST', '/api/semester/create', semester_actions[i][0], () => {
+                  console.log("post_add");
                 });
             }
             else {
-                sendRequest('DELETE', '/api/semester/delete', changes_to_db[i][0], () => {
-                    console.log(321);
+                console.log("pre_remove");
+                sendRequest('DELETE', '/api/semester/delete', semester_actions[i][0], () => {
+                    console.log("post_remove");
                 });
             }
         }
-        changes_to_db = [];
+        shared_semesters_dict = {};
+        sendRequest('get', 'api/semester/list', null, res => {
+            let data = JSON.parse(res);
+            for (let i in data) {
+                let semester = "חורף";
+                if (!data[i].semester.localeCompare("spring")) {
+                    semester = "אביב"
+                }
+                let name = semester + " " + data[i].year;
+                var entry = {
+                    "end_a": data[i]["end_a"],
+                    "end_b": data[i]["end_b"],
+                    "semester": semester,
+                    "start_a": data[i]["start_a"],
+                    "start_b": data[i]["start_b"],
+                    "year": data[i]["year"],
+                    "_id": data[i]["_id"],
+                };
+                shared_semesters_dict[name] = entry;
+            }
+            localStorage.setItem("semesters_dict", JSON.stringify(shared_semesters_dict));
+        });
+        setTimeout(function () {
+            window.location.href = '/scheduler';
+        }, 3000);
     };
-
-
 
 
 </script>

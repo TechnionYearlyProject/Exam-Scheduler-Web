@@ -214,12 +214,15 @@
     var map_a = {};
     var map_b = {};
     var courses_dict = [];
-
+    let all_semester_dict = [];
     var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
     let all_courses_dict = [];
     let temp_all_courses = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
+        for (var i in semesters)
+            all_semester_dict.push(semesters[i]);
+        localStorage.setItem("semesters_dict", JSON.stringify(all_semester_dict));
         for (let i = semesters.length - 1; i >= 0; i--) {
             let semester = semesters[i].semester;
             if (semester == "spring") {
