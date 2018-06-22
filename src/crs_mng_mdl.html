@@ -156,16 +156,20 @@
             error.innerHTML = 'נא לבחור פקולטה מהרשימה.';
             return;
         }
+        let days_before = Math.floor(course_points.value) - 1;
+        if (days_before <= 0)
+            days_before = 1;
         let entry = {
                 "id" : course_num.value,
                 "name" : course_name.value,
-                "faculty" : course_faculty.value,
-                "credit_point" : course_points.value,
+                "faculty" : faculty_name_to_id(course_faculty.value),
+                "credit_point" : parseFloat(course_points.value),
+                "days_before" : days_before.toString(),
+                "programs" : []
             };
         temp_all_courses.push(entry);
         let t = $('#courses_management_table').DataTable();
         t.row.add(entry).draw();
-        entry["programs"] = [];
         course_management_to_db.push([entry,"add"]);
         error.style.color = "green";
         error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
@@ -205,36 +209,28 @@
                         course_management_to_db.splice(j,1);
         for(let i in course_management_to_db) {
             if (course_management_to_db[i][1] == "add") {
-                let temp_entry = course_management_to_db[i][0];
-                temp_entry['faculty'] = faculty_name_to_id(temp_entry['faculty']);
-                console.log(temp_entry);
-                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', temp_entry, function (out) {
+                console.log(course_management_to_db[i][0]);
+                console.log('/api/' + localStorage.getItem('semester_name') + '/course/create');
+                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
+                alert('hi');
                 });
-                let days_before = Math.floor(course_management_to_db[i][0]["credit_point"])-1;
-                if (days_before <= 0)
-                    days_before = 1;
                 let entry = {
                     "id": course_management_to_db[i][0]["id"],
                     "name": course_management_to_db[i][0]["name"],
                     "pref": "אוטומטי",
                     "credit_points": course_management_to_db[i][0]["credit_point"],
-                    "days_before": days_before,
+                    "days_before": course_management_to_db[i][0]["days_before"],
                     "has_exam": true,
                     "is_first" : false,
                     "is_last" : false,
                     "faculty" : course_management_to_db[i][0]["faculty"]
                 };
+                console.log(faculty_name_to_id(course_management_to_db[i][0]["faculty"]));
                 shared_courses_dict.push(entry);
-                //main_window_courses_table.row.add(entry).draw();
             } else {
-                let elem =  {"faculty" : faculty_name_to_id(course_management_to_db[i][0]["faculty"])};
-                sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', elem, function (out) {
+                console.log(course_management_to_db[i][0]);
+                sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', {"faculty" : faculty_name_to_id(course_management_to_db[i][0]["faculty"])}, function (out) {
                 });
-                // main_window_courses_table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-                //     if (this.node().childNodes[1].innerHTML == course_management_to_db[i][0]["id"]) {
-                //         this.node().remove().draw();
-                //     }
-                // });
                 for (let j in shared_courses_dict) {
                     if (shared_courses_dict[j]["id"] == course_management_to_db[i][0]["id"]) {
                         shared_courses_dict.splice(j, 1);

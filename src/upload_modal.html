@@ -69,18 +69,28 @@
                 sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'date': local_course_changes[course_id]['b_constraint']}, function (out) {
                 });
             }
-            // if (courses_switch.checked) {
-            //     if (local_course_changes[course_id]['preperationTime'] != undefined) ||
-            //
-            //
-            //     sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/update', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
-            //     });
-            //     router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
-            //
-
+            if (courses_switch.checked) {
+                var entry = {};
+                if (local_course_changes[course_id]['preperationTime'] != undefined)
+                    entry["days_before"] = local_course_changes[course_id]['preperationTime'];
+                if (local_course_changes[course_id]['has_exam'] != undefined)
+                    entry["has_exam"] = local_course_changes[course_id]['has_exam'];
+                if (local_course_changes[course_id]['pref'] != undefined) {
+                    entry["is_first"] = false;
+                    entry["is_last"] = false;
+                    if (local_course_changes[course_id]['pref'] == "סוף")
+                        entry["is_last"] = true;
+                    if (local_course_changes[course_id]['pref'] == "התחלה")
+                        entry["is_first"] = true;
+                }
+                if (entry != {}) {
+                    console.log(JSON.stringify(entry));
+                    sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/update', JSON.stringify(entry), function (out) {
+                        alert("post_update");
+                    });
+                }
+            }
         }
-
-
         upload_alert.style.color = "green";
         upload_alert.innerHTML = "המידע מועלה לשרת.";
         setTimeout(function () {
