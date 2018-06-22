@@ -85,14 +85,7 @@ exports.schedule_moed_a = async function (req, res, next) {
   var dates = {course: course._id, date: req.body.date};
   await Schedule.update(
   {semester: semester._id, faculty: req.faculty_id},
-  {$push: {exams_a: dates}},
-  function (error, success) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(success);
-    }
-  }
+  {$push: {exams_a: dates}}
   ).then(() => {
     return res.end();
   }).catch(err => {

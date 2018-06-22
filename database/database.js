@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const Faculty = require('../server/models/faculty').model;
+const Course = require('../server/models/course').model;
+const Semester = require('../server/models/semester').model;
+const Schedule = require('../server/models/schedule').model;
+const MessageList = require('../server/models/messagelist').model;
+const StudyProgram = require('../server/models/studyprogram').model;
 const config = require('../server/auth/config');
 const db_config = require('./database_config');
-const Mockgoose = require('mockgoose').Mockgoose;
-const mockgoose = new Mockgoose(mongoose);
 const logging = require('../logging');
 
 async function init_admin() {
@@ -20,18 +23,25 @@ async function init_admin() {
 
 exports.open = async function () {
   if (process.env.NODE_ENV === 'test') {
-    await mockgoose.prepareStorage();
-    await mongoose.connect("mongodb://localhost/exam-scheduler-test");
+    await mongoose.connect(db_config.test.uri, db_config.test.options);
+    logging.info('Connection to MongoDB test database successful.');
   } else {
-    await mongoose.connect(db_config.uri, db_config.options);
+    await mongoose.connect(db_config.prod.uri, db_config.prod.options);
     logging.info('Connection to MongoDB database successful.');
   }
   await init_admin();
 };
 
 exports.close = async function () {
-  await mockgoose.helper.reset();
+  if (process.env.NODE_ENV === 'test') {
+    Faculty.remove({name: {$ne: config.admin_default.name}}).exec();
+    Semester.remove({}).exec();
+    StudyProgram.remove({}).exec();
+    Course.remove({}).exec();
+    Schedule.remove({}).exec();
+    MessageList.remove({}).exec();
+  }
   await mongoose.disconnect();
-  mockgoose.mongodHelper.mongoBin.childProcess.kill();
+  logging.warning('Connection to MongoDB database closed.');
 };
 
