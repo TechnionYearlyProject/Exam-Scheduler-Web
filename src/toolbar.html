@@ -202,7 +202,7 @@
               '        <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;)">\n' +
               '          <a class="dropdown-item" data-toggle="modal" data-target="#fcl_mng_mdl" href="#">פקולטות</a>\n' +
               '          <a class="dropdown-item" data-toggle="modal" data-target="#sem_mng_mdl" href="#">סמסטרים</a>\n' +
-              '          <a class="dropdown-item" data-toggle="modal" data-target="#crs_mng_mdl" href="#">קורסים</a>\n' +
+              '          <a class="dropdown-item" id="crs_mng_btn" href="#">קורסים</a>\n' +
               '        </div>';
           document.getElementById("button_toolbar").appendChild(sep);
           document.getElementById("button_toolbar").appendChild(mng);
@@ -251,20 +251,20 @@
           $('#password_change_modal').modal();
       }
 
-      document.getElementById('course_management_item').onclick = function(e) {
-          var manager = document.getElementById("new_course_faculty");
-          var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
-          for(var key in faculties_dict)
-          {
-              if (faculties_dict[key]["name"] == "Administrator")
-                  continue;
-              var option = document.createElement("option");
-              option.innerHTML = faculties_dict[key]["name"];
-              manager.appendChild(option);
-          }
-          var error = document.getElementById("courses_management_error");
-          error.innerHTML = "";
-      };
+      // document.getElementById('course_management_item').onclick = function(e) {
+      //     var manager = document.getElementById("new_course_faculty");
+      //     var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+      //     for(var key in faculties_dict)
+      //     {
+      //         if (faculties_dict[key]["name"] == "Administrator")
+      //             continue;
+      //         var option = document.createElement("option");
+      //         option.innerHTML = faculties_dict[key]["name"];
+      //         manager.appendChild(option);
+      //     }
+      //     var error = document.getElementById("courses_management_error");
+      //     error.innerHTML = "";
+      // };
 
 
 
