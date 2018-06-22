@@ -95,6 +95,8 @@
         document.getElementById("image_file").value = "";
         fcl_mng_lst.innerHTML = "";
         shared_faculties_dict = {};
+        temp_faculties_dict = {};
+
         sendRequest('get', 'api/faculty/details_list', null, res => {
             let faculties = JSON.parse(res);
             for (let i in faculties) {
