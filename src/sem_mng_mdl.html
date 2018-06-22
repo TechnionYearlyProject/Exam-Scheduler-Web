@@ -285,9 +285,10 @@
         for(var i in semester_actions) {
             if (semester_actions[i][1] == "add") {
                 console.log("pre_add");
-
                 sendRequest('POST', '/api/semester/create', semester_actions[i][0], () => {
-                  console.log("post_add");
+                    console.log('/api/' + semester_actions[i][0]["year"] + '-' + semester_actions[i][0]["semester"] + '/schedule');
+                    sendRequest('GET', '/api/' + semester_actions[i][0]["year"] + '-' + semester_actions[i][0]["semester"] + '/schedule', null ,function(out){
+                    });
                 });
             }
             else {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
+        <span style="font-size: 20px;"><i class="fas fa-cloud"></i></span>
+        <h5 class="modal-title" style="margin-right: 5px;">העלאה לענן</h5>
+      </div>
+      <div class="modal-body" style="text-align: right; height: 90px;">
+        <div class="form-check">
+          <label class="switch" style="margin-bottom: -2px; display: inline-block">
+            <input type="checkbox" id="courses_switch">
+            <span class="slider round"></span>
+          </label>
+          <label class="form-check-label" style="margin-right: 20px;" for="courses_switch">מערכת קורסים</label>
+        </div>
+        <div class="form-check">
+          <label class="switch" style="margin-bottom: -2px; display: inline-block">
+            <input type="checkbox" id="moed_a_switch">
+            <span class="slider round"></span>
+          </label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_a_switch">מועד א'</label>
+        </div>
+        <div class="form-check">
+          <label class="switch" style="margin-bottom: -2px; display: inline-block">
+            <input type="checkbox" id="moed_b_switch">
+            <span class="slider round"></span>
+          </label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_b_switch">מועד ב'</label>
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 10px;">
+        <p class="text-right" id="upload_alert" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 80px;">ביטול</button>
+        <button type="button" id="upload_save" class="btn btn-secondary" style="width: 80px; margin-right: 10px; margin-left: inherit;">העלאה</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module">
+    import {sendRequest} from "./js/request";
+    let courses_switch = document.getElementById('courses_switch');
+    let moed_a_switch = document.getElementById('moed_a_switch');
+    let moed_b_switch = document.getElementById('moed_b_switch');
+    let upload_alert = document.getElementById('upload_alert');
+    let local_course_changes = {};
+    let current_semester = '';
+    document.getElementById('cloud_upload_button').onclick = function() {
+        courses_switch.checked = false;
+        moed_a_switch.checked = false;
+        moed_b_switch.checked = false;
+        upload_alert.innerHTML = "";
+        $('#upload_modal').modal();
+    };
+    document.getElementById('upload_save').onclick = function () {
+        local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
+        current_semester = localStorage.getItem('semester_name');
+        for (var course_id in local_course_changes) {
+            if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
+                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
+                });
+            }
+            if (moed_b_switch.checked && local_course_changes[course_id]['b_constraint'] != undefined) {
+                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'date': local_course_changes[course_id]['b_constraint']}, function (out) {
+                });
+            }
+            // if (courses_switch.checked) {
+            //     if (local_course_changes[course_id]['preperationTime'] != undefined) ||
+            //
+            //
+            //     sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/update', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
+            //     });
+            //     router.patch(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
+            //
+
+        }
+
+
+        upload_alert.style.color = "green";
+        upload_alert.innerHTML = "המידע מועלה לשרת.";
+        setTimeout(function () {
+            $('#upload_modal').modal('hide');
+        }, 2500);
+    }
+
+</script>
+</body>
+</html>

@@ -84,43 +84,6 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="height:54px; padding-top: 4px; padding-bottom: 4px; align-items: center !important; justify-content: unset">
-                <span style="font-size: 20px;"><i class="fas fa-cloud"></i></span>
-                <h5 class="modal-title" style="margin-right: 5px;">העלאה לענן</h5>
-            </div>
-            <div class="modal-body" style="text-align: right; height: 90px;">
-                <div class="form-check">
-                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
-                        <input type="checkbox" id="upload_switch_1">
-                        <span class="slider round"></span>
-                    </label>
-                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_1">מערכת קורסים</label>
-                </div>
-                <div class="form-check">
-                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
-                        <input type="checkbox" id="upload_switch_2">
-                        <span class="slider round"></span>
-                    </label>
-                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_2">מועד א'</label>
-                </div>
-                <div class="form-check">
-                    <label class="switch" style="margin-bottom: -2px; display: inline-block">
-                        <input type="checkbox" id="upload_switch_3">
-                        <span class="slider round"></span>
-                    </label>
-                    <label class="form-check-label" style="margin-right: 20px;" for="upload_switch_3">מועד ב'</label>
-                </div>
-            </div>
-            <div class="modal-footer" style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 80px;">ביטול</button>
-                <button type="button" id="alert_func" class="btn btn-secondary" data-dismiss="modal" style="width: 80px; margin-right: 10px; margin-left: inherit;">אישור</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="email_change_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -208,6 +171,8 @@
 <div id="crs_mng_ldr"></div>
 <div id="fcl_mng_ldr"></div>
 <div id="cnflcts_ldr"></div>
+<div id="upload_loader"></div>
+
 
 <script type="module">
     import { sendRequest } from './js/request';
@@ -309,17 +274,17 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-    $('#upload_button').click(function () {
-        $.ajax({
-            url: "/save-schedule",
-            type: "POST",
-            data: {
-                schedule: localStorage.getItem("result"),
-                changes: localStorage.getItem("changesForSchedule"),
-                faculty: localStorage.faculty,
-            }
-        });
-    });
+    // $('#upload_button').click(function () {
+    //     $.ajax({
+    //         url: "/save-schedule",
+    //         type: "POST",
+    //         data: {
+    //             schedule: localStorage.getItem("result"),
+    //             changes: localStorage.getItem("changesForSchedule"),
+    //             faculty: localStorage.faculty,
+    //         }
+    //     });
+    // });
     $('body').on('click', function (e) {
         if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input"))
             return;
@@ -331,6 +296,7 @@
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
     $('#moed_b').load('moed_b.html');
+    $('#upload_loader').load('upload_modal.html');
     $('#courses').load('datatable.html', function () {
         $('#scheduler_function_caller').click(function(){
             $("[id^='exam_for_']").remove();
