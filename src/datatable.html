@@ -119,22 +119,25 @@
         button_group.appendChild(auto_button);
         button_group.appendChild(end_button);
         pairs.push({text: 'העדפת שיבוץ:', elem: button_group, elem_is_text: false});
+        let res = localStorage.getItem("all_courses_dict");
+        let courses = JSON.parse(res);
+        let conflicts = {};
+        let localConflicts = localStorage.getItem("local_conflicts");
+        if (localConflicts){
+            conflicts = JSON.parse(localConflicts);
+        }
+        if (!conflicts[entry.id]){
+            conflicts[entry.id] = {};
+        }
         function reloadLocalCourses(table1, table2){
             table1.clear();
-            let res = localStorage.getItem("all_courses_dict");
-            let courses = JSON.parse(res);
-            console.log(courses);
-            let conflicts = {};
-            let localConflicts = localStorage.getItem("local_conflicts");
-            if (localConflicts){
-                conflicts = JSON.parse(localConflicts);
-            }
-            if (!conflicts[entry.id]){
-                conflicts[entry.id] = {};
-            }
+            table2.clear();
             for (let i in courses) {
+                if (courses[i].id == entry.id){
+                    continue;
+                }
                 if (conflicts[entry.id][courses[i].id]){
-                    table2.row.add([courses[i]]).draw();
+                    table2.row.add(courses[i]).draw();
                 } else {
                     table1.row.add(courses[i]).draw();
                 }
@@ -151,6 +154,54 @@
             var table1 = $("#all_courses").DataTable();
             var table2 = $("#conflicting_courses").DataTable();
             reloadLocalCourses(table1, table2);
+            $('#conflict_add').click(function() {
+                var count1 = table1.rows( { selected: true } ).count();
+                var error = document.getElementById("conflict_error");
+                if (count1 == 0)
+                {
+                    error.innerHTML = "לא נבחר קורס להוספה";
+                    return;
+                }
+                error.innerHTML = "";
+                var selected_row = table1.row('.selected');
+                table2.row.add(selected_row.data()).draw();
+                conflicts[entry.id][selected_row.data().id] = "1";
+                if (!conflicts[selected_row.data().id]){
+                    conflicts[selected_row.data().id] = {};
+                }
+                conflicts[selected_row.data().id][entry.id] = "1";
+                selected_row.remove().draw();
+            });
+            $('#conflict_remove').click(function() {
+                var count2 = table2.rows( { selected: true } ).count();
+                var error = document.getElementById("conflict_error");
+                if (count2 == 0)
+                {
+                    error.innerHTML = "לא נבחר קורס להסרה";
+                    return;
+                }
+                error.innerHTML = "";
+                var selected_row = table2.row('.selected');
+                table1.row.add(selected_row.data()).draw();
+                console.log(conflicts);
+                delete conflicts[entry.id][selected_row.data().id];
+                delete conflicts[selected_row.data().id][entry.id];
+                selected_row.remove().draw();
+
+            });
+            $('#save_local_conflicts').click(function () {
+                localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
+            });
+            $('#discard_conflict_changes').click(function () {
+                conflicts = {};
+                localConflicts = localStorage.getItem("local_conflicts");
+                if (localConflicts){
+                    conflicts = JSON.parse(localConflicts);
+                }
+                if (!conflicts[entry.id]){
+                    conflicts[entry.id] = {};
+                }
+            });
             table1.draw();
             table2.draw();
             document.getElementById("conflict_error").innerHTML = "";

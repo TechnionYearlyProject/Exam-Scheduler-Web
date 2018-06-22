@@ -376,6 +376,8 @@
                 document.body.removeChild(document.getElementById('test_tooltip_' + id));
             }
         };
+        localStorage.setItem("local_conflicts", "{}");
+        console.log(localStorage);
     }
     window.addEventListener('load', initSched, false);
 
