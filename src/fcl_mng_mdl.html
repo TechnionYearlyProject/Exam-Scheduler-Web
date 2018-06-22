@@ -19,14 +19,15 @@
               <div style="font-weight:bold; font-size: 15px; text-align: right; margin-top: 5px;">יצירת פקולטה חדשה:</div>
               <div style="text-align: right; margin-top: 5px;">תמונה:</div>
               <button type="button" id="fcl_img_btn" class="btn btn-outline-secondary" style="width: 336.8px;"><i class="fas fa-camera" style="padding-left:10px;"></i>העלאת תמונה</button>
+              <input type="file" accept=".jpg , .jpeg" id="image_file" style="display: none;">
               <div style="text-align: right; margin-top: 5px;">שם הפקולטה:</div>
               <input type="text" class="form-control" id="new_faculty_name" style="width: 336.8px;">
               <div style="text-align: right; margin-top: 5px;">כתובת דוא"ל:</div>
               <input type="text" class="form-control" id="new_faculty_email" style="width: 336.8px;">
               <div style="text-align: right; margin-top: 5px;">סיסמה:</div>
-              <input type="text" class="form-control" id="new_faculty_password" style="width: 336.8px;">
+              <input type="password" class="form-control" id="new_faculty_password" style="width: 336.8px;">
               <div style="text-align: right; margin-top: 5px;">אישור סיסמה:</div>
-              <input type="text" class="form-control" id="new_faculty_password_verify" style="width: 336.8px;">
+              <input type="password" class="form-control" id="new_faculty_password_verify" style="width: 336.8px;">
               <button type="button" id="fcl_add_btn" class="btn btn-outline-secondary" style="position: absolute; bottom:0px; width: 336.8px;"><i class="fas fa-plus" style="padding-left:10px;"></i>הוספת הפקולטה</button>
             </div>
             <div class="col-sm">
@@ -40,7 +41,7 @@
       <div class="modal-footer"style="padding: 10px;">
         <p class="text-right" id="faculty_management_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
         <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
-        <button type="button" id="course_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
+        <button type="button" id="faculty_save_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">שמירה</button>
       </div>
     </div>
   </div>
@@ -48,20 +49,210 @@
 
 <script type="module">
     import {sendRequest} from "./js/request";
-    let fcl_mng_lst = document.getElementById('fcl_mng_lst');
-    sendRequest('get', 'api/faculty/details_list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-            if (data[i].name == "Administrator") {
-                continue;
+    let temp_faculties_dict = {};
+    let shared_faculties_dict = JSON.parse(localStorage.getItem("faculties_dict"));
+    let fcl_mng_lst = document.getElementById("fcl_mng_lst");
+    let faculty_management_error = document.getElementById("faculty_management_error");
+    let faculty_actions = [];
+    let file = document.getElementById('image_file');
+
+    function resize_and_convert(file, callback) {
+        let MAX_SIZE = 200;
+        let reader = new FileReader();
+        reader.onload = function (event) {
+            let image = new Image();
+            image.src = event.target.result;
+            image.onload = function () {
+                if (image.width > image.height) {
+                    if (image.height > MAX_SIZE) {
+                        image.width *= MAX_SIZE / image.height;
+                        image.height = MAX_SIZE;
+                    }
+                } else {
+                    if (image.width > MAX_SIZE) {
+                        image.height *= MAX_SIZE / image.width;
+                        image.width = MAX_SIZE;
+                    }
+                }
+                let canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                let context = canvas.getContext("2d");
+                context.drawImage(this, 0, 0, image.width, image.height);
+                let retval = canvas.toDataURL(file.type);
+                callback(retval);
             }
-            let li = document.createElement('li');
-            li.className = "list-group-item";
-            li.innerHTML = data[i].name + '<button type="button" class="btn btn-outline-secondary" style="float: left"><i class="fas fa-trash"></i></button>\n';
-            li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-            fcl_mng_lst.appendChild(li);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    document.getElementById('fcl_mng_btn').onclick = function() {
+        faculty_management_error.innerHTML = "";
+        document.getElementById("new_faculty_name").value = "";
+        document.getElementById("new_faculty_email").value = "";
+        document.getElementById("new_faculty_password").value = "";
+        document.getElementById("new_faculty_password_verify").value = "";
+        document.getElementById("image_file").value = "";
+        fcl_mng_lst.innerHTML = "";
+        shared_faculties_dict = {};
+        sendRequest('get', 'api/faculty/details_list', null, res => {
+            let faculties = JSON.parse(res);
+            for (let i in faculties) {
+                let entry = {
+                    "id": faculties[i]["_id"],
+                    "name": faculties[i]["name"],
+                    "image": faculties[i]["image"]
+                };
+                shared_faculties_dict[faculties[i]["_id"]] = entry;
+                temp_faculties_dict[faculties[i]["name"]] = entry;
+                if (faculties[i].name == "Administrator") {
+                    continue;
+                }
+                let li = document.createElement('li');
+                li.className = "list-group-item";
+                li.innerHTML = faculties[i].name;
+                li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+                let del_button = document.createElement('button');
+                del_button.type = "button";
+                del_button.className = "btn btn-outline-secondary";
+                del_button.style = "float: left";
+                del_button.innerHTML = "<i class=\"fas fa-trash\"></i>";
+                del_button.onclick = function() {
+                    faculty_actions.push([{'name':faculties[i].name}, 'remove']);
+                    fcl_mng_lst.removeChild(li);
+                    faculty_management_error.style.color = "green";
+                    faculty_management_error.innerHTML = "הסמסטר הוסר בהצלחה.";
+                    delete temp_faculties_dict[new_faculty_name];
+                };
+                li.appendChild(del_button);
+                fcl_mng_lst.appendChild(li);
+            }
+            localStorage.setItem("faculties_dict",JSON.stringify(shared_faculties_dict));
+        });
+
+        faculty_actions = [];
+        $('#fcl_mng_mdl').modal();
+    };
+
+    document.getElementById('fcl_add_btn').onclick = function() {
+        var image_file = document.getElementById("image_file").value;
+        var new_faculty_name = document.getElementById("new_faculty_name").value;
+        var new_faculty_email = document.getElementById("new_faculty_email").value;
+        var new_faculty_password = document.getElementById("new_faculty_password").value;
+        var new_faculty_password_verify = document.getElementById("new_faculty_password_verify").value;
+        if (image_file.length == 0) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'לא נבחרה תמונה לפקולטה.';
+            return;
         }
-    });
+        if (new_faculty_name.length == 0) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'לא נבחר שם לפקולטה.';
+            return;
+        }
+        if (new_faculty_name == "לימודי הסמכה") {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'הפקולטה כבר קיימת במערכת.';
+            return;
+        }
+        if (temp_faculties_dict["new_faculty_name"] != undefined) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'הפקולטה כבר קיימת במערכת.';
+            return;
+        }
+        if (!new_faculty_email.match(/[\w\.]+@(\w+\.)+\w+/)) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'כתובת הדוא"ל אינה חוקית.';
+            return;
+        }
+        if (new_faculty_password.length < 8) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'על הסיסמא להיות באורך 8 תווים לפחות.';
+            return;
+        }
+        if (new_faculty_password.localeCompare(new_faculty_password_verify) !== 0) {
+            faculty_management_error.style.color = "red";
+            faculty_management_error.innerHTML = 'הסיסמאות שהוזנו לא תואמות.';
+            return;
+        }
+        let json = {
+            name: new_faculty_name,
+            email: new_faculty_email,
+            password: new_faculty_password,
+            retype: new_faculty_password_verify,
+            image: file.files[0]
+        };
+        faculty_actions.push([json, 'add']);
+        let li = document.createElement('li');
+        li.className = "list-group-item";
+        li.innerHTML = new_faculty_name;
+        li.style = "line-height: 30px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+        let del_button = document.createElement('button');
+        del_button.type = "button";
+        del_button.className = "btn btn-outline-secondary";
+        del_button.style = "float: left";
+        del_button.innerHTML = "<i class=\"fas fa-trash\"></i>";
+        del_button.onclick = function () {
+            faculty_actions.push([{'name': new_faculty_name}, 'remove']);
+            fcl_mng_lst.removeChild(li);
+            faculty_management_error.style.color = "green";
+            faculty_management_error.innerHTML = "הפקולטה הוסרה בהצלחה.";
+            delete temp_faculties_dict[new_faculty_name];
+        };
+        li.appendChild(del_button);
+        fcl_mng_lst.appendChild(li);
+        faculty_management_error.style.color = "green";
+        faculty_management_error.innerHTML = 'הפקולטה "' + new_faculty_name + '" נוספה בהצלחה.';
+        let entry = {
+            "id": "",
+            "name": new_faculty_name,
+            "image": ""
+        };
+        temp_faculties_dict[new_faculty_name] = entry;
+        document.getElementById("new_faculty_name").value = "";
+        document.getElementById("new_faculty_email").value = "";
+        document.getElementById("new_faculty_password").value = "";
+        document.getElementById("new_faculty_password_verify").value = "";
+        document.getElementById("image_file").value = "";
+    };
+
+    document.getElementById('faculty_save_button').onclick = function() {
+        for (let i = faculty_actions.length - 1; i >= 1; --i)
+            if (faculty_actions[i][1] == "remove")
+                for (let j = i-1; j>=0; j--)
+                    if (faculty_actions[j][0]["name"] == faculty_actions[i][0]["name"])
+                        faculty_actions.splice(j,1);
+        for(let i in faculty_actions) {
+            if (faculty_actions[i][1] == "add") {
+                resize_and_convert(faculty_actions[i][0]["image"], image => {
+                    let json = faculty_actions[i][0];
+                    json["image"] = image;
+                    sendRequest('post', '/api/faculty/create', json, function () {
+                    })});
+            }
+            else {
+                sendRequest('delete', 'api/faculty/delete', faculty_actions[i][0], function () {
+                });
+            }
+        }
+        shared_faculties_dict = {};
+        sendRequest('get', 'api/faculty/details_list', null, res => {
+            let faculties = JSON.parse(res);
+            for (let i in faculties) {
+                let entry = {
+                    "id": faculties[i]["_id"],
+                    "name": faculties[i]["name"],
+                    "image": faculties[i]["image"]
+                };
+                shared_faculties_dict[faculties[i]["_id"]] = entry;
+            }
+            localStorage.setItem("faculties_dict", JSON.stringify(shared_faculties_dict));
+        });
+    };
+
+    document.getElementById('fcl_img_btn').onclick = function() {
+        file.click();
+    }
 
 </script>
 </body>
