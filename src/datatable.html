@@ -32,6 +32,18 @@
               save_changes_to_local(d1.id, field, value);
           }
         };
+        function createPrefButton(text, checked){
+            let button = document.createElement('label');
+            button.className = "btn btn-outline-secondary";
+            button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> ' + text +'\n';
+            button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;";
+            if (checked){
+                button.checked = "true";
+                button.classList.add("active");
+            }
+            button.onclick = row_changer(row, "pref", text) ;
+            return button;
+        }
         let entry = get_course_entry(row.data().id);
         let has_exam = '';
         let changes = JSON.parse(localStorage.getItem(changes_root_key));
@@ -71,48 +83,62 @@
             d1["days_before"] = input.value;
             row.data(d1);
             save_changes_to_local(entry.id, "preparationTime", input.value);
-
         };
         pairs.push({text: 'ימי למידה:', elem: input, elem_is_text: false});
         var button_group = document.createElement('div');
         button_group. className = 'btn-group btn-group-toggle';
         button_group.setAttribute('data-toggle','buttons');
-        var start_button = document.createElement('label');
-        start_button.className = "btn btn-outline-secondary";
-        start_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> התחלה\n';
-        start_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem;"
-        start_button.onclick = row_changer(row, "pref", "התחלה");
-        var auto_button = document.createElement('label');
-        auto_button.className = "btn btn-outline-secondary active";
-        auto_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> אוטומטי\n';
-        auto_button.checked = "true";
-        auto_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px;"
-        auto_button.onclick = row_changer(row, "pref", "אוטומטי" );
-        var end_button = document.createElement('label');
-        end_button.className = "btn btn-outline-secondary";
-        end_button.innerHTML = '<input type="radio" name="options" id="start" autocomplete="off"> סוף\n';
-        end_button.style = "height: 20px; width: 58px; padding: 0px; font-size: 13px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem;"
-        end_button.onclick = row_changer(row, "pref", "סוף" );
+        var start_button = createPrefButton("התחלה");
+        var auto_button = createPrefButton("אוטומטי", true);
+        var end_button = createPrefButton("סוף");
+        var active_button = auto_button;
+        function changeActiveButtonTo(button) {
+           active_button.classList.remove("active");
+           active_button.checked = "false";
+           button.checked = "true";
+           button.classList.add("active");
+           active_button = button;
+        }
         if (entry["is_first"]) {
-            auto_button.className = "btn btn-outline-secondary";
-            auto_button.checked = "false";
-            end_button.className = "btn btn-outline-secondary";
-            end_button.checked = "false";
-            start_button.className = "btn btn-outline-secondary active";
-            start_button.checked = "true";
+            changeActiveButtonTo(start_button);
         }
         if (entry["is_last"]) {
-            auto_button.className = "btn btn-outline-secondary";
-            auto_button.checked = "false";
-            start_button.className = "btn btn-outline-secondary";
-            start_button.checked = "false";
-            end_button.className = "btn btn-outline-secondary active";
-            end_button.checked = "true";
+            changeActiveButtonTo(end_button);
+        }
+        if (course_changes && course_changes["pref"]) {
+            if (course_changes["pref"] == "סוף") {
+               changeActiveButtonTo(end_button);
+            } else if (course_changes["pref"] == "התחלה"){
+                changeActiveButtonTo(start_button);
+            } else {
+                changeActiveButtonTo(auto_button);
+            }
         }
         button_group.appendChild(start_button);
         button_group.appendChild(auto_button);
         button_group.appendChild(end_button);
         pairs.push({text: 'העדפת שיבוץ:', elem: button_group, elem_is_text: false});
+        function reloadLocalCourses(table1, table2){
+            table1.clear();
+            let res = localStorage.getItem("all_courses_dict");
+            let courses = JSON.parse(res);
+            console.log(courses);
+            let conflicts = {};
+            let localConflicts = localStorage.getItem("local_conflicts");
+            if (localConflicts){
+                conflicts = JSON.parse(localConflicts);
+            }
+            if (!conflicts[entry.id]){
+                conflicts[entry.id] = {};
+            }
+            for (let i in courses) {
+                if (conflicts[entry.id][courses[i].id]){
+                    table2.row.add([courses[i]]).draw();
+                } else {
+                    table1.row.add(courses[i]).draw();
+                }
+            }
+        }
         var conbutton = document.createElement("button");
         conbutton.type = "button";
         conbutton.className = "btn btn-outline-secondary btn-sm";
@@ -123,7 +149,9 @@
             title.innerHTML = 'ניהול קשרים עבור הקורס "' + entry["name"] + '"';
             var table1 = $("#all_courses").DataTable();
             var table2 = $("#conflicting_courses").DataTable();
-            table2.clear().draw();
+            reloadLocalCourses(table1, table2);
+            table1.draw();
+            table2.draw();
             document.getElementById("conflict_error").innerHTML = "";
             $('#conflicts_modal').modal();
         };

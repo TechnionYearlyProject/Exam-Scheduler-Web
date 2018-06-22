@@ -473,6 +473,7 @@
         $('#search_box_2').keyup(function(){
             table2.search($(this).val()).draw() ;
         });
+
         $('#conflict_add').click(function() {
             var count1 = table1.rows( { selected: true } ).count();
             var error = document.getElementById("conflict_error");
@@ -483,10 +484,11 @@
             }
             error.innerHTML = "";
             var selected_row = table1.row('.selected');
+            console.log(selected_row.data());
             table2.row.add(selected_row.data()).draw();
             selected_row.remove().draw();
-
         });
+
         $('#conflict_remove').click(function() {
             var count2 = table2.rows( { selected: true } ).count();
             var error = document.getElementById("conflict_error");

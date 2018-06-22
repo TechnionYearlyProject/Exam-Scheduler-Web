@@ -8,7 +8,6 @@ function save_changes_to_local(id, field, value) {
     }
     changes[id][field] = value;
     localStorage.setItem(changes_root_key, JSON.stringify(changes));
-    console.log(localStorage);
 };
 function popup_modal(type, text, func) {
     var title = document.getElementById("alert_title");
