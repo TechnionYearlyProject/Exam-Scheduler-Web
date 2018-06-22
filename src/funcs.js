@@ -43,21 +43,25 @@ function popup_modal(type, text, func) {
 }
 
 
+
+
 function popover_comment(elem_id, semester, moed, course_id) {
     var test = document.getElementById(elem_id);
     test.setAttribute("data-toggle", "popover");
     var input = document.getElementById("popover_input");
-    var button = document.getElementById("popover_button");
-    var popover = document.getElementById('popover_comment');
+    var popover = document.createElement("div");
+    popover.id = "popover_" + course_id;
+    popover.innerHTML = '    <div class = "row">\n' +
+        '        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input_' + course_id + '" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>\n' +
+        '        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button_' + course_id + '" class="btn btn-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>\n' +
+        '    </div>';
     $('#' + elem_id).popover({
         trigger: 'focus',
         placement: 'right',
         html:true,
         content: popover
     });
-    button.onclick = function() {
-        console.log([input.value, semester, moed, course_id]);
-    };
+
 }
 
 
@@ -206,6 +210,32 @@ function make_calendar(start, end, moed) {
                 popover_comment(test.id, localStorage.getItem('semester_name'), moed.getAttribute("moed"), entry["id"]);
                 test.ondblclick = function () {
                     $('#' + test.id).popover("show");
+                    var button = document.getElementById("popover_button_"+entry["id"]);
+                    var input = document.getElementById("popover_input_"+entry["id"]);
+                    input.value = "";
+                    button.onclick = function() {
+                        var event = new CustomEvent(
+                            "send_msg",
+                            {
+                                detail: {
+                                    message: "Hello World!",
+                                    time: new Date(),
+                                },
+                                bubbles: true,
+                                cancelable: true
+                            }
+                        );
+                        localStorage.setItem("popover_data",JSON.stringify({
+                            "msg" : input.value,
+                            "semester" : localStorage.getItem('semester_name'),
+                            "moed" : moed.getAttribute("moed"),
+                            "course_id" : entry["id"]
+                        }));
+                        document.getElementById("popover_input_"+entry["id"]).dispatchEvent(event);
+
+                    };
+
+
                 }
             };
             day.ondragover = function (ev) {

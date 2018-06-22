@@ -70,12 +70,7 @@
         <div id="moed_b" moed="b"></div>
     </div>
 </div>
-<div id="popover_comment">
-    <div class = "row">
-        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>
-        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button" class="btn btn-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>
-    </div>
-</div>
+
 <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -375,7 +370,7 @@
         });
     });
     $('body').on('click', function (e) {
-        if (e.target.className == "popover-body" || e.target.id == "popover_input" || e.target.id == "popover_button")
+        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input"))
             return;
         $('[data-toggle="popover"]').each(function () {
             $(this).popover('hide');
@@ -402,6 +397,19 @@
             $("[id^='exam_for_']").remove();
         })
     });
+
+
+    //rafa its here
+
+    document.addEventListener("send_msg", send_msg_handler , false);
+    function send_msg_handler(e) {
+        var json = JSON.parse(localStorage.getItem("popover_data"));
+        console.log([json["msg"], json["semester"], json["moed"], json["course_id"]]);
+    }
+
+    //
+
+
     function initSched() {
         var top = document.getElementById('sem_picker');
         document.getElementById('semester_button').innerHTML = top.innerHTML;
