@@ -50,6 +50,7 @@
     let upload_alert = document.getElementById('upload_alert');
     let local_course_changes = {};
     let current_semester = '';
+    let all_local_courses = [];
     document.getElementById('cloud_upload_button').onclick = function() {
         courses_switch.checked = false;
         moed_a_switch.checked = false;
@@ -60,6 +61,7 @@
     document.getElementById('upload_save').onclick = function () {
         local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
         current_semester = localStorage.getItem('semester_name');
+        all_local_courses = JSON.parse(localStorage.getItem('courses_dict'));
         for (var course_id in local_course_changes) {
             if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
                 sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
@@ -69,26 +71,32 @@
                 sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'date': local_course_changes[course_id]['b_constraint']}, function (out) {
                 });
             }
-            if (courses_switch.checked) {
-                var entry = {};
-                if (local_course_changes[course_id]['preperationTime'] != undefined)
-                    entry["days_before"] = local_course_changes[course_id]['preperationTime'];
-                if (local_course_changes[course_id]['has_exam'] != undefined)
-                    entry["has_exam"] = local_course_changes[course_id]['has_exam'];
-                if (local_course_changes[course_id]['pref'] != undefined) {
-                    entry["is_first"] = false;
-                    entry["is_last"] = false;
-                    if (local_course_changes[course_id]['pref'] == "סוף")
-                        entry["is_last"] = true;
-                    if (local_course_changes[course_id]['pref'] == "התחלה")
-                        entry["is_first"] = true;
-                }
-                if (entry != {}) {
-                    console.log(JSON.stringify(entry));
-                    sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/update', JSON.stringify(entry), function (out) {
-                        alert("post_update");
-                    });
-                }
+            if ((courses_switch.checked) && ((local_course_changes[course_id]['preperationTime'] != undefined) || (local_course_changes[course_id]['has_exam'] != undefined) || (local_course_changes[course_id]['pref'] != undefined))) {
+              let entry = {}
+              for (let i in all_local_courses) {
+                  if (all_local_courses[i]['id'] == course_id) {
+                      entry = all_local_courses[i];
+                      break;
+                  }
+              }
+              entry['credit_point'] = entry['credit_points'];
+              delete entry['credit_points'];
+              if (local_course_changes[course_id]['preperationTime'] != undefined)
+                  entry["days_before"] = local_course_changes[course_id]['preperationTime'];
+              if (local_course_changes[course_id]['has_exam'] != undefined)
+                  entry["has_exam"] = local_course_changes[course_id]['has_exam'];
+              if (local_course_changes[course_id]['pref'] != undefined) {
+                  entry["is_first"] = false;
+                  entry["is_last"] = false;
+                  if (local_course_changes[course_id]['pref'] == "סוף")
+                      entry["is_last"] = true;
+                  if (local_course_changes[course_id]['pref'] == "התחלה")
+                      entry["is_first"] = true;
+              }
+              console.log(JSON.stringify(entry));
+              sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/update', JSON.stringify(entry), function (out) {
+                  alert("post_update");
+              });
             }
         }
         upload_alert.style.color = "green";
