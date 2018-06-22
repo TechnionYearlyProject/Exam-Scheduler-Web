@@ -53,30 +53,8 @@
       </li>
     </ul>
   </nav>
-  <!--<div id="message_modal" class="modal right fade" role="dialog" tabindex="-1">-->
-    <!--<div class="modal-dialog modal-dialog-centered" role="document">-->
-      <!--<div class="modal-content">-->
-        <!--<div class="modal-header">-->
-          <!--<h5 class="modal-title">הודעות</h5>-->
-        <!--</div>-->
-        <!--<div class="modal-body">-->
-          <!--<div id="accordion" role="tablist">-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
   <script type="module">
       import {sendRequest} from "./js/request";
-      // let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      // let mine = ["שלום גלית החמוד. דודה שלך מוסרת דש. אשמח היפגש ולדון","message2","message3"];
-      // for (let i in mine) {
-      //     let li = document.createElement('li');
-      //     li.className = "list-group-item";
-      //     li.innerHTML = mine[i];
-      //     li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-      //     msgs_cntr_lst.appendChild(li);
-      // }
       document.getElementById('messages_button').onclick = function (e) {
           if (this.className == "btn btn-danger btn-md dropdown-toggle")
               this.className = "btn btn-secondary btn-md dropdown-toggle"
@@ -96,96 +74,6 @@
               }});
       };
 
-    // function formatDate(string) {
-    //   let date = new Date(string);
-    //   return date.getDay() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-    // }
-    //
-    // function formatDateTime(string) {
-    //   let date = new Date(string);
-    //   return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDay() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-    // }
-    //
-    // function sendMessage(event) {
-    //   let text = document.getElementById(event.data.text_area).value;
-    //   if (text.localeCompare('')) {
-    //     let json = {
-    //       course: event.data.course_id,
-    //       message: text,
-    //       moed: event.data.moed
-    //     };
-    //     let route = '/api/' + event.data.year + '-' + event.data.sem + '/message/send';
-    //     sendRequest('post', route, json, () => {
-    //       reload_message_list();
-    //       $('#message_modal').modal('hide');
-    //       document.getElementById(event.data.text_area).value = '';
-    //     });
-    //   }
-    // }
-
-    function reload_message_list() {
-      // let accordion = document.getElementById('accordion');
-      // while (accordion.firstChild) {
-      //   accordion.removeChild(accordion.firstChild);
-      // }
-      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      sendRequest('get', '/api/message/list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-          let li = document.createElement('li');
-          li.className = "list-group-item";
-          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-
-          let id = document.createElement('p');
-          id.innerHTML = data[i].course.id;
-          li.appendChild(id);
-
-          let course = document.createElement('p');
-          course.innerHTML = data[i].course.name;
-          li.appendChild(course);
-
-          let year = document.createElement('p');
-          year.innerHTML = data[i].semester.year;
-          li.appendChild(year);
-
-          let semester = document.createElement('p');
-          semester.innerHTML = data[i].semester.semester;
-          li.appendChild(semester);
-
-          let schedule = document.createElement('p');
-          schedule.innerHTML = data[i].schedule;
-          li.appendChild(schedule);
-
-          let moed = document.createElement('p');
-          moed.innerHTML = data[i].moed;
-          li.appendChild(moed);
-
-          let sender = document.createElement('p');
-          sender.innerHTML = data[i].sender.name;
-          li.appendChild(sender);
-
-          let date = document.createElement('p');
-          date.innerHTML = data[i].date;
-          li.appendChild(date);
-
-          let text = document.createElement('p');
-          text.innerHTML = data[i].text;
-          li.appendChild(text);
-
-          let read = document.createElement('p');
-          text.innerHTML = data[i].read;
-          li.appendChild(read);
-
-          msgs_cntr_lst.appendChild(li);
-        }
-      });
-    }
-
-    $(document).ready(reload_message_list);
-
-    // $('#message_button').click(() => {
-    //   $('#message_modal').modal('show');
-    // });
 
       var name = localStorage.getItem('faculty_name');
       if (name == "Administrator") {
