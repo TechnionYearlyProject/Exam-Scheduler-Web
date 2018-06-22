@@ -169,8 +169,12 @@
           li.appendChild(date);
 
           let text = document.createElement('p');
-          date.innerHTML = data[i].text;
-          li.appendChild(date);
+          text.innerHTML = data[i].text;
+          li.appendChild(text);
+
+          let read = document.createElement('p');
+          text.innerHTML = data[i].read;
+          li.appendChild(read);
 
           msgs_cntr_lst.appendChild(li);
         }

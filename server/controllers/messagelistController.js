@@ -3,20 +3,32 @@ const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
 const Schedule = require('../models/schedule').model;
 
-exports.messageList = function (req, res, next) {
-  MessageList.find({
+exports.messageList = async function (req, res, next) {
+  let messages = await MessageList.find({
     receiver: req.faculty_id
   })
   .populate('sender', 'name')
   .populate('receiver', 'name')
   .populate('course', 'name id')
   .populate('semester', 'year semester')
-  .then(message_lists => {
-    return res.json(message_lists);
+  .then(messages => {
+    return messages;
   })
   .catch(err => {
     next(err);
+  });
+
+  MessageList.update({
+    receiver: req.faculty_id
+  }, {
+    read: true
   })
+  .then(messages => {
+    return res.json(messages);
+  })
+  .catch(err => {
+    next(err);
+  });
 };
 
 exports.sendMessage = async function (req, res, next) {
