@@ -42,6 +42,7 @@ exports.course_create = async function (req, res, next) {
   .catch(err => {
     next(err);
   });
+
   const faculty = await Faculty.find({name: req.body.faculty}).then(f=>{
       if(!f){
           return res.status(404).send('Faculty not found.');
@@ -83,7 +84,7 @@ exports.course_create = async function (req, res, next) {
   Course.findOne({
     id: req.body.id,
     semester: semester._id,
-    faculty: faculty._id
+    faculty: faculty[0]._id
   })
   .then(exists => {
     if (exists) {
@@ -92,7 +93,7 @@ exports.course_create = async function (req, res, next) {
     return Course.create({
       id: req.body.id,
       name: req.body.name,
-      faculty: faculty._id,
+      faculty: faculty[0]._id,
       semester: semester._id,
       credit_point: req.body.credit_point,
       registrations: programs,
