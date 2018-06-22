@@ -144,7 +144,7 @@
         }
         let values = str.split("/");
         let day =  parseInt(values[0]);
-        let month = parseInt(values[1]);
+        let month = parseInt(values[1])-1;
         let year = parseInt(values[2]);
         let date = new Date;
         date.setTime(0);
