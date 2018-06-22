@@ -42,13 +42,20 @@ exports.course_create = async function (req, res, next) {
   .catch(err => {
     next(err);
   });
-
+  const faculty = await Faculty.find({name: req.body.faculty}).then(f=>{
+      if(!f){
+          return res.status(404).send('Faculty not found.');
+      }
+      return f;
+  }).catch(err=>{
+     next(err);
+  });
   if(req.body.id.length !== 6){
       return res.status(400).send('Course ID must be 6 digits.');
   }
 
   const faculty_programs = await StudyProgram.find({
-        faculty: req.faculty_id
+        faculty: req.body.faculty
     }).then(programs => {
         return programs;
     }).catch(err => {
@@ -76,7 +83,7 @@ exports.course_create = async function (req, res, next) {
   Course.findOne({
     id: req.body.id,
     semester: semester._id,
-    faculty: req.faculty_id
+    faculty: faculty._id
   })
   .then(exists => {
     if (exists) {
@@ -85,7 +92,7 @@ exports.course_create = async function (req, res, next) {
     return Course.create({
       id: req.body.id,
       name: req.body.name,
-      faculty: req.faculty_id,
+      faculty: faculty._id,
       semester: semester._id,
       credit_point: req.body.credit_point,
       registrations: programs,
@@ -100,7 +107,7 @@ exports.course_create = async function (req, res, next) {
   });
 };
 
-exports.set_conflicts = async function(req,res,err){
+exports.set_conflicts = async function(req,res,next){
     logging.db('set course conflicts ' + req.params.id + '.');
     const semester = await Semester.findOne({
         year: req.params.year,
@@ -152,27 +159,27 @@ exports.set_conflicts = async function(req,res,err){
 };
 
 exports.faculty_course_update = function (req, res, next) {
-  Semester.findOne({
-    year: req.params.year,
-    semester: req.params.semester
-  })
-  .then(semester => {
-    if (!semester) {
-      return res.status(404).send('Semester not found.');
-    }
-    return Course.findOneAndUpdate({
-      id: req.params.courseID,
-      semester: semester._id,
-      faculty: req.faculty_id
-    },
-    req.body);
-  })
-  .then(() => {
-    return res.end();
-  })
-  .catch(err => {
-    next(err);
-  });
+    Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    })
+        .then(semester => {
+            if (!semester) {
+                return res.status(404).send('Semester not found.');
+            }
+        }).catch((err) => {
+        next(err);
+    });
+    var conditions = {
+        id: req.params.courseID,
+        semester: semester._id,
+        faculty: req.faculty_id
+    };
+    return Course.findOneAndUpdate(conditions, req.body).then(() => {
+        return res.end();
+    }).catch(err => {
+        next(err);
+    });
 };
 
 /*
