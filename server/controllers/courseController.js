@@ -143,13 +143,7 @@ exports.set_conflicts = async function(req,res,err){
     }
 
     await Course.update({semester: semester._id, id:req.params.id},
-        {$set: {conflicts: conflicts}}, function (error, success) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(success);
-            }
-        }
+        {$set: {conflicts: conflicts}}
     ).then(() => {
         return res.end();
     }).catch(err => {

@@ -1,6 +1,7 @@
 process.env.NODE_ENV = 'test';
 const app = require('../app');
 const db = require('../database/database');
+const Semester = require('../server/models/semester').model;
 const chai = require('chai');
 const chai_http = require('chai-http');
 chai.use(chai_http);
@@ -963,11 +964,11 @@ const CS = {
 };
 
 describe('Semester', ()=> {
-    before(async function () {
+    beforeEach(async function () {
         this.enableTimeouts(false);
         await db.open();
     });
-    after(async () => {
+    afterEach(async () => {
         await db.close()
     });
     it('Admin can create new semester', done => {

@@ -5,7 +5,7 @@ const Faculty = require('../models/faculty').model;
 const logging = require('../../logging');
 
 exports.login = function (req, res, next) {
-  logging.db('Login: Fetch "' + req.body.name + '" user data.');
+  logging.db('Login: Fetch ' + req.body.name + ' user data.');
   const params = {
     name: req.body.name
   };
