@@ -2,7 +2,7 @@ const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
 const Faculty = require('../models/faculty').model;
 const logging = require('../../logging');
-// const StudyProgram = require('../models/studyprogram').model;
+const StudyProgram = require('../models/studyprogram').model;
 
 exports.faculty_course_list = function(req,res,next){
   Semester.findOne({
@@ -47,41 +47,31 @@ exports.course_create = async function (req, res, next) {
       return res.status(400).send('Course ID must be 6 digits.');
   }
 
-  const faculty = await Faculty.findOne({
-    name: req.body.faculty
-  })
-  .then(faculty => {
-    return faculty;
-  })
-  .catch(err => {
-    next(err);
-  });
-
-  // const faculty_programs = await StudyProgram.find({
-  //       faculty: req.faculty_id
-  //   }).then(programs => {
-  //       return programs;
-  //   }).catch(err => {
-  //       next(err);
-  //   });
-  // var i;
-  // var programs = [];
-  //   for(i =0;i<req.body.programs.length;i++){
-  //       var flag = false;
-  //       for(let j in faculty_programs){
-  //       if(faculty_programs[j].name == req.body.programs[i].study_program){
-  //         flag = true;
-  //         var p = {
-  //             "study_program":faculty_programs[j]._id,
-  //             "semester":req.body.programs[i].semester
-  //         };
-  //         programs.push(p);
-  //       }
-  //     }
-  //     if(flag === false ){
-  //       return res.status(400).send('Study program does not exist.');
-  //     }
-  //   }
+  const faculty_programs = await StudyProgram.find({
+        faculty: req.faculty_id
+    }).then(programs => {
+        return programs;
+    }).catch(err => {
+        next(err);
+    });
+  var i;
+  var programs = [];
+    for(i =0;i<req.body.programs.length;i++){
+        var flag = false;
+        for(let j in faculty_programs){
+        if(faculty_programs[j].name === req.body.programs[i].study_program){
+          flag = true;
+          var p = {
+              "study_program":faculty_programs[j]._id,
+              "semester":req.body.programs[i].semester
+          };
+          programs.push(p);
+        }
+      }
+      if(flag === false ){
+        return res.status(400).send('Study program does not exist.');
+      }
+    }
 
   Course.findOne({
     id: req.body.id,
@@ -95,10 +85,11 @@ exports.course_create = async function (req, res, next) {
     return Course.create({
       id: req.body.id,
       name: req.body.name,
-      faculty: faculty._id,
+      faculty: req.faculty_id,
       semester: semester._id,
       credit_point: req.body.credit_point,
-      // registrations: programs
+      registrations: programs,
+        days_before: req.body.days_before
     });
   })
   .then(() => {
@@ -107,6 +98,63 @@ exports.course_create = async function (req, res, next) {
   .catch(err => {
     next(err);
   });
+};
+
+exports.set_conflicts = async function(req,res,err){
+    logging.db('set course conflicts ' + req.params.id + '.');
+    const semester = await Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    }).then(semester => {
+            if (!semester) {
+                return res.status(404).send('Semester not found.');
+            }
+            return semester;
+        })
+        .catch(err => {
+            next(err);
+        });
+
+
+    const course_conflicts = await Course.find({
+        id: req.conflicts
+    }).then(courses => {
+        return courses;
+    }).catch(err => {
+        next(err);
+    });
+
+    var conflicts = [];
+    var i;
+    for(i =0;i<req.body.conflicts.length;i++){
+        var flag = false;
+        for(let j in course_conflicts){
+            if(course_conflicts[j].id === req.body.conflicts[i].id){
+                flag = true;
+                var p = {
+                    "course":course_conflicts[j]._id
+                };
+                conflicts.push(p);
+            }
+        }
+        if(flag === false ){
+            return res.status(400).send('Course does not exist.');
+        }
+    }
+
+    await Course.update({semester: semester._id, id:req.params.id},
+        {$set: {conflicts: conflicts}}, function (error, success) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(success);
+            }
+        }
+    ).then(() => {
+        return res.end();
+    }).catch(err => {
+        next(err);
+    });
 };
 
 exports.faculty_course_update = function (req, res, next) {

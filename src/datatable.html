@@ -24,6 +24,7 @@
 <script type="module">
     import { sendRequest } from './js/request';
     function course_expand (row) {
+        console.log(row);
         let row_changer = function (row, field, value) {
           return function(){
               var d1 = row.data();

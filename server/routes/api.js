@@ -36,7 +36,6 @@ router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);//crea
 router.patch(sem_regex + '/course/:courseID/schedule_a',schedule_controller.schedule_moed_a);//assign moed_a
 router.patch(sem_regex + '/course/:courseID/schedule_b',schedule_controller.schedule_moed_b);//assign moed_b
 router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//clear schedule
-// router.get(sem_regex + '/schedule_all', schedule_controller.schedule_list);
 
 router.get('/semester/list', semester_controller.semester_list);
 
@@ -50,11 +49,11 @@ router.delete(sem_regex + '/message/remove', message_list_controller.removeMessa
 router.put('/update_email', faculty_controller.faculty_update_mail);
 router.put('/update_password', faculty_controller.faculty_update_password);
 
+router.post(sem_regex + '/course/create',course_controller.course_create);
+
 // Following routes require admin user
 
 router.all('*', auth.verify_admin);
-
-router.post(sem_regex + '/course/create',course_controller.course_create);
 router.delete(sem_regex + '/course/:courseID/delete', course_controller.faculty_course_delete);
 
 router.post('/program/create', study_program_controller.study_program_create);

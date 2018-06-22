@@ -91,19 +91,15 @@ CourseSchema.pre('remove', function (next) {
     semester: this.semester
   }, {
     $pull: {
-      exams_a: {
-        course: this._id
-      }
-    }
-  }).exec();
-  Schedule.update({
-    faculty: this.faculty,
-    semester: this.semester
-  }, {
-    $pull: {
-      exams_b: {
-        course: this._id
-      }
+      $or: [{
+        exams_a: {
+          course: this._id
+        }
+      }, {
+        exams_b: {
+          course: this._id
+        }
+      }]
     }
   }).exec();
   MessageList.remove({
