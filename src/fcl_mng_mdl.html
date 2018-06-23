@@ -68,7 +68,7 @@
             });
         } else {
             sendRequest('delete', 'api/faculty/delete', faculty_actions[index][0], function () {
-                 exectute_faculy_actions(index + 1);
+                exectute_faculy_actions(index + 1);
             });
         }
         return;
@@ -143,7 +143,7 @@
                     fcl_mng_lst.removeChild(li);
                     faculty_management_error.style.color = "green";
                     faculty_management_error.innerHTML = "הסמסטר הוסר בהצלחה.";
-                    delete temp_faculties_dict[new_faculty_name];
+                    delete temp_faculties_dict[faculties[i].name];
                 };
                 li.appendChild(del_button);
                 fcl_mng_lst.appendChild(li);
