@@ -41,9 +41,13 @@
     let moed_b_conflicts_switch = document.getElementById('moed_b_conflicts_switch');
     let download_alert = document.getElementById('download_alert');
     let current_semester = '';
-    let all_local_courses = [];
+    let schedule_a = {};
+    let schedule_b = {};
     let faculty_name = '';
     let faculty_id = '';
+    let faculties_dict = [];
+    let translation_map_courses = {};
+
     sendRequest('GET', '/api/faculty/name', null, function (res) {
         let json = JSON.parse(res);
         faculty_name = json['name'];
@@ -60,51 +64,114 @@
     document.getElementById('download_save').onclick = function () {
         download_alert.style.color = "green";
         download_alert.innerHTML = "המידע יורד מהשרת.";
-        // local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
-        // current_semester = localStorage.getItem('semester_name');
-        // all_local_courses = JSON.parse(localStorage.getItem('courses_dict'));
-        // for (var course_id in local_course_changes) {
-        //
-        //     if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
-        //         sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
-        //         });
-        //     }
-        //     if (moed_b_switch.checked && local_course_changes[course_id]['b_constraint'] != undefined) {
-        //         sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'date': local_course_changes[course_id]['b_constraint']}, function (out) {
-        //         });
-        //     }
-        //     if ((courses_switch.checked) && ((local_course_changes[course_id]['preparationTime'] != undefined) || (local_course_changes[course_id]['has_exam'] != undefined) || (local_course_changes[course_id]['pref'] != undefined))) {
-        //       let current_entry = {}
-        //       for (let i in all_local_courses) {
-        //           if (all_local_courses[i]['id'] == course_id) {
-        //               current_entry = all_local_courses[i];
-        //               break;
-        //           }
-        //       }
-        //       let entry = {'days_before': parseInt(current_entry['days_before']),
-        //           'has_exam': current_entry['has_exam'].toString(),
-        //           'is_first': current_entry['is_first'].toString(),
-        //           'is_last': current_entry['is_last'].toString()
-        //       };
-        //       if (local_course_changes[course_id]['preparationTime'] != undefined)
-        //           entry["days_before"] = parseInt(local_course_changes[course_id]['preparationTime']);
-        //       if (local_course_changes[course_id]['has_exam'] != undefined)
-        //           entry["has_exam"] = local_course_changes[course_id]['has_exam'].toString();
-        //       if (local_course_changes[course_id]['pref'] != undefined) {
-        //           entry["is_first"] = "false";
-        //           entry["is_last"] = "false";
-        //           if (local_course_changes[course_id]['pref'] == "סוף")
-        //               entry["is_last"] = "true";
-        //           if (local_course_changes[course_id]['pref'] == "התחלה")
-        //               entry["is_first"] = "true";
-        //       }
-        //       sendRequest('PUT', '/api/' + current_semester + '/course/' + course_id + '/update', entry, function (out) {
-        //       });
-        //     }
-        // }
-        // setTimeout(function () {
-        //     $('#upload_modal').modal('hide');
-        // }, 2000);
+        update_translation();
+        console.log(translation_map_courses);
+        faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+        current_semester = localStorage.getItem('semester_name');
+        schedule_a = {};
+        schedule_b = {};
+        let dict_len = Object.keys(faculties_dict).length;
+        let j = 0;
+        for (let faculty_id in faculties_dict) {
+            j = j + 1;
+            if (j < dict_len) {
+                sendRequest('POST', '/api/' + current_semester + '/schedule', {'faculty': faculty_id}, function (res) {
+                    let exams_a = JSON.parse(res)['exams_a'];
+                    if (exams_a == undefined) {
+                        exams_a = [];
+                    }
+                    for (let i in exams_a) {
+                        let date = new Date(exams_a[i]['date']);
+                        let course = exams_a[i]['course'];
+                        if (schedule_a[date] == undefined) {
+                            schedule_a[date] = [];
+                        }
+                        if (schedule_a[date].indexOf(course) <= -1) {
+                            schedule_a[date].push(course);
+                        }
+                    }
+                    let exams_b = JSON.parse(res)['exams_b'];
+                    if (exams_b == undefined) {
+                        exams_b = [];
+                    }
+                    for (let i in exams_b) {
+                        let date = new Date(exams_b[i]['date']);
+                        let course = exams_b[i]['course'];
+                        if (schedule_b[date] == undefined) {
+                            schedule_b[date] = [];
+                        }
+                        if (schedule_b[date].indexOf(course) <= -1) {
+                            schedule_b[date].push(course);
+                        }
+                    }
+                });
+            } else {
+                sendRequest('POST', '/api/' + current_semester + '/schedule', {'faculty': faculty_id}, function (res) {
+                    let exams_a = JSON.parse(res)['exams_a'];
+                    if (exams_a == undefined) {
+                        exams_a = [];
+                    }
+                    for (let i in exams_a) {
+                        let date = new Date(exams_a[i]['date']);
+                        let course = exams_a[i]['course'];
+                        if (schedule_a[date] == undefined) {
+                            schedule_a[date] = [];
+                        }
+                        if (schedule_a[date].indexOf(course) <= -1) {
+                            schedule_a[date].push(course);
+                        }
+                    }
+                    let exams_b = JSON.parse(res)['exams_b'];
+                    if (exams_b == undefined) {
+                        exams_b = [];
+                    }
+                    for (let i in exams_b) {
+                        let date = new Date(exams_b[i]['date']);
+                        let course = exams_b[i]['course'];
+                        if (schedule_b[date] == undefined) {
+                            schedule_b[date] = [];
+                        }
+                        if (schedule_b[date].indexOf(course) <= -1) {
+                            schedule_b[date].push(course);
+                        }
+                    }
+
+                    localStorage.setItem('schedule_a', JSON.stringify(schedule_a));
+                    localStorage.setItem('schedule_b', JSON.stringify(schedule_b));
+                    if (moed_a_conflicts_switch.checked) {
+                        let map_a = JSON.parse(localStorage.getItem('map_a'));
+                        for (let curr_date in map_a) {
+                            let add_to = document.getElementById(map_a[curr_date]);
+                            if (schedule_a[curr_date] != undefined) {
+                                for (let h in schedule_a[curr_date]) {
+                                    let entry = translation_map_courses[schedule_a[curr_date][h]];
+                                    console.log(entry);
+                                    //create_test(add_to, "div", schedule_a[curr_date][h], "123456", "test", "moed_a");
+
+                                }
+                            }
+
+
+
+                        }
+
+
+                    }
+
+                });
+            }
+        }
+
+    };
+
+    function update_translation() {
+        let courses = JSON.parse(localStorage.getItem("all_courses_dict"));
+        console.log(courses);
+        translation_map_courses = {};
+        for(let i in courses) {
+            translation_map_courses[courses[i]["_id"]] = courses[i];
+        }
+        console.log(translation_map_courses);
     }
 
 </script>

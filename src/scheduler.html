@@ -182,8 +182,8 @@
 
 <script type="module">
     import { sendRequest } from './js/request';
-    var map_a = {};
-    var map_b = {};
+    let map_a = {};
+    let map_b = {};
     var courses_dict = [];
     let all_semester_dict = [];
     let faculties_dict = {};
@@ -241,7 +241,9 @@
                 localStorage.setItem('end_b', a.getAttribute('end_b'));
                 localStorage.setItem('semester_name', a.getAttribute('semester_name'));
                 map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
+                localStorage.setItem('map_a', JSON.stringify(map_a));
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
+                localStorage.setItem('map_b', JSON.stringify(map_b));
                 load_courses_table();
                 load_all_courses_table();
             };
@@ -255,7 +257,9 @@
         localStorage.setItem('end_b', top.getAttribute('end_b'));
         localStorage.setItem('semester_name', top.getAttribute('semester_name'));
         map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
+        localStorage.setItem('map_a', JSON.stringify(map_a));
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
+        localStorage.setItem('map_b', JSON.stringify(map_b));
         load_courses_table();
         load_all_courses_table();
     });

@@ -139,7 +139,7 @@ function make_calendar(start, end, moed) {
         '      <div class="col" style="background-color: #CFD8DC; border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ה\'</div>\n' +
         '      <div class="col" style="background-color: #CFD8DC; border: 1px solid #CFD8DC; border-right: 0px; padding-right: 5px">ו\'</div>\n' +
         '    </div>';
-    var map = new Map();
+    let map = {};
     if (start.getDay() == 6) {
         start.setDate(start.getDate() + 1);
     }
@@ -170,7 +170,7 @@ function make_calendar(start, end, moed) {
             var id = "moed_" + moed + "_day_" + counter;
             counter += 1;
             day.id = id;
-            map.set(current, id);
+            map[current] = id;
             day.setAttribute("date", current);
             day.onmouseover = function () {
                 this.childNodes[1].style.visibility = "visible";
