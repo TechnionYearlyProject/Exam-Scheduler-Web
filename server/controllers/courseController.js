@@ -134,7 +134,6 @@ exports.set_conflicts = async function(req,res,err) {
     }).catch(err => {
         next(err);
     });
-    console.log(course_conflicts);
     var conflicts = [];
     for (let i in course_conflicts) {
         var p = {
@@ -142,7 +141,6 @@ exports.set_conflicts = async function(req,res,err) {
         };
         conflicts.push(p);
     }
-    console.log(conflicts)
 
     await Course.update({semester: semester._id, id: req.params.id},
         {$set: {conflicts: conflicts}}

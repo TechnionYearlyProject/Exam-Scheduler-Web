@@ -222,7 +222,16 @@
                };
                $('#conflict_remove').click(removeConflict(entry.id));
                $('#save_local_conflicts').click(function () {
+                   var course_id = row.data().id;
+                   var params = [];
+                   for (var i in conflicts[course_id])
+                       params.push(i);
                    localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
+                   console.log(params);
+                   sendRequest('PATCH', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', params, function (res) {
+                       console.log(123);
+                   });
+
                });
                let discardChanges = function (id) {
                    return function () {
