@@ -24,7 +24,7 @@
           ענן
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
-          <a class="dropdown-item" href="#" id="download_button">הורדה</a>
+          <a class="dropdown-item" href="#" id="cloud_download_button">הורדה</a>
           <a class="dropdown-item" href="#" id="cloud_upload_button">העלאה</a>
         </div>
       </div>
@@ -122,13 +122,13 @@
           popup_modal("CONF", 'האם אתה בטוח שברצונך לנקות את התוכנית?', clean);
       };
 
-      var download_button = document.getElementById("download_button");
-      download_button.onclick = function(){
-          function download() {
-              alert("download_constraints");
-          }
-          popup_modal("CONF", 'האם אתה בטוח שברצונך להוריד התנגשויות?', download);
-      };
+      // var download_button = document.getElementById("download_button");
+      // download_button.onclick = function(){
+      //     function download() {
+      //         alert("download_constraints");
+      //     }
+      //     popup_modal("CONF", 'האם אתה בטוח שברצונך להוריד התנגשויות?', download);
+      // };
 
 
       // var upload_button = document.getElementById("upload_button");
