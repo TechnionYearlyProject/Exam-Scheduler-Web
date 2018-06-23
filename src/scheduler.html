@@ -185,7 +185,7 @@
     var map_b = {};
     var courses_dict = [];
     let all_semester_dict = [];
-    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    let faculties_dict = {};
     let all_courses_dict = [];
     let temp_all_courses = [];
     sendRequest('GET', '/api/semester/list', null, function (res) {
@@ -236,7 +236,20 @@
         load_courses_table();
         load_all_courses_table();
     });
-
+    sendRequest('GET', '/api/faculty/list', null, function (res) {
+        faculties_dict = {};
+        var faculties = JSON.parse(res);
+        for (var i in faculties) {
+            let entry = {
+                "id": faculties[i]["_id"],
+                "name": faculties[i]["name"],
+                "image": faculties[i]["image"],
+                "email": faculties[i]["email"],
+            };
+            faculties_dict[faculties[i]["_id"]] = entry;
+        }
+        localStorage.setItem('faculties_dict',JSON.stringify(faculties_dict));
+    });
 
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
@@ -301,7 +314,7 @@
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
     $('#moed_b').load('moed_b.html');
-    $('#upload_loader').load('upload_modal.html');
+    //$('#upload_loader').load('upload_modal.html');
     $('#courses').load('datatable.html', function () {
         $('#scheduler_function_caller').click(function(){
             $("[id^='exam_for_']").remove();
