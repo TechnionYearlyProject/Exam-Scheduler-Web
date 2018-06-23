@@ -151,7 +151,7 @@ function make_calendar(start, end, moed) {
         cal_end.setTime(end.getTime() + (6 - end.getDay()) * 86400000);
     var row = document.createElement("div");
     row.className = "row";
-    row.style = "min-height: 113px";
+    row.style = "min-height: 110px";
     var counter = 0;
     for (current = cal_start; current <= cal_end; current.setDate(current.getDate() + 1)) {
         if (current.getDay() == 6) {
@@ -291,7 +291,7 @@ function make_calendar(start, end, moed) {
             schedule.appendChild(row);
             row = document.createElement("div");
             row.className = "row";
-            row.style = "min-height: 113px";
+            row.style = "min-height: 110px";
         }
     }
     return map;

@@ -5,18 +5,20 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<input type="text" id="search_box" style="height: 30px; width: 439px; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
-<table id="example" class="mdl-data-table" style="max-width:420px; min-width: 420px; table-layout: fixed">
-    <thead style="padding-left: 0px;">
-    <tr>
-        <th></th>
-        <th style="padding-left: 0px">מספר</th>
-        <th>שם הקורס</th>
-        <th style="padding-left: 0px">העדפה</th>
-        <th style="padding-left: 0px">למידה</th>
-    </tr>
-    </thead>
-</table>
+<input type="text" id="search_box" style="height: 30px; width: 100%; font-size: 13px; outline: none; border-color: rgba(0,0,0,.12); border-width: 1px; border-bottom-width: 0px; padding-right: 4px;" placeholder="חיפוש קורסים...">
+<div class="table-responsive" style="overflow-x: hidden">
+    <table id="example" class="mdl-data-table" style="width:100%; table-layout: fixed">
+        <thead style="padding-left: 0px;">
+            <tr>
+                <th></th>
+                <th style="font-size:13px; padding-right: 26px; padding-left: 0px">מס'</th>
+                <th style="font-size:13px; padding-right: 26px; ">שם הקורס</th>
+                <th style="font-size:13px; padding-right: 26px; padding-left: 0px">העדפה</th>
+                <th style="font-size:13px; padding-right: 26px; padding-left: 0px">למידה</th>
+            </tr>
+        </thead>
+    </table>
+</div>
 
 <script type="module">
     import { sendRequest } from './js/request';
@@ -63,7 +65,7 @@
             }
         }
         var mini_table = document.createElement('table');
-        mini_table.style = "padding-left:50px; border: 0px ; cellspacing: 0px; cellpadding: 5px";
+        mini_table.style = "margin-right: -20px; padding-left:50px; border: 0px ; cellspacing: 0px; cellpadding: 5px";
         var pairs = [];
         var switcher = document.createElement("label");
         switcher.className = "switch";
@@ -227,10 +229,10 @@
         pairs.push({text: 'ניהול קשרים:', elem: conbutton, elem_is_text: false});
         for (var i in pairs) {
             var td1 = document.createElement("td");
-            td1.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
+            td1.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px; padding-left: 15px;";
             td1.innerHTML = pairs[i].text;
             var td2 = document.createElement("td");
-            td2.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px;";
+            td2.style = "border-color: transparent !important; padding-bottom: 5px; padding-top:1px; padding-right: 0px;";
             if (pairs[i].elem_is_text)
                 td2.innerHTML = pairs[i].elem;
             else
@@ -250,7 +252,7 @@
     $(document).ready(function() {
         localStorage.setItem(changes_root_key, "{}");
         var table = $('#example').DataTable( {
-            scrollY: 540,
+            scrollY: 525,
             paging: false,
             info: false,
             "dom": 'lrt',
@@ -259,10 +261,10 @@
                 "zeroRecords": "לא נמצאו קורסים מתאימים",
             },
             "columnDefs": [
-                { "width": "25px", "targets": 0 },
-                { "width": "75px", "targets": 1 },
-                { "width": "75px", "targets": 3 },
-                { "width": "70px", "targets": 4 },
+                { "width": "22px", "targets": 0 },
+                { "width": "58px", "targets": 1 },
+                { "width": "65px", "targets": 3 },
+                { "width": "56px", "targets": 4 },
             ],
             "columns": [
                 {
