@@ -340,7 +340,6 @@
     });
 
 
-
     //rafa its here
 
     document.addEventListener("send_msg", send_msg_handler , false);
@@ -494,24 +493,27 @@
         update_email()
     };
 
-        function load_all_courses_table() {
-            faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
-            var table1 = $("#all_courses").DataTable();
-            var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-                var courses = JSON.parse(res);
-                for (var i in courses) {
-                    var entry = {
-                        "id": ("0" + courses[i]["id"]).slice(-6),
-                        "name": courses[i]["name"],
-                        "faculty" : faculties_dict[courses[i]["faculty"]]['name']
-                    };
-                    all_courses_dict.push(entry);
-                    table1.row.add(entry).draw();
-                }
-                localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
-                temp_all_courses = all_courses_dict;
-            });
-    }
+    function load_all_courses_table() {
+    var table1 = $("#all_courses").DataTable();
+    var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+        var courses = JSON.parse(res);
+        //console.log(courses);
+        for (var i in courses) {
+            var entry = {
+                "id": ("0" + courses[i]["id"]).slice(-6),
+                "name": courses[i]["name"],
+                "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                "conflicts" : courses[i]["conflicts"],
+                "_id" : courses[i]["_id"],
+            };
+            all_courses_dict.push(entry);
+            table1.row.add(entry).draw();
+        }
+
+        localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        temp_all_courses = all_courses_dict;
+    });
+}
 
 
 
@@ -539,7 +541,9 @@
                     "has_exam": courses[i]["has_exam"],
                     "is_first" : courses[i]["is_first"],
                     "is_last" : courses[i]["is_last"],
-                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"]
                 };
                 courses_dict.push(entry);
                 table.row.add(entry).draw();

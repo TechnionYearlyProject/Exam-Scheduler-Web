@@ -24,13 +24,32 @@
     import { sendRequest } from './js/request';
     let res = localStorage.getItem("all_courses_dict");
     let courses = JSON.parse(res);
+    let map_courses = {};
+    for(var i in courses)
+        map_courses[courses[i]["_id"]] = courses[i];
+    //console.log(courses);
+    //console.log(map_courses);
+
+    let initial_conflicts = {};
+    for (var i in courses)
+    {
+        for (var j in courses[i]["conflicts"])
+        {
+            if (initial_conflicts[courses[i]["id"]] == undefined)
+                initial_conflicts[courses[i]["id"]] = {};
+            initial_conflicts[courses[i]["id"]][map_courses[courses[i]["conflicts"][j]["course"]]["id"]] = "1";
+            if (initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]] == undefined)
+                initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]] = {};
+            initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]][courses[i]["id"]] = "1";
+        }
+    }
+    localStorage.setItem("local_conflicts", JSON.stringify(initial_conflicts));
     var conflicts = {};
     var localConflicts = localStorage.getItem("local_conflicts");
     if (localConflicts){
         conflicts = JSON.parse(localConflicts);
     }
     function course_expand (row) {
-        console.log(row);
         let row_changer = function (row, field, value) {
           return function(){
               let d1 = row.data();
@@ -130,8 +149,6 @@
         conbutton.className = "btn btn-outline-secondary btn-sm";
         conbutton.style = "height: 20px; width: 20px; padding: 0px;"
         conbutton.innerHTML = '<i class="fas fa-link"></i>';
-        console.log("Entry");
-        console.log(entry);
         let showConflictsButton = function (entry) {
            return function () {
                localConflicts = localStorage.getItem("local_conflicts");
@@ -142,8 +159,8 @@
                    conflicts[entry.id] = {};
                }
                function reloadLocalCourses(table1, table2){
-                   table1.clear();
-                   table2.clear();
+                   table1.clear().draw();
+                   table2.clear().draw();
                    for (let i in courses) {
                        if (courses[i].id == entry.id){
                            continue;
@@ -178,6 +195,7 @@
                       }
                       conflicts[selected_row.data().id][id] = "1";
                       selected_row.remove().draw();
+                      console.log(conflicts);
                   }
                };
                $('#conflict_add').unbind('click');
@@ -204,7 +222,19 @@
                };
                $('#conflict_remove').click(removeConflict(entry.id));
                $('#save_local_conflicts').click(function () {
+                   var course_id = row.data().id;
+                   var params = [];
+                   for (var i in conflicts[course_id])
+                       params.push(i);
                    localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
+                   var jsondb = {
+                       "conflicts" : params
+                   };
+                   console.log(jsondb);
+                   sendRequest('put', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', JSON.stringify(jsondb), function (res) {
+                       console.log(123);
+                   });
+
                });
                let discardChanges = function (id) {
                    return function () {
@@ -306,6 +336,7 @@
         })
 
     } );
+
 </script>
 </body>
 </html>

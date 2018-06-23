@@ -95,7 +95,7 @@
     function exectute_courses_actions(index) {
         if (index == courses_actions.length) {
             $('#crs_mng_mdl').modal('hide');
-            //window.location.href = '/scheduler';
+            window.location.href = '/scheduler';
             return;
         }
         if (courses_actions[index][1] == 'add') {
@@ -144,11 +144,15 @@
             let entry = {
                 "id": ("0" + shared_courses_dict[i]["id"]).slice(-6),
                 "name": shared_courses_dict[i]["name"],
-                "faculty": shared_courses_dict[i]["faculty"]
-            };
+                "faculty": shared_courses_dict[i]["faculty"],
+                "conflicts": shared_courses_dict[i]["conflicts"],
+                "_id" : shared_courses_dict[i]["_id"],
+            };``
             all_courses_dict.push(entry);
             courses_management_table.row.add(entry).draw();
         }
+        console.log(3);
+        console.log(all_courses_dict);
         localStorage.setItem("all_courses_dict", JSON.stringify(all_courses_dict));
         temp_all_courses = all_courses_dict;
     };
