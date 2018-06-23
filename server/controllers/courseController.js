@@ -42,7 +42,6 @@ exports.course_create = async function (req, res, next) {
         .catch(err => {
             next(err);
         });
-    console.log(req.body.faculty);
     if(req.body.id.length !== 6){
         return res.status(400).send('Course ID must be 6 digits.');
     }
@@ -137,19 +136,18 @@ exports.set_conflicts = async function(req,res,err){
     var conflicts = [];
     var i;
     for(i =0;i<req.body.conflicts.length;i++){
-        var flag = false;
         for(let j in course_conflicts){
             if(course_conflicts[j].id === req.body.conflicts[i].id){
-                flag = true;
+                // flag = true;
                 var p = {
                     "course":course_conflicts[j]._id
                 };
                 conflicts.push(p);
             }
         }
-        if(flag === false ){
-            return res.status(400).send('Course does not exist.');
-        }
+        // if(flag === false ){
+        //     return res.status(400).send('Course does not exist.');
+        // }
     }
 
     await Course.update({semester: semester._id, id:req.params.id},
@@ -161,9 +159,8 @@ exports.set_conflicts = async function(req,res,err){
     });
 };
 
-exports.faculty_course_update = function (req, res, next) {
-    console.log(req.body);
-    const semester = Semester.findOne({
+exports.faculty_course_update = async function (req, res, next) {
+    const semester = await Semester.findOne({
         year: req.params.year,
         semester: req.params.semester
     })
@@ -175,16 +172,32 @@ exports.faculty_course_update = function (req, res, next) {
         }).catch(err => {
             next(err);
         });
-
-    return Course.findOneAndUpdate({
+    const course = await Course.findOne({
+        faculty: req.faculty_id,
         id: req.params.courseID,
-        semester: semester._id,
-        faculty: req.faculty_id
-    }, req.body).then(() => {
+        semester: semester._id
+    })
+        .then(c => {
+            if (!c) {
+                return res.status(404).send('Course not found.');
+            }
+            return c;
+        }).catch(err => {
+            next(err);
+        });
+
+    const conditions = {
+        is_first: req.body.is_first,
+        is_last: req.body.is_last,
+        has_exam: req.body.has_exam,
+        is_required: req.body.is_required,
+        days_before:req.body.days_before
+    };
+
+    Course.findOneAndUpdate({ _id:course._id}, conditions).then(()=> {
         return res.end();
-    }).catch(err => {
-        next(err);
-    });
+    }).catch(err=>{next(err);});
+
 };
 
 /*
@@ -192,17 +205,7 @@ exports.faculty_course_update = function (req, res, next) {
  */
 exports.faculty_course_delete = async function (req, res, next) {
     logging.db('Delete course ' + req.params.courseID + '.');
-    console.log(req.body.faculty);
-    const faculty = await Faculty.findOne({
-        _id: req.body.faculty
-    })
-        .then(faculty => {
-            return faculty;
-        })
-        .catch(err => {
-            logging.error(err);
-            next(err);
-        });
+
     Semester.findOne({
         year: req.params.year,
         semester: req.params.semester
