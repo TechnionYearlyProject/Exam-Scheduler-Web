@@ -33,7 +33,7 @@ router.get(sem_regex + '/courses/list',course_controller.all_courses);//list of 
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.put(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);
 
-router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);//create schedule (load if exists)
+router.post(sem_regex + '/schedule', schedule_controller.faculty_schedule);//create schedule (load if exists)
 router.patch(sem_regex + '/course/:courseID/schedule_a',schedule_controller.schedule_moed_a);//assign moed_a
 router.patch(sem_regex + '/course/:courseID/schedule_b',schedule_controller.schedule_moed_b);//assign moed_b
 router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//clear schedule
