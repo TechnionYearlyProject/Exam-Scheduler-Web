@@ -105,8 +105,19 @@
       var clean_button = document.getElementById("schedule_clear");
       clean_button.onclick = function(){
           function clean() {
+              let changes = JSON.parse(localStorage.getItem('local_course_changes'));
+              for (var  course_id in changes)
+              {
+                  delete changes[course_id]["a_constraint"];
+                  delete changes[course_id]["b_constraint"];
+                  if (Object.keys(changes[course_id]).length == 0)
+                      delete changes[course_id];
+              }
+              localStorage.setItem('local_course_changes', JSON.stringify(changes));
+
               make_calendar(new Date(localStorage.getItem('start_a')), new Date(localStorage.getItem('end_a')), "a");
               make_calendar(new Date(localStorage.getItem('start_b')), new Date(localStorage.getItem('end_b')), "b");
+
           }
           popup_modal("CONF", 'האם אתה בטוח שברצונך לנקות את התוכנית?', clean);
       };

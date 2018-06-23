@@ -19,6 +19,7 @@ function save_changes_to_local(id, field, value) {
     }
     changes[id][field] = value;
     localStorage.setItem(changes_root_key, JSON.stringify(changes));
+
 };
 function popup_modal(type, text, func) {
     var title = document.getElementById("alert_title");
@@ -190,6 +191,15 @@ function make_calendar(start, end, moed) {
                 while (!moed.hasAttribute("moed"))
                     moed = moed.parentNode;
                 var course_id = ev.dataTransfer.getData("list_drag");
+                let changes = JSON.parse(localStorage.getItem('local_course_changes'));
+                if (course_id != "" && changes[course_id] != undefined)
+                {
+                    if (changes[course_id][moed.getAttribute("moed") + "_constraint"] != undefined)
+                    {
+                        popup_modal("ERROR", 'המבחן כבר קיים במועד זה', null);
+                        return;
+                    }
+                }
                 if (course_id == "") //dragged from day
                 {
                     str = ev.dataTransfer.getData("test_drag");
@@ -211,8 +221,8 @@ function make_calendar(start, end, moed) {
                             if (child.getAttribute("test_id") == moed.getAttribute("moed") + "_" + course_id)
                                 day_dragged.removeChild(child);
                     }
+                    $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 }
-                $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 var entry = get_course_entry(course_id);
                 var test = create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
                 let constraint = ev.target.getAttribute("date");

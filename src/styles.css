@@ -71,12 +71,11 @@ textarea:focus {
     padding-right: 2px;
     font-size: 10px;
     border-radius: 2px;
-    white-space: nowrap !important;
     overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 70px;
-    min-width: 70px;
     text-align: right;
+    max-width: 100%;
+    max-height: 14.4px !important;
+    min-height: 14.4px !important;
 }
 
 .test_tooltip{
@@ -93,6 +92,7 @@ textarea:focus {
 }
 
 .day{
+    width: 100%;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
