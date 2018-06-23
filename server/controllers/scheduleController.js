@@ -33,7 +33,7 @@ exports.faculty_schedule = async function (req, res, next) {
   }
   let schedule = await Schedule.findOne({
     semester: semester._id,
-    faculty: req.faculty_id
+    faculty: req.body.faculty
   })
   .catch(err => {
     next(err)
@@ -41,7 +41,7 @@ exports.faculty_schedule = async function (req, res, next) {
   if (!schedule) {
     schedule = await Schedule.create({
       semester: semester._id,
-      faculty: req.faculty_id,
+      faculty: req.body.faculty
     })
     .catch(err => {
       next(err)
@@ -62,7 +62,7 @@ exports.schedule_moed_a = async function (req, res, next) {
     }
 
   let schedule = await Schedule.findOne({
-    semester: semester._id, faculty: req.faculty_id
+    semester: semester._id, faculty: req.body.faculty
   }).catch(err => {
     next(err)
   });
@@ -84,7 +84,7 @@ exports.schedule_moed_a = async function (req, res, next) {
   }
   var dates = {course: course._id, date: req.body.date};
   await Schedule.update(
-  {semester: semester._id, faculty: req.faculty_id},
+  {semester: semester._id, faculty: req.body.faculty},
   {$push: {exams_a: dates}}
   ).then(() => {
     return res.end();
@@ -104,7 +104,7 @@ exports.schedule_moed_b = async function (req, res, next) {
     return res.status(404).send('Semester not found.');
   }
   let schedule = await Schedule.findOne({
-    semester: semester._id, faculty: req.faculty_id
+    semester: semester._id, faculty: req.body.faculty
   }).catch(err => {
     next(err)
   });
