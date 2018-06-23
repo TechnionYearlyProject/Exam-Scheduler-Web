@@ -193,7 +193,7 @@ exports.faculty_course_update = async function (req, res, next) {
 };
 
 exports.get_conflicts_dates = async function(req,res,err){
-    logging.db('get course conflicts exam dates' + req.params.id + '.');
+    logging.db('get course conflicts exam dates.');
     const semester = await Semester.findOne({
         year: req.params.year,
         semester: req.params.semester
@@ -209,46 +209,56 @@ exports.get_conflicts_dates = async function(req,res,err){
     const courses = await Course.find({
         semester: semester._id,
         faculty: req.faculty_id
-    }).then(courses => {
+    },'faculty conflicts').then(courses => {
         return courses;
     }).catch(err => {
         next(err);
     });
-    console.log(courses);
-    var all_dates = [];
+
+    var conflicts = [];
     for(var i in courses) {
         for (var j in courses[i].conflicts) {
-            if (req.faculty_id != courses[i].faculty) {
-                Schedule.find({semester: semester._id, faculty: courses[i].faculty}).then(sched => {
-                    if(sched) {
-                        var exam_date = {
-                            id: courses[i].conflicts[j].course,
-                            date_a: {},
-                            date_b: {}
-                        };
-                        for (var k in sched.exams_a) {
-                            if (sched.exams_a[k].course === courses[i].conflicts[j].course) {
-                                exam_date.date_a = sched.exams_a[k].date;
+            if (courses[i].conflicts[j].course !== undefined) {
+                const c = await Course.findOne({_id: courses[i].conflicts[j].course}).then(c => {
+                    return c;
+                }).catch(err => {
+                    next(err);
+                });
+                var conflict_faculty = c.faculty;
+                if (req.faculty_id !== conflict_faculty) {
+                    const sched = await Schedule.findOne({
+                        semester: semester._id,
+                        faculty: conflict_faculty
+                    }).then(sched => {
+                        return sched
+                    }).catch(err => {
+                        next(err);
+                    });
+                    if (sched) {
 
+                        for (var k in sched.exams_a) {
+                            if (sched.exams_a[k].course == c._id.toString()) {
+                                var p = {
+                                    "id": c.id, "date_a": sched.exams_a[k].date
+                                };
+                                conflicts.push(p);
                             }
                         }
                         for (var k in sched.exams_b) {
-                            if (sched.exams_b[k].course === courses[i].conflicts[j].course) {
-                                exam_date.date_b = sched.exams_b[k].date;
+                            if (sched.exams_b[k].course == c._id.toString()) {
+                                var p = {
+                                    "id": c.id, "date_b": sched.exams_a[k].date
+                                };
+                                conflicts.push(p);
                             }
                         }
-                        if (!all_dates.contains(exam_date)) {
-                            all_dates.push(exam_date);
-                        }
                     }
-                }).catch(err => {
-                    logging.db(err + '.');
-                    next(err);
-                });
+                }
             }
+
         }
     }
-    return res.json(all_dates);
+    return res.json(conflicts);
 };
 
 /*
