@@ -23,11 +23,11 @@ router.all('*', auth.verify_token);
 router.get('/faculty/name', faculty_controller.get_name);
 router.get('/faculty/email', faculty_controller.get_email);
 router.get('/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty
-
+router.patch(sem_regex+'/course/:id/set_conflicts',course_controller.set_conflicts);
 //router.delete('/program/delete', study_program_controller.study_program_delete);
 
 router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
-router.get(sem_regex+'/courses/list',course_controller.all_courses);//list of all courses
+router.get(sem_regex + '/courses/list',course_controller.all_courses);//list of all courses
 
 router.get(sem_regex + '/course/:courseID', course_controller.course_data);
 router.put(sem_regex + '/course/:courseID/update',course_controller.faculty_course_update);

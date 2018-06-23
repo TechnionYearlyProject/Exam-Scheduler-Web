@@ -109,7 +109,7 @@ exports.course_create = async function (req, res, next) {
         });
 };
 
-exports.set_conflicts = async function(req,res,err){
+exports.set_conflicts = async function(req,res,err) {
     logging.db('set course conflicts ' + req.params.id + '.');
     const semester = await Semester.findOne({
         year: req.params.year,
@@ -126,31 +126,24 @@ exports.set_conflicts = async function(req,res,err){
 
 
     const course_conflicts = await Course.find({
-        id: req.conflicts
+        id: req.body.conflicts,
+        semester: semester._id
     }).then(courses => {
         return courses;
     }).catch(err => {
         next(err);
     });
-
+    console.log(course_conflicts);
     var conflicts = [];
-    var i;
-    for(i =0;i<req.body.conflicts.length;i++){
-        for(let j in course_conflicts){
-            if(course_conflicts[j].id === req.body.conflicts[i].id){
-                // flag = true;
-                var p = {
-                    "course":course_conflicts[j]._id
-                };
-                conflicts.push(p);
-            }
-        }
-        // if(flag === false ){
-        //     return res.status(400).send('Course does not exist.');
-        // }
+    for (let i in course_conflicts) {
+        var p = {
+            "course": course_conflicts[i]._id
+        };
+        conflicts.push(p);
     }
+    console.log(conflicts)
 
-    await Course.update({semester: semester._id, id:req.params.id},
+    await Course.update({semester: semester._id, id: req.params.id},
         {$set: {conflicts: conflicts}}
     ).then(() => {
         return res.end();
