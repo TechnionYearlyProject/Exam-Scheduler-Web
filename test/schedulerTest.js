@@ -2,6 +2,7 @@ const app = require('../app');
 const db = require('../database/database');
 const chai = require('chai');
 const chai_http = require('chai-http');
+const assert = require("assert");
 chai.use(chai_http);
 chai.should();
 
@@ -34,10 +35,12 @@ describe('Scheduler', function() {
                      .send({
                          semester:'2018-spring',
                          faculty: 'מדעי המחשב',
+                         changes: '{}',
                      })
                      .set("Cookie", "token="+token)
                      .end((err, res) => {
                          validateResultLegality(res);
+                         done();
                      });
              });
      });
@@ -50,11 +53,11 @@ function validateScheduleLegality(schedule) {
 function validateResultLegality(res) {
   res.should.have.status(200);
   res.body.should.be.a('object');
-  console.log(res.body);
+  res.body = JSON.parse(res.text);
   res.body.should.have.property('moed_a');
   res.body.should.have.property('moed_b');
   res.body.moed_a.should.have.property("schedule");
   res.body.moed_b.should.have.property("schedule");
-  should(validateScheduleLegality(res.body.moed_a.schedule));
-  should(validateScheduleLegality(res.body.moed_b.schedule));
+  assert.ok(validateScheduleLegality(res.body.moed_a.schedule));
+  assert.ok(validateScheduleLegality(res.body.moed_b.schedule));
 }
