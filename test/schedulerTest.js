@@ -37,6 +37,7 @@ describe('Schedule', function() {
                      .set("Cookie", "token="+token)
                      .end((err, res) => {
                          validateResultLegality(res);
+                         done();
                      });
              });
      });
