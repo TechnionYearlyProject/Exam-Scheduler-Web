@@ -159,8 +159,8 @@
                    conflicts[entry.id] = {};
                }
                function reloadLocalCourses(table1, table2){
-                   table1.clear();
-                   table2.clear();
+                   table1.clear().draw();
+                   table2.clear().draw();
                    for (let i in courses) {
                        if (courses[i].id == entry.id){
                            continue;
@@ -227,8 +227,11 @@
                    for (var i in conflicts[course_id])
                        params.push(i);
                    localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
-                   console.log(params);
-                   sendRequest('PATCH', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', params, function (res) {
+                   var jsondb = {
+                       "conflicts" : params
+                   };
+                   console.log(jsondb);
+                   sendRequest('put', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', JSON.stringify(jsondb), function (res) {
                        console.log(123);
                    });
 
