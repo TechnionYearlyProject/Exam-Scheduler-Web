@@ -166,7 +166,6 @@ exports.faculty_course_update = async function (req, res, next) {
             next(err);
         });
     const course = await Course.findOne({
-        faculty: req.faculty_id,
         id: req.params.courseID,
         semester: semester._id
     })
@@ -183,7 +182,6 @@ exports.faculty_course_update = async function (req, res, next) {
         is_first: req.body.is_first,
         is_last: req.body.is_last,
         has_exam: req.body.has_exam,
-        is_required: req.body.is_required,
         days_before:req.body.days_before
     };
 
