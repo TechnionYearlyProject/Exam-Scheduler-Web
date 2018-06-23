@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=start DEBUG=server:* node ./bin/www",
-    "test": "cross-env NODE_ENV=test mocha ./test/schedulerTest.js --timeout 120000"
+    "test": "cross-env NODE_ENV=test mocha --timeout 120000"
   },
   "private": true,
   "dependencies": {
