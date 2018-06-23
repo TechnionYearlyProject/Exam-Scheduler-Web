@@ -34,10 +34,12 @@ exports.faculty_schedule = async function (req, res, next) {
   let schedule = await Schedule.findOne({
     semester: semester._id,
     faculty: req.body.faculty
-  })
-  .catch(err => {
+  }).catch(err => {
     next(err)
   });
+  if(schedule){
+      return res.json(schedule);
+  }
   if (!schedule) {
     schedule = await Schedule.create({
       semester: semester._id,

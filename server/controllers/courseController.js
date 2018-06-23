@@ -3,6 +3,7 @@ const Semester = require('../models/semester').model;
 const Faculty = require('../models/faculty').model;
 const logging = require('../../logging');
 const StudyProgram = require('../models/studyprogram').model;
+const Schedule = require('../models/schedule').model;
 
 exports.faculty_course_list = function(req,res,next){
     Semester.findOne({
@@ -53,7 +54,7 @@ exports.course_create = async function (req, res, next) {
         }
         return f;
     }).catch(err=>{
-       next(err);
+        next(err);
     });
 
     const faculty_programs = await StudyProgram.find({
@@ -189,6 +190,65 @@ exports.faculty_course_update = async function (req, res, next) {
         return res.end();
     }).catch(err=>{next(err);});
 
+};
+
+exports.get_conflicts_dates = async function(req,res,err){
+    logging.db('get course conflicts exam dates' + req.params.id + '.');
+    const semester = await Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    }).then(semester => {
+        if (!semester) {
+            return res.status(404).send('Semester not found.');
+        }
+        return semester;
+    }).catch(err => {
+        logging.db(err +'.');
+        next(err);
+    });
+    const courses = await Course.find({
+        semester: semester._id,
+        faculty: req.faculty_id
+    }).then(courses => {
+        return courses;
+    }).catch(err => {
+        next(err);
+    });
+    console.log(courses);
+    var all_dates = [];
+    for(var i in courses) {
+        for (var j in courses[i].conflicts) {
+            if (req.faculty_id != courses[i].faculty) {
+                Schedule.find({semester: semester._id, faculty: courses[i].faculty}).then(sched => {
+                    if(sched) {
+                        var exam_date = {
+                            id: courses[i].conflicts[j].course,
+                            date_a: {},
+                            date_b: {}
+                        };
+                        for (var k in sched.exams_a) {
+                            if (sched.exams_a[k].course === courses[i].conflicts[j].course) {
+                                exam_date.date_a = sched.exams_a[k].date;
+
+                            }
+                        }
+                        for (var k in sched.exams_b) {
+                            if (sched.exams_b[k].course === courses[i].conflicts[j].course) {
+                                exam_date.date_b = sched.exams_b[k].date;
+                            }
+                        }
+                        if (!all_dates.contains(exam_date)) {
+                            all_dates.push(exam_date);
+                        }
+                    }
+                }).catch(err => {
+                    logging.db(err + '.');
+                    next(err);
+                });
+            }
+        }
+    }
+    return res.json(all_dates);
 };
 
 /*
