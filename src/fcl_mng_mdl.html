@@ -56,6 +56,24 @@
     let faculty_actions = [];
     let file = document.getElementById('image_file');
 
+    function exectute_faculy_actions(index) {
+        if (index == faculty_actions.length) {
+            $('#fcl_mng_mdl').modal('hide');
+            window.location.href = "/scheduler";
+            return;
+        }
+        if (faculty_actions[index][1] == 'add') {
+            sendRequest('post', '/api/faculty/create', faculty_actions[index][0], function () {
+                exectute_faculy_actions(index + 1);
+            });
+        } else {
+            sendRequest('delete', 'api/faculty/delete', faculty_actions[index][0], function () {
+                 exectute_faculy_actions(index + 1);
+            });
+        }
+        return;
+    }
+
     function resize_and_convert(file, callback) {
         let MAX_SIZE = 200;
         let reader = new FileReader();
@@ -103,7 +121,8 @@
                 let entry = {
                     "id": faculties[i]["_id"],
                     "name": faculties[i]["name"],
-                    "image": faculties[i]["image"]
+                    "image": faculties[i]["image"],
+                    "email": faculties[i]["email"]
                 };
                 shared_faculties_dict[faculties[i]["_id"]] = entry;
                 temp_faculties_dict[faculties[i]["name"]] = entry;
@@ -167,6 +186,13 @@
             faculty_management_error.innerHTML = 'כתובת הדוא"ל אינה חוקית.';
             return;
         }
+        for (let k in temp_faculties_dict) {
+            if (new_faculty_email == temp_faculties_dict[k]['email']) {
+                faculty_management_error.style.color = "red";
+                faculty_management_error.innerHTML = 'כתובת הדוא"ל כבר קיימת במערכת.';
+                return;
+            }
+        }
         if (new_faculty_password.length < 8) {
             faculty_management_error.style.color = "red";
             faculty_management_error.innerHTML = 'על הסיסמא להיות באורך 8 תווים לפחות.';
@@ -182,8 +208,11 @@
             email: new_faculty_email,
             password: new_faculty_password,
             retype: new_faculty_password_verify,
-            image: file.files[0]
+            image: ''
         };
+        resize_and_convert(file.files[0], image => {
+            json['image'] = image;
+        });
         faculty_actions.push([json, 'add']);
         let li = document.createElement('li');
         li.className = "list-group-item";
@@ -208,7 +237,8 @@
         let entry = {
             "id": "",
             "name": new_faculty_name,
-            "image": ""
+            "image": "",
+            "email": new_faculty_email
         };
         temp_faculties_dict[new_faculty_name] = entry;
         document.getElementById("new_faculty_name").value = "";
@@ -224,41 +254,9 @@
                 for (let j = i-1; j>=0; j--)
                     if (faculty_actions[j][0]["name"] == faculty_actions[i][0]["name"])
                         faculty_actions.splice(j,1);
-        for(let i in faculty_actions) {
-            if (faculty_actions[i][1] == "add") {
-                resize_and_convert(faculty_actions[i][0]["image"], image => {
-                    let json = faculty_actions[i][0];
-                    json["image"] = image;
-                    sendRequest('post', '/api/faculty/create', json, function () {
-                    })});
-            }
-            else {
-                sendRequest('delete', 'api/faculty/delete', faculty_actions[i][0], function () {
-                });
-            }
-        }
-        shared_faculties_dict = {};
-        sendRequest('get', 'api/faculty/details_list', null, res => {
-            let faculties = JSON.parse(res);
-            for (let i in faculties) {
-                let entry = {
-                    "id": faculties[i]["_id"],
-                    "name": faculties[i]["name"],
-                    "image": faculties[i]["image"]
-                };
-                shared_faculties_dict[faculties[i]["_id"]] = entry;
-            }
-            localStorage.setItem("faculties_dict", JSON.stringify(shared_faculties_dict));
-        });
         faculty_management_error.style.color = "green";
-        faculty_management_error.innerHTML = "השינויים נשמרים לשרת.";
-        setTimeout(function () {
-            $("#sys_loader").show();
-            $('#fcl_mng_mdl').modal('hide');
-            setTimeout(function () {
-                $("#sys_loader").hide();
-            }, 1000);
-        }, 2500);
+        faculty_management_error.innerHTML = "השינויים נשמרים לשרת. התהליך עשוי להימשך מספר דקות...";
+        exectute_faculy_actions(0);
     };
 
     document.getElementById('fcl_img_btn').onclick = function() {

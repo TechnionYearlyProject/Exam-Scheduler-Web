@@ -82,6 +82,23 @@
     let semester_management_error = document.getElementById("semester_management_error");
     let semester_actions = [];
 
+    function exectute_semester_actions(index) {
+        if (index == semester_actions.length) {
+          $('#sem_mng_mdl').modal('hide');
+          window.location.href = '/scheduler';
+          return;
+        }
+        if (semester_actions[index][1] == 'add') {
+            sendRequest('POST', '/api/semester/create', semester_actions[index][0], () => {
+                exectute_semester_actions(index + 1);
+            });
+        } else {
+            sendRequest('DELETE', '/api/semester/delete', semester_actions[index][0], () => {
+                exectute_semester_actions(index + 1);
+            });
+        }
+        return;
+    }
 
     document.getElementById('sem_mng_btn').onclick = function() {
         semester_management_error.innerHTML = "";
@@ -271,64 +288,16 @@
         document.getElementById("semester_moedb_end").value = "";
     };
 
-
-
-    var semester_save = document.getElementById("semester_save_button");
-    semester_save.onclick = function () {
+    document.getElementById("semester_save_button").onclick = function () {
         for (var i = semester_actions.length - 1; i >= 1; --i)
             if (semester_actions[i][1] == "remove")
-                for (var j = i-1; j>=0; j--)
+                for (var j = i - 1; j >= 0; j--)
                     if (semester_actions[j][0]["year"] == semester_actions[i][0]["year"] && semester_actions[j][0]["semester"] == semester_actions[i][0]["semester"])
-                        semester_actions.splice(j,1);
-
-
-        for(var i in semester_actions) {
-            if (semester_actions[i][1] == "add") {
-                console.log("pre_add");
-                sendRequest('POST', '/api/semester/create', semester_actions[i][0], () => {
-                    console.log('/api/' + semester_actions[i][0]["year"] + '-' + semester_actions[i][0]["semester"] + '/schedule');
-                    sendRequest('GET', '/api/' + semester_actions[i][0]["year"] + '-' + semester_actions[i][0]["semester"] + '/schedule', null ,function(out){
-                    });
-                });
-            }
-            else {
-                console.log("pre_remove");
-                sendRequest('DELETE', '/api/semester/delete', semester_actions[i][0], () => {
-                    console.log("post_remove");
-                });
-            }
-        }
-        shared_semesters_dict = {};
-        sendRequest('get', 'api/semester/list', null, res => {
-            let data = JSON.parse(res);
-            for (let i in data) {
-                let semester = "חורף";
-                if (!data[i].semester.localeCompare("spring")) {
-                    semester = "אביב"
-                }
-                let name = semester + " " + data[i].year;
-                var entry = {
-                    "end_a": data[i]["end_a"],
-                    "end_b": data[i]["end_b"],
-                    "semester": semester,
-                    "start_a": data[i]["start_a"],
-                    "start_b": data[i]["start_b"],
-                    "year": data[i]["year"],
-                    "_id": data[i]["_id"],
-                };
-                shared_semesters_dict[name] = entry;
-            }
-            localStorage.setItem("semesters_dict", JSON.stringify(shared_semesters_dict));
-        });
-
+                        semester_actions.splice(j, 1);
         semester_management_error.style.color = "green";
-        semester_management_error.innerHTML = "השינויים נשמרים לשרת.";
-        setTimeout(function () {
-            $('#sem_mng_mdl').modal('hide');
-            window.location.href = '/scheduler';
-        }, 3000);
-    };
-
+        semester_management_error.innerHTML = "השינויים נשמרים לשרת. התהליך עשוי להימשך מספר דקות...";
+        exectute_semester_actions(0);
+    }
 
 </script>
 </body>

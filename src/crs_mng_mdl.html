@@ -60,11 +60,30 @@
     import {sendRequest} from "./js/request";
     let shared_courses_dict = JSON.parse(localStorage.getItem("courses_dict"));
     let main_window_courses_table = $('#example').DataTable();
-    let course_management_to_db = [];
+    let courses_actions = [];
     let all_courses_dict = [];
     let temp_all_courses = [];
     let shared_faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
     let manager = document.getElementById("new_course_faculty");
+
+    function exectute_courses_actions(index) {
+        if (index == courses_actions.length) {
+            $('#crs_mng_mdl').modal('hide');
+            window.location.href = '/scheduler';
+            return;
+        }
+        if (courses_actions[index][1] == 'add') {
+            sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', courses_actions[index][0], function (out) {
+                exectute_courses_actions(index + 1);
+            });
+        } else {
+            sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + courses_actions[index][0]["id"] + '/delete', {"faculty": faculty_name_to_id(courses_actions[index][0]["faculty"])}, function (out) {
+                exectute_courses_actions(index + 1);
+            });
+        }
+        return;
+    }
+
     document.getElementById('crs_mng_btn').onclick = function() {
         document.getElementById("new_course_num").value = "";
         document.getElementById("new_course_name").value = "";
@@ -170,7 +189,7 @@
         temp_all_courses.push(entry);
         let t = $('#courses_management_table').DataTable();
         t.row.add(entry).draw();
-        course_management_to_db.push([entry,"add"]);
+        courses_actions.push([entry,"add"]);
         error.style.color = "green";
         error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
         course_num.value = "";
@@ -196,94 +215,22 @@
                 "id" : selected_row.data()["id"],
                 "faculty" : selected_row.data()["faculty"],
             };
-        course_management_to_db.push([entry, "remove"]);
+        courses_actions.push([entry, "remove"]);
         error.style.color = "green";
         error.innerHTML = 'הקורס "' + selected_row.data()["name"] + '" נמחק בהצלחה.';
         selected_row.remove().draw();
     };
     document.getElementById("course_save_button").onclick = function () {
-        for (let i = course_management_to_db.length - 1; i >= 1; --i)
-            if (course_management_to_db[i][1] == "remove")
-                for (let j = i-1; j>=0; j--)
-                    if (course_management_to_db[j][0]["id"] == course_management_to_db[i][0]["id"])
-                        course_management_to_db.splice(j,1);
-        for(let i in course_management_to_db) {
-            if (course_management_to_db[i][1] == "add") {
-                console.log(course_management_to_db[i][0]);
-                console.log('/api/' + localStorage.getItem('semester_name') + '/course/create');
-                sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', course_management_to_db[i][0], function (out) {
-                alert('hi');
-                });
-                let entry = {
-                    "id": course_management_to_db[i][0]["id"],
-                    "name": course_management_to_db[i][0]["name"],
-                    "pref": "אוטומטי",
-                    "credit_points": course_management_to_db[i][0]["credit_point"],
-                    "days_before": course_management_to_db[i][0]["days_before"],
-                    "has_exam": true,
-                    "is_first" : false,
-                    "is_last" : false,
-                    "faculty" : course_management_to_db[i][0]["faculty"]
-                };
-                console.log(faculty_name_to_id(course_management_to_db[i][0]["faculty"]));
-                shared_courses_dict.push(entry);
-            } else {
-                console.log(course_management_to_db[i][0]);
-                sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_management_to_db[i][0]["id"] +'/delete', {"faculty" : faculty_name_to_id(course_management_to_db[i][0]["faculty"])}, function (out) {
-                });
-                for (let j in shared_courses_dict) {
-                    if (shared_courses_dict[j]["id"] == course_management_to_db[i][0]["id"]) {
-                        shared_courses_dict.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-        }
-        main_window_courses_table.clear().draw();
-        main_window_courses_table.rows.add(shared_courses_dict).draw();
-        main_window_courses_table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-            let a = this.node();
-            this.node().draggable = true;
-            this.node().className = "draggable";
-            this.node().ondragstart = function (ev) {
-                var id = a.childNodes[1].innerHTML;
-                var test = document.createElement("label");
-                test.className += "test_tooltip";
-                test.innerHTML = id + " - " + a.childNodes[2].innerHTML;
-                test.draggable = true;
-                var color = "black";
-                if (id.startsWith("234")){
-                    color = "#26A69A";
-                } else if (id.startsWith("104")){
-                    color = "#EF5350";
-                } else if (id.startsWith("094")) {
-                    color = "#FFEB3B";
-                } else if (id.startsWith("236")) {
-                    color = "#9CCC65";
-                }
-                test.style.backgroundColor = color;
-                test.style.position = 'absolute';
-                test.style.left = '0px';
-                test.style.top = '0px';
-                test.style.zIndex = '-1';
-                test.id = 'test_tooltip_' + id;
-                document.body.appendChild(test);
-                ev.dataTransfer.setDragImage(test, 0, 0);
-                ev.dataTransfer.setData("list_drag", id);
-            }
-        } );
-        course_management_to_db = [];
-        localStorage.setItem("courses_dict",JSON.stringify(shared_courses_dict));
+        for (let i = courses_actions.length - 1; i >= 1; --i)
+            if (courses_actions[i][1] == "remove")
+                for (let j = i - 1; j >= 0; j--)
+                    if (courses_actions[j][0]["id"] == courses_actions[i][0]["id"])
+                        courses_actions.splice(j, 1);
+        exectute_courses_actions(0);
         document.getElementById('courses_management_error').style.color = "green";
-        document.getElementById('courses_management_error').innerHTML = "השינויים נשמרים לשרת.";
-        setTimeout(function () {
-            $("#sys_loader").show();
-            $('#crs_mng_mdl').modal('hide');
-            setTimeout(function () {
-                $("#sys_loader").hide();
-            }, 1000);
-        }, 2500);
+        document.getElementById('courses_management_error').innerHTML = "השינויים נשמרים לשרת. התהליך עשוי להימשך מספר דקות...";
     };
+
 </script>
 </body>
 </html>
