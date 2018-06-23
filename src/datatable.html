@@ -24,13 +24,32 @@
     import { sendRequest } from './js/request';
     let res = localStorage.getItem("all_courses_dict");
     let courses = JSON.parse(res);
+    let map_courses = {};
+    for(var i in courses)
+        map_courses[courses[i]["_id"]] = courses[i];
+    //console.log(courses);
+    //console.log(map_courses);
+
+    let initial_conflicts = {};
+    for (var i in courses)
+    {
+        for (var j in courses[i]["conflicts"])
+        {
+            if (initial_conflicts[courses[i]["id"]] == undefined)
+                initial_conflicts[courses[i]["id"]] = {};
+            initial_conflicts[courses[i]["id"]][map_courses[courses[i]["conflicts"][j]["course"]]["id"]] = "1";
+            if (initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]] == undefined)
+                initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]] = {};
+            initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]][courses[i]["id"]] = "1";
+        }
+    }
+    localStorage.setItem("local_conflicts", JSON.stringify(initial_conflicts));
     var conflicts = {};
     var localConflicts = localStorage.getItem("local_conflicts");
     if (localConflicts){
         conflicts = JSON.parse(localConflicts);
     }
     function course_expand (row) {
-        console.log(row);
         let row_changer = function (row, field, value) {
           return function(){
               let d1 = row.data();
@@ -130,8 +149,6 @@
         conbutton.className = "btn btn-outline-secondary btn-sm";
         conbutton.style = "height: 20px; width: 20px; padding: 0px;"
         conbutton.innerHTML = '<i class="fas fa-link"></i>';
-        console.log("Entry");
-        console.log(entry);
         let showConflictsButton = function (entry) {
            return function () {
                localConflicts = localStorage.getItem("local_conflicts");
@@ -178,6 +195,7 @@
                       }
                       conflicts[selected_row.data().id][id] = "1";
                       selected_row.remove().draw();
+                      console.log(conflicts);
                   }
                };
                $('#conflict_add').unbind('click');
@@ -306,6 +324,7 @@
         })
 
     } );
+
 </script>
 </body>
 </html>

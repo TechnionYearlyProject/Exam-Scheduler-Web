@@ -18,7 +18,7 @@ exports.faculty_course_list = function(req,res,next){
                     semester: semester._id,
                     faculty: req.faculty_id
                 },
-                'name id credit_point constraint_a constraint_b is_first faculty is_last days_before has_exam');
+                'name id credit_point constraint_a constraint_b is_first faculty is_last days_before has_exam conflicts _id');
         })
         .then(courses => {
             return res.json(courses);
@@ -319,7 +319,7 @@ exports.all_courses = function(req,res,next){
         }
         return Course.find({
             semester: semester._id,
-        }, 'name id credit_point constraint_a constraint_b is_first is_last days_before has_exam faculty');
+        }, 'name id credit_point constraint_a constraint_b is_first is_last days_before has_exam faculty conflicts _id');
     }).then(courses => {
         return res.json(courses);
     }).catch(err => {

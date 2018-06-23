@@ -475,11 +475,14 @@
         var table1 = $("#all_courses").DataTable();
         var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
             var courses = JSON.parse(res);
+            //console.log(courses);
             for (var i in courses) {
                 var entry = {
                     "id": ("0" + courses[i]["id"]).slice(-6),
                     "name": courses[i]["name"],
-                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"],
                 };
                 all_courses_dict.push(entry);
                 table1.row.add(entry).draw();
@@ -514,7 +517,9 @@
                     "has_exam": courses[i]["has_exam"],
                     "is_first" : courses[i]["is_first"],
                     "is_last" : courses[i]["is_last"],
-                    "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"]
                 };
                 courses_dict.push(entry);
                 table.row.add(entry).draw();
