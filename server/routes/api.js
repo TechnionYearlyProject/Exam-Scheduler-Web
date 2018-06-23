@@ -15,7 +15,6 @@ const sem_regex = '/:year([1-2][0-9]{3})-:semester(winter|spring)';
 
 router.post('/login', auth.login);
 router.get('/faculty/list', faculty_controller.faculty_list); // Necessary to display faculty list at login
-
 // Database API routes
 
 router.all('*', auth.verify_token);
@@ -25,6 +24,8 @@ router.get('/faculty/email', faculty_controller.get_email);
 router.get('/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty
 router.patch(sem_regex+'/course/:id/set_conflicts',course_controller.set_conflicts);
 //router.delete('/program/delete', study_program_controller.study_program_delete);
+
+router.get(sem_regex+'/download/conflicts',course_controller.get_conflicts_dates);
 
 router.get(sem_regex + '/course/list', course_controller.faculty_course_list); //Courses by faculty
 router.get(sem_regex + '/courses/list',course_controller.all_courses);//list of all courses
@@ -36,7 +37,6 @@ router.get(sem_regex + '/schedule', schedule_controller.faculty_schedule);//crea
 router.patch(sem_regex + '/course/:courseID/schedule_a',schedule_controller.schedule_moed_a);//assign moed_a
 router.patch(sem_regex + '/course/:courseID/schedule_b',schedule_controller.schedule_moed_b);//assign moed_b
 router.patch(sem_regex + '/schedule/clear',schedule_controller.clear_exams);//clear schedule
-
 router.get('/semester/list', semester_controller.semester_list);
 
 router.get('/message/list', message_list_controller.messageList);
