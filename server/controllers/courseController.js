@@ -5,6 +5,29 @@ const logging = require('../../logging');
 const StudyProgram = require('../models/studyprogram').model;
 const Schedule = require('../models/schedule').model;
 
+exports.get_list = function(req,res,next){
+    Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    })
+        .then(semester => {
+            if (!semester) {
+                return res.status(404).send('Semester not found.');
+            }
+            return Course.find({
+                    semester: semester._id,
+                    faculty: req.faculty_id
+                },
+                'name id credit_point faculty days_before conflicts registrations');
+        })
+        .then(courses => {
+            return res.json(courses);
+        })
+        .catch(err => {
+            next(err);
+        });
+};
+
 exports.faculty_course_list = function(req,res,next){
     Semester.findOne({
         year: req.params.year,
@@ -124,7 +147,7 @@ exports.set_conflicts = async function(req,res,err) {
         .catch(err => {
             next(err);
         });
-
+    console.log(semester);
 
     const course_conflicts = await Course.find({
         id: req.body.conflicts,
@@ -134,6 +157,7 @@ exports.set_conflicts = async function(req,res,err) {
     }).catch(err => {
         next(err);
     });
+    console.log(course_conflicts);
     var conflicts = [];
     for (let i in course_conflicts) {
         var p = {
@@ -141,10 +165,9 @@ exports.set_conflicts = async function(req,res,err) {
         };
         conflicts.push(p);
     }
+    console.log(conflicts)
 
-    await Course.update({semester: semester._id, id: req.params.id},
-        {$set: {conflicts: conflicts}}
-    ).then(() => {
+    Course.findOneAndUpdate({semester: semester._id, id: req.params.id}, {conflicts: conflicts}).then(() => {
         return res.end();
     }).catch(err => {
         next(err);
