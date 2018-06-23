@@ -11,7 +11,6 @@ const admin_user = { name: 'Administrator',
 };
 
 describe('Scheduler', function() {
-    this.timeout(150000);
      before(async () => {
          await db.open();
      });
@@ -20,7 +19,7 @@ describe('Scheduler', function() {
          await db.close();
      });
      var agent = chai.request.agent(app);
-     it('should login successfully with all parameters', done => {
+     it('should do simple schedule without additional data', done => {
          agent
              .post('/api/login')
              .send(admin_user)
@@ -42,21 +41,20 @@ describe('Scheduler', function() {
                      });
              });
      });
+});
 
- });
+function validateScheduleLegality(schedule) {
+  return true;
+}
 
- function validateScheduleLegality(schedule){
-     return true;
- }
-
- function validateResultLegality(res) {
-     res.should.have.status(200);
-     res.body.should.be.a('object');
-     console.log(res.body);
-     res.body.should.have.property('moed_a');
-     res.body.should.have.property('moed_b');
-     res.body.moed_a.should.have.property("schedule");
-     res.body.moed_b.should.have.property("schedule");
-     should(validateScheduleLegality(res.body.moed_a.schedule));
-     should(validateScheduleLegality(res.body.moed_b.schedule));
- }
+function validateResultLegality(res) {
+  res.should.have.status(200);
+  res.body.should.be.a('object');
+  console.log(res.body);
+  res.body.should.have.property('moed_a');
+  res.body.should.have.property('moed_b');
+  res.body.moed_a.should.have.property("schedule");
+  res.body.moed_b.should.have.property("schedule");
+  should(validateScheduleLegality(res.body.moed_a.schedule));
+  should(validateScheduleLegality(res.body.moed_b.schedule));
+}
