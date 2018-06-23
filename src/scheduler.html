@@ -177,6 +177,7 @@
 <div id="fcl_mng_ldr"></div>
 <div id="cnflcts_ldr"></div>
 <div id="upload_loader"></div>
+<div id="download_loader"></div>
 
 
 <script type="module">
@@ -185,9 +186,31 @@
     var map_b = {};
     var courses_dict = [];
     let all_semester_dict = [];
-    var faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    let faculties_dict = {};
     let all_courses_dict = [];
     let temp_all_courses = [];
+
+    $('#cnflcts_ldr').load('cnflcts_mdl.html');
+    $('#toolbar').load('toolbar.html');
+    $('#moed_a').load('moed_a.html');
+    $('#moed_b').load('moed_b.html');
+    //$('#upload_loader').load('upload_modal.html');
+    $('#download_loader').load('download_modal.html');
+    $('#courses').load('datatable.html', function () {
+        $('#scheduler_function_caller').click(function(){
+            $("[id^='exam_for_']").remove();
+            makeSchedule(["moed_a", "moed_b"]);
+        });
+        $('#scheduler_function_caller_2').click(function(){
+            $("[id^='exam_for_moed_a']").remove();
+            makeSchedule(["moed_a"]);
+        });
+        $('#scheduler_function_caller_3').click(function(){
+            $("[id^='exam_for_moed_b']").remove();
+            makeSchedule(["moed_b"]);
+        });
+    });
+
     sendRequest('GET', '/api/semester/list', null, function (res) {
         let semesters = JSON.parse(res);
         for (var i in semesters)
@@ -237,6 +260,20 @@
         load_all_courses_table();
     });
 
+    sendRequest('GET', '/api/faculty/list', null, function (res) {
+        let faculties_dict_temp = {};
+        var faculties = JSON.parse(res);
+        for (var i in faculties) {
+            let entry = {
+                "id": faculties[i]["_id"],
+                "name": faculties[i]["name"],
+                "image": faculties[i]["image"],
+            };
+            faculties_dict_temp[faculties[i]["_id"]] = entry;
+        }
+        localStorage.setItem('faculties_dict',JSON.stringify(faculties_dict_temp));
+        faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    });
 
     var fillScheduleWithCourses = function (moeds) {
         return function (result) {
@@ -295,25 +332,6 @@
             return;
         $('[data-toggle="popover"]').each(function () {
             $(this).popover('hide');
-        });
-    });
-    $('#cnflcts_ldr').load('cnflcts_mdl.html');
-    $('#toolbar').load('toolbar.html');
-    $('#moed_a').load('moed_a.html');
-    $('#moed_b').load('moed_b.html');
-    $('#upload_loader').load('upload_modal.html');
-    $('#courses').load('datatable.html', function () {
-        $('#scheduler_function_caller').click(function(){
-            $("[id^='exam_for_']").remove();
-            makeSchedule(["moed_a", "moed_b"]);
-        });
-        $('#scheduler_function_caller_2').click(function(){
-            $("[id^='exam_for_moed_a']").remove();
-            makeSchedule(["moed_a"]);
-        });
-        $('#scheduler_function_caller_3').click(function(){
-            $("[id^='exam_for_moed_b']").remove();
-            makeSchedule(["moed_b"]);
         });
     });
 
@@ -490,11 +508,28 @@
             localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
             temp_all_courses = all_courses_dict;
         });
+            faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+            var table1 = $("#all_courses").DataTable();
+            var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+                var courses = JSON.parse(res);
+                for (var i in courses) {
+                    var entry = {
+                        "id": ("0" + courses[i]["id"]).slice(-6),
+                        "name": courses[i]["name"],
+                        "faculty" : faculties_dict[courses[i]["faculty"]]['name']
+                    };
+                    all_courses_dict.push(entry);
+                    table1.row.add(entry).draw();
+                }
+                localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+                temp_all_courses = all_courses_dict;
+            });
     }
 
 
 
     function load_courses_table() {
+        faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
         var table = $("#example").DataTable();
         table.clear().draw();
         let req_path = "/course/list";

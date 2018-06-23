@@ -5,7 +5,12 @@ const chai_http = require('chai-http');
 chai.use(chai_http);
 chai.should();
 
-describe('Schedule', function() {
+const admin_user = { name: 'Administrator',
+    email: 'admin@technion.ac.il',
+    password: 'Aa123456'
+};
+
+describe('Scheduler', function() {
      before(async () => {
          await db.open();
      });
@@ -14,14 +19,10 @@ describe('Schedule', function() {
          await db.close();
      });
      var agent = chai.request.agent(app);
-     it('should login successfully with all parameters', done => {
+     it('should do simple schedule without additional data', done => {
          agent
              .post('/api/login')
-             .send({
-                 name: 'Administrator',
-                 email: 'admin@technion.ac.il',
-                 password: 'Aa123456'
-             })
+             .send(admin_user)
              .end((err, res) => {
                  res.should.have.status(200);
                  res.body.should.be.a('object');
@@ -40,21 +41,20 @@ describe('Schedule', function() {
                      });
              });
      });
+});
 
- });
+function validateScheduleLegality(schedule) {
+  return true;
+}
 
- function validateScheduleLegality(schedule){
-     return true;
- }
-
- function validateResultLegality(res) {
-     res.should.have.status(200);
-     res.body.should.be.a('object');
-     console.log(res.body);
-     res.body.should.have.property('moed_a');
-     res.body.should.have.property('moed_b');
-     res.body.moed_a.should.have.property("schedule");
-     res.body.moed_b.should.have.property("schedule");
-     should(validateScheduleLegality(res.body.moed_a.schedule));
-     should(validateScheduleLegality(res.body.moed_b.schedule));
- }
+function validateResultLegality(res) {
+  res.should.have.status(200);
+  res.body.should.be.a('object');
+  console.log(res.body);
+  res.body.should.have.property('moed_a');
+  res.body.should.have.property('moed_b');
+  res.body.moed_a.should.have.property("schedule");
+  res.body.moed_b.should.have.property("schedule");
+  should(validateScheduleLegality(res.body.moed_a.schedule));
+  should(validateScheduleLegality(res.body.moed_b.schedule));
+}
