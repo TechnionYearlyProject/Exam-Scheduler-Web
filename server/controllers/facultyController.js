@@ -63,7 +63,7 @@ exports.faculty_delete = function (req, res, next) {
 exports.get_name = function (req, res, next) {
   Faculty.findOne({_id: req.faculty_id})
   .then((faculty) => {
-    return res.json({name: faculty.name});
+    return res.json({name: faculty.name,_id:req.faculty_id});
   })
   .catch(err => {
     logging.error(err);

@@ -51,6 +51,14 @@
     let local_course_changes = {};
     let current_semester = '';
     let all_local_courses = [];
+    let faculty_name = '';
+    let faculty_id = '';
+    sendRequest('GET', '/api/faculty/name', null, function (res) {
+        let json = JSON.parse(res);
+        faculty_name = json['name'];
+        faculty_id = json['_id'];
+    });
+
     document.getElementById('cloud_upload_button').onclick = function() {
         courses_switch.checked = false;
         moed_a_switch.checked = false;
@@ -64,8 +72,8 @@
         local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
         current_semester = localStorage.getItem('semester_name');
         all_local_courses = JSON.parse(localStorage.getItem('courses_dict'));
-        console.log(local_course_changes);
         for (var course_id in local_course_changes) {
+                        
             if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
                 sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
                 });
@@ -99,9 +107,7 @@
                   if (local_course_changes[course_id]['pref'] == "התחלה")
                       entry["is_first"] = "true";
               }
-              console.log(entry);
               sendRequest('PUT', '/api/' + current_semester + '/course/' + course_id + '/update', entry, function (out) {
-                  alert("post_update");
               });
             }
         }
