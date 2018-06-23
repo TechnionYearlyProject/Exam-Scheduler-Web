@@ -63,21 +63,24 @@
     let courses_actions = [];
     let all_courses_dict = [];
     let temp_all_courses = [];
-    let shared_faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    let shared_faculties_dict = {};
     let manager = document.getElementById("new_course_faculty");
 
     function exectute_courses_actions(index) {
+        console.log(courses_actions);
         if (index == courses_actions.length) {
             $('#crs_mng_mdl').modal('hide');
-            window.location.href = '/scheduler';
+            //window.location.href = '/scheduler';
             return;
         }
         if (courses_actions[index][1] == 'add') {
+            console.log("add")
             sendRequest('POST', '/api/' + localStorage.getItem('semester_name') + '/course/create', courses_actions[index][0], function (out) {
                 exectute_courses_actions(index + 1);
             });
         } else {
             sendRequest('DELETE', '/api/' + localStorage.getItem('semester_name') + '/course/' + courses_actions[index][0]["id"] + '/delete', {"faculty": faculty_name_to_id(courses_actions[index][0]["faculty"])}, function (out) {
+                console.log("remove")
                 exectute_courses_actions(index + 1);
             });
         }
@@ -91,7 +94,10 @@
         document.getElementById("courses_management_error").innerHTML = "";
         document.getElementById("new_course_faculty").value = "";
         document.getElementById("new_course_faculty").options.length = 0;
-        shared_faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+        sendRequest('GET', '/api/faculty/list', null, function (res) {
+            shared_faculties_dict  = JSON.parse(res);
+
+        });
         for(let key in shared_faculties_dict) {
             if (shared_faculties_dict[key]["name"] == "Administrator")
                 continue;
@@ -181,15 +187,23 @@
         let entry = {
                 "id" : course_num.value,
                 "name" : course_name.value,
-                "faculty" : faculty_name_to_id(course_faculty.value),
+                "faculty" : course_faculty.value,
                 "credit_point" : parseFloat(course_points.value),
                 "days_before" : days_before.toString(),
                 "programs" : []
             };
+        let entry2 = {
+            "id" : course_num.value,
+            "name" : course_name.value,
+            "faculty" : faculty_name_to_id(course_faculty.value),
+            "credit_point" : parseFloat(course_points.value),
+            "days_before" : days_before.toString(),
+            "programs" : []
+        };
         temp_all_courses.push(entry);
         let t = $('#courses_management_table').DataTable();
         t.row.add(entry).draw();
-        courses_actions.push([entry,"add"]);
+        courses_actions.push([entry2,"add"]);
         error.style.color = "green";
         error.innerHTML = 'הקורס "' + entry["name"] + '" נוסף בהצלחה.';
         course_num.value = "";
