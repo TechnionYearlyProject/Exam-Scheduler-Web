@@ -5,7 +5,13 @@ const chai_http = require('chai-http');
 chai.use(chai_http);
 chai.should();
 
-describe('Schedule', function() {
+const admin_user = { name: 'Administrator',
+    email: 'admin@technion.ac.il',
+    password: 'Aa123456'
+};
+
+describe('Scheduler', function() {
+    this.timeout(150000);
      before(async () => {
          await db.open();
      });
@@ -17,11 +23,7 @@ describe('Schedule', function() {
      it('should login successfully with all parameters', done => {
          agent
              .post('/api/login')
-             .send({
-                 name: 'Administrator',
-                 email: 'admin@technion.ac.il',
-                 password: 'Aa123456'
-             })
+             .send(admin_user)
              .end((err, res) => {
                  res.should.have.status(200);
                  res.body.should.be.a('object');
