@@ -181,13 +181,43 @@
                         }
                     }
                     if (moed_b_conflicts_switch.checked) {
-                        let map_b = JSON.parse(localStorage.getItem('map_b'));
+                        let map_b = JSON.pars1e(localStorage.getItem('map_b'));
                         for (let curr_date in map_b) {
                             if (schedule_b[curr_date] != undefined) {
                                 let add_to = document.getElementById(map_b[curr_date]);
                                 for (let h in schedule_b[curr_date]) {
                                     let entry = translation_map_courses[schedule_b[curr_date][h]];
-                                    create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
+                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
+                                    popover_comment("exam_for_moed_b_downloaded_" + entry['id'], entry['id']);
+                                    let id = entry["id"];
+                                    test.ondblclick = function () {
+                                        $('#' + test.id).popover("show");
+                                        console.log(entry["id"]);
+                                        var button = document.getElementById("popover_button_"+id);
+                                        console.log(button);
+                                        var input = document.getElementById("popover_input_"+id);
+                                        input.value = "";
+                                        button.onclick = function() {
+                                            var event = new CustomEvent(
+                                                "send_msg",
+                                                {
+                                                    detail: {
+                                                        message: "Hello World!",
+                                                        time: new Date(),
+                                                    },
+                                                    bubbles: true,
+                                                    cancelable: true
+                                                }
+                                            );
+                                            localStorage.setItem("popover_data",JSON.stringify({
+                                                "msg" : input.value,
+                                                "semester" : localStorage.getItem('semester_name'),
+                                                "moed" : "b",
+                                                "course_id" : entry["id"]
+                                            }));
+                                            document.getElementById("popover_input_"+ entry["id"]).dispatchEvent(event);
+                                        };
+                                    }
                                 }
                             }
                         }
