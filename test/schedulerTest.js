@@ -13,11 +13,11 @@ const admin_user = { name: 'Administrator',
 
 describe('Scheduler', function() {
      before(async () => {
-         await db.open();
+         await db.openProd();
      });
 
      after(async () => {
-         await db.close();
+         await db.closeProd();
      });
      var agent = chai.request.agent(app);
      it('should do simple schedule without additional data', done => {

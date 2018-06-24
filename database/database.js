@@ -45,3 +45,12 @@ exports.close = async function () {
   logging.warning('Connection to MongoDB database closed.');
 };
 
+exports.openProd = async function () {
+    await mongoose.connect(db_config.prod.uri, db_config.prod.options);
+    logging.info('Connection to MongoDB database successful.');
+    await init_admin();
+};
+exports.closeProd = async function () {
+    await mongoose.disconnect();
+    logging.warning('Connection to MongoDB database closed.');
+};
