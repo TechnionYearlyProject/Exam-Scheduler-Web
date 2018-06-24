@@ -105,6 +105,7 @@
       var clean_button = document.getElementById("schedule_clear");
       clean_button.onclick = function(){
           function clean() {
+              localStorage.setItem("pressed_schedule", "false");
               let changes = JSON.parse(localStorage.getItem('local_course_changes'));
               for (var  course_id in changes)
               {
