@@ -145,7 +145,7 @@
                                 let add_to = document.getElementById(map_a[curr_date]);
                                 for (let h in schedule_a[curr_date]) {
                                     let entry = translation_map_courses[schedule_a[curr_date][h]];
-                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a");
+                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a", false);
                                     popover_comment("exam_for_moed_a_downloaded_" + entry['id'], entry['id']);
                                     let id = entry["id"];
                                     test.ondblclick = function () {
@@ -187,7 +187,7 @@
                                 let add_to = document.getElementById(map_b[curr_date]);
                                 for (let h in schedule_b[curr_date]) {
                                     let entry = translation_map_courses[schedule_b[curr_date][h]];
-                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
+                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b", false);
                                     popover_comment("exam_for_moed_b_downloaded_" + entry['id'], entry['id']);
                                     let id = entry["id"];
                                     test.ondblclick = function () {

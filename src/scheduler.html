@@ -284,7 +284,6 @@
             };
             document.getElementById('sem_picker').appendChild(a);
         }
-
         var top = document.getElementById('sem_picker').firstChild;
         document.getElementById('semester_button').innerHTML = top.innerHTML;
         localStorage.setItem('start_a', top.getAttribute('start_a'));
@@ -297,7 +296,6 @@
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         localStorage.setItem('map_b', JSON.stringify(map_b));
         load_courses_table();
-        console.log(3);
         load_all_courses_table();
     });
 
