@@ -2,8 +2,10 @@ const MessageList = require('../models/messagelist').model;
 const Course = require('../models/course').model;
 const Semester = require('../models/semester').model;
 const Schedule = require('../models/schedule').model;
+const logging = require('../../logging');
 
 exports.messageList = async function (req, res, next) {
+  logging.db('Fetch message list.');
   let messages = await MessageList.find({
     receiver: req.faculty_id
   })
@@ -15,9 +17,11 @@ exports.messageList = async function (req, res, next) {
     return messages;
   })
   .catch(err => {
+    logging.error(err);
     next(err);
   });
 
+  logging.db('Update last messages as read.');
   MessageList.updateMany({
     receiver: req.faculty_id
   }, {
@@ -27,22 +31,28 @@ exports.messageList = async function (req, res, next) {
     return res.json(messages);
   })
   .catch(err => {
+    logging.error(err);
     next(err);
   });
 };
 
 exports.sendMessage = async function (req, res, next) {
+  logging.db('Send message to faculty ' + req.body.course + '.');
   const semester = await Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
   })
   .then(semester => {
     if (!semester) {
+      logging.error('Semester not found.');
       return res.status(404).send('Semester not found.');
     }
     return semester;
   })
-  .catch(err => next(err));
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
 
   const course = await Course.findOne({
     id: req.body.course,
@@ -50,13 +60,18 @@ exports.sendMessage = async function (req, res, next) {
   })
   .then(course => {
     if (!course) {
+      logging.error(req.body.course + ' course does not exists.');
       return res.status(401).send('Course does not exists.');
     }
     return course
   })
-  .catch(err => next(err));
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
 
   if (req.body.moed.localeCompare('A') && req.body.moed.localeCompare('B')) {
+    logging.error('Invalid moed.');
     return res.status(401).send('Invalid moed.');
   }
 
@@ -89,6 +104,7 @@ exports.sendMessage = async function (req, res, next) {
   });
 
   if (date === null) {
+    logging.error('Course has no schedule date.');
     return res.status(401).send('Course has no schedule date.');
   }
 
@@ -105,21 +121,29 @@ exports.sendMessage = async function (req, res, next) {
   .then(() => {
     return res.end();
   })
-  .catch(err => next(err));
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
 };
 
 exports.removeMessage = async function (req, res, next) {
+  logging.db('Remove message.');
   const semester = await Semester.findOne({
     year: req.params.year,
     semester: req.params.semester
   })
   .then(semester => {
     if (!semester) {
+      logging.error('Semester not found.');
       return res.status(404).send('Semester not found.');
     }
     return semester;
   })
-  .catch(err => next(err));
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
 
   Course.findOne({
     id: req.body.course,
@@ -127,6 +151,7 @@ exports.removeMessage = async function (req, res, next) {
   })
   .then(course => {
     if (!course) {
+      logging.error(req.body.course + ' course does not exists.');
       return res.status(401).send('Course does not exists.');
     }
     return MessageList.remove({
@@ -138,5 +163,8 @@ exports.removeMessage = async function (req, res, next) {
   .then(() => {
     return res.end();
   })
-  .catch(err => next(err));
+  .catch(err => {
+    logging.error(err);
+    next(err);
+  });
 };
