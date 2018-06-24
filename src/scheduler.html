@@ -276,6 +276,7 @@
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
                 localStorage.setItem('map_b', JSON.stringify(map_b));
                 load_courses_table();
+                console.log(1);
                 load_all_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
@@ -292,6 +293,7 @@
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         localStorage.setItem('map_b', JSON.stringify(map_b));
         load_courses_table();
+        console.log(3);
         load_all_courses_table();
     });
 
@@ -528,6 +530,7 @@
     function load_all_courses_table() {
     var table1 = $("#all_courses").DataTable();
     var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+        console.log(2);
         var courses = JSON.parse(res);
         //console.log(courses);
         for (var i in courses) {
