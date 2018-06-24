@@ -188,7 +188,7 @@
     let all_semester_dict = [];
     let faculties_dict = {};
     let all_courses_dict = [];
-    let temp_all_courses = [];
+    localStorage.setItem("pressed_schedule", "false");
 
     $('#cnflcts_ldr').load('cnflcts_mdl.html');
     $('#toolbar').load('toolbar.html');
@@ -198,14 +198,42 @@
     $('#download_loader').load('download_modal.html');
     $('#courses').load('datatable.html', function () {
         $('#scheduler_function_caller').click(function(){
+            if (localStorage.getItem("pressed_schedule") == "true")
+            {
+                popup_modal("ERROR", 'לחץ על כפתור הניקוי לפני שיבוץ שנית.', null);
+                return;
+            }
             $("[id^='exam_for_']").remove();
             makeSchedule(["moed_a", "moed_b"]);
+            localStorage.setItem("pressed_schedule", "true");
+            for (var i in map_a)
+            {
+                var day = document.getElementById(map_a[i]);
+                var lock = day.childNodes[1];
+                day.removeChild(lock);
+            }
+            for (var i in map_b)
+            {
+                var day = document.getElementById(map_b[i]);
+                var lock = day.childNodes[1];
+                day.removeChild(lock);
+            }
         });
         $('#scheduler_function_caller_2').click(function(){
+            if (localStorage.getItem("pressed_schedule") == "false")
+            {
+                popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
+                return;
+            }
             $("[id^='exam_for_moed_a']").remove();
             makeSchedule(["moed_a"]);
         });
         $('#scheduler_function_caller_3').click(function(){
+            if (localStorage.getItem("pressed_schedule") == "false")
+            {
+                popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
+                return;
+            }
             $("[id^='exam_for_moed_b']").remove();
             makeSchedule(["moed_b"]);
         });
