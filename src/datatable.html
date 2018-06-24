@@ -244,6 +244,7 @@
                        error.style.color = "green";
                        setTimeout(function () {
                            $("#conflicts_modal").modal('hide');
+                           localStorage.setItem("refresh_again", "true");
                            window.location.href = '/scheduler'
                        }, 1000);
                    });

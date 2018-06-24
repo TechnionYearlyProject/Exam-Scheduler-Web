@@ -103,11 +103,11 @@ function get_course_entry (course_id) {
     }
 }
 
-function create_test(target, elem_type, text, course_id, class_name, moed) {
+function create_test(target, elem_type, text, course_id, class_name, moed, draggable) {
     var test = document.createElement(elem_type);
     test.className += class_name;
     test.innerHTML = text;
-    test.draggable = true;
+    test.draggable = draggable;
     test.id = "exam_for_" + moed + "_" + course_id;
     test.setAttribute("test_id", moed + "_" + course_id);
     var color = "#F39C12";
@@ -121,21 +121,25 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
         color = "#9CCC65";
     }
     test.style.backgroundColor = color;
-    test.ondragstart = function(ev) {
-        $('#' + test.id).tooltip("hide");
-        var test2 = document.createElement("label");
-        test2.className = "test_tooltip";
-        test2.innerHTML = text;
-        test2.style.backgroundColor = color;
-        test2.style.position = 'absolute';
-        test2.style.left = '0px';
-        test2.style.top = '0px';
-        test2.id = 'test_tooltip_' + course_id;
-        test2.style.zIndex = '-1';
-        document.body.appendChild(test2);
-        ev.dataTransfer.setDragImage(test2, 0, 0);
-        ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
-    };
+    if (draggable)
+    {
+        test.ondragstart = function(ev) {
+            $('#' + test.id).tooltip("hide");
+            var test2 = document.createElement("label");
+            test2.className = "test_tooltip";
+            test2.innerHTML = text;
+            test2.style.backgroundColor = color;
+            test2.style.position = 'absolute';
+            test2.style.left = '0px';
+            test2.style.top = '0px';
+            test2.id = 'test_tooltip_' + course_id;
+            test2.style.zIndex = '-1';
+            document.body.appendChild(test2);
+            ev.dataTransfer.setDragImage(test2, 0, 0);
+            ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
+        };
+    }
+
     target.appendChild(test);
     $('#' + test.id).tooltip({
         trigger: 'hover',
@@ -204,6 +208,11 @@ function make_calendar(start, end, moed) {
                 if (this.getAttribute('active') == 0) {
                     return;
                 }
+                if (localStorage.getItem("pressed_schedule") == "true")
+                {
+                    popup_modal("ERROR", 'פעולה לא חוקית אחרי שיבוץ.', null);
+                    return;
+                }
                 this.childNodes[1].style.visibility = "hidden";
                 var moed = day.parentNode;
                 while (!moed.hasAttribute("moed"))
@@ -242,7 +251,7 @@ function make_calendar(start, end, moed) {
                     $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 }
                 var entry = get_course_entry(course_id);
-                create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
+                create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"), true);
                 let constraint = ev.target.getAttribute("date");
                 save_changes_to_local(course_id, moed.getAttribute("moed") + "_constraint", constraint);
             };
