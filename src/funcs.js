@@ -91,7 +91,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
     test.draggable = true;
     test.id = "exam_for_" + moed + "_" + course_id;
     test.setAttribute("test_id", moed + "_" + course_id);
-    var color = "black";
+    var color = "#F39C12";
     if (course_id.startsWith("234")){
         color = "#26A69A";
     } else if (course_id.startsWith("104")){
