@@ -363,11 +363,12 @@
     //     });
     // });
     $('body').on('click', function (e) {
-        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input"))
+        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input") || e.target.id.startsWith("msgs_cntr") || e.target.id.startsWith("messages_button"))
             return;
         $('[data-toggle="popover"]').each(function () {
             $(this).popover('hide');
         });
+        $("#msgs_cntr").hide();
     });
 
 
@@ -420,50 +421,45 @@
       sendRequest('get', '/api/message/list', null, res => {
         let data = JSON.parse(res);
         for (let i in data) {
-          let li = document.createElement('li');
-          li.className = "list-group-item";
-          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+            let date = new Date(data[i].schedule);
+            let sender = data[i].sender.name;
+            if (sender == 'Administrator') {
+                sender = 'לימודי הסמכה';
+            }
+            let semester = 'חורף';
+            if (data[i].semester.semester == 'spring') {
+                semester = 'אביב';
+            }
+            let moed = "א'";
+            if (data[i].moed == 'B') {
+                moed = "ב'";
+            }
+            let li = document.createElement('li');
+            li.id = "msgs_cntr_" + i;
+            li.className = "list-group-item myhover";
+            li.style = "border-bottom: 1px solid #ced4da; text-align: right; font-size:13px";
+            li.innerHTML = '<div id=' + "msgs_cntr_1_" + i +' style="font-weight: bold; margin-bottom:-5px;">\n' +
+              '                  <i  id=' + "msgs_cntr_5_" + i +'  class="fas fa-user" style="color: grey; padding: 5px"></i>\n' +
+                sender + '\n' +
+              '                </div>\n' +
+              '                <div id=' + "msgs_cntr_2_" + i + ' style="font-weight: bold; margin-bottom:-5px;">\n' +
+              '                  <i id=' + "msgs_cntr_6_" + i +'  class="fas fa-file-alt" style="color: grey; padding: 5px"></i>\n' +
+              data[i].course.id + ' - ' + data[i].course.name + '\n' +
+              '                </div>\n' +
+              '                <div id=' + "msgs_cntr_3_" + i + ' style="font-weight: bold;">\n' +
+              '                  <i id=' + "msgs_cntr_7_" + i +'  class="fas fa-clock" style="color: grey; padding: 5px"></i>\n' +
+              semester + ' ' + data[i].semester.year + ' מועד ' + moed + ' ' + date.getDate() + '/' + (parseInt(date.getMonth())+parseInt(1)) + '/' + date.getFullYear() + '\n' +
+              '                </div>\n' +
+              '                <div id=' + "msgs_cntr_4_" + i + ' style="line-height: 1.3">\n' +
+              data[i].text + '\n' +
+              '                </div>';
 
-          let id = document.createElement('p');
-          id.innerHTML = data[i].course.id;
-          li.appendChild(id);
 
-          let course = document.createElement('p');
-          course.innerHTML = data[i].course.name;
-          li.appendChild(course);
 
-          let year = document.createElement('p');
-          year.innerHTML = data[i].semester.year;
-          li.appendChild(year);
 
-          let semester = document.createElement('p');
-          semester.innerHTML = data[i].semester.semester;
-          li.appendChild(semester);
 
-          let schedule = document.createElement('p');
-          schedule.innerHTML = data[i].schedule;
-          li.appendChild(schedule);
-
-          let moed = document.createElement('p');
-          moed.innerHTML = data[i].moed;
-          li.appendChild(moed);
-
-          let sender = document.createElement('p');
-          sender.innerHTML = data[i].sender.name;
-          li.appendChild(sender);
-
-          let date = document.createElement('p');
-          date.innerHTML = data[i].date;
-          li.appendChild(date);
-
-          let text = document.createElement('p');
-          text.innerHTML = data[i].text;
-          li.appendChild(text);
-
-          let read = document.createElement('p');
-          read.innerHTML = data[i].read;
-          li.appendChild(read);
-
+          //schedule.innerHTML = data[i].schedule;
+          //data[i].read;
           msgs_cntr_lst.appendChild(li);
         }
       });

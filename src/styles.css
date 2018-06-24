@@ -88,6 +88,10 @@ textarea:focus {
     text-align: right;
 }
 
+.myhover:hover{
+    background-color: #ECF0F1;
+}
+
 .day{
     width: 100%;
     -webkit-touch-callout: none;
