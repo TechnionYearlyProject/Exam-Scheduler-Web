@@ -27,9 +27,6 @@
     let map_courses = {};
     for(var i in courses)
         map_courses[courses[i]["_id"]] = courses[i];
-    //console.log(courses);
-    //console.log(map_courses);
-
     let initial_conflicts = {};
     for (var i in courses)
     {
@@ -230,7 +227,7 @@
                    var jsondb = {
                        "conflicts" : params
                    };
-                   console.log(jsondb);
+                   console.log(JSON.stringify(jsondb));
                    sendRequest('put', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', JSON.stringify(jsondb), function (res) {
                        console.log(123);
                    });
