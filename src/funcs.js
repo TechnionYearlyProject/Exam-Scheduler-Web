@@ -160,14 +160,14 @@ function create_test(target, elem_type, text, course_id, class_name, moed, dragg
         };
     }
 
-    test.ondblclick = function (ev) {
-        ev.preventDefault();
-        $('#' + test.id).tooltip('hide');
-        $('#' + test.id).remove();
-        let moedLetter = moed.split('_')[1];
-        delete_from_local(course_id, moedLetter + "_constraint");
-        console.log(localStorage);
-    };
+    // test.ondblclick = function (ev) {
+    //     ev.preventDefault();
+    //     $('#' + test.id).tooltip('hide');
+    //     $('#' + test.id).remove();
+    //     let moedLetter = moed.split('_')[1];
+    //     delete_from_local(course_id, moedLetter + "_constraint");
+    //     console.log(localStorage);
+    // };
     target.appendChild(test);
     $('#' + test.id).tooltip({
         trigger: 'hover',
