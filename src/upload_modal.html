@@ -113,7 +113,7 @@
 
     document.getElementById('upload_save').onclick = function () {
         upload_alert.style.color = "green";
-        upload_alert.innerHTML = "המידע מועלה לשרת.";
+        upload_alert.innerHTML = "המידע מועלה לשרת...";
         faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
         local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
         current_semester = localStorage.getItem('semester_name');
