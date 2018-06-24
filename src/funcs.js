@@ -39,6 +39,26 @@ function save_changes_to_local(id, field, value) {
     localStorage.setItem(changes_root_key, JSON.stringify(changes));
 
 };
+
+function delete_from_local(id, field) {
+    let changes = JSON.parse(localStorage.getItem(changes_root_key)) || {};
+    console.log(id);
+    console.log(field);
+    console.log(changes);
+    if (!changes.hasOwnProperty(id)){
+        console.log("th1");
+        return;
+    }
+    if(!changes[id].hasOwnProperty(field)){
+        console.log("th2");
+        return;
+    } else {
+        delete changes[id][field];
+    }
+    console.log(changes);
+    localStorage.setItem(changes_root_key, JSON.stringify(changes));
+};
+
 function popup_modal(type, text, func) {
     var title = document.getElementById("alert_title");
     var body = document.getElementById("alert_body");
@@ -103,11 +123,11 @@ function get_course_entry (course_id) {
     }
 }
 
-function create_test(target, elem_type, text, course_id, class_name, moed) {
+function create_test(target, elem_type, text, course_id, class_name, moed, draggable) {
     var test = document.createElement(elem_type);
     test.className += class_name;
     test.innerHTML = text;
-    test.draggable = true;
+    test.draggable = draggable;
     test.id = "exam_for_" + moed + "_" + course_id;
     test.setAttribute("test_id", moed + "_" + course_id);
     var color = "#F39C12";
@@ -121,25 +141,37 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
         color = "#9CCC65";
     }
     test.style.backgroundColor = color;
-    test.ondragstart = function(ev) {
-        $('#' + test.id).tooltip("hide");
-        var test2 = document.createElement("label");
-        test2.className = "test_tooltip";
-        test2.innerHTML = text;
-        test2.style.backgroundColor = color;
-        test2.style.position = 'absolute';
-        test2.style.left = '0px';
-        test2.style.top = '0px';
-        test2.id = 'test_tooltip_' + course_id;
-        test2.style.zIndex = '-1';
-        document.body.appendChild(test2);
-        ev.dataTransfer.setDragImage(test2, 0, 0);
-        ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
-    };
+    if (draggable)
+    {
+        test.ondragstart = function(ev) {
+            $('#' + test.id).tooltip("hide");
+            var test2 = document.createElement("label");
+            test2.className = "test_tooltip";
+            test2.innerHTML = text;
+            test2.style.backgroundColor = color;
+            test2.style.position = 'absolute';
+            test2.style.left = '0px';
+            test2.style.top = '0px';
+            test2.id = 'test_tooltip_' + course_id;
+            test2.style.zIndex = '-1';
+            document.body.appendChild(test2);
+            ev.dataTransfer.setDragImage(test2, 0, 0);
+            ev.dataTransfer.setData("test_drag", course_id + "|" + test.parentNode.id);
+        };
+    }
+
+    // test.ondblclick = function (ev) {
+    //     ev.preventDefault();
+    //     $('#' + test.id).tooltip('hide');
+    //     $('#' + test.id).remove();
+    //     let moedLetter = moed.split('_')[1];
+    //     delete_from_local(course_id, moedLetter + "_constraint");
+    //     console.log(localStorage);
+    // };
     target.appendChild(test);
     $('#' + test.id).tooltip({
         trigger: 'hover',
-        placement: 'left',
+        placement: 'right',
         title:  text
     });
     return test;
@@ -204,6 +236,11 @@ function make_calendar(start, end, moed) {
                 if (this.getAttribute('active') == 0) {
                     return;
                 }
+                if (localStorage.getItem("pressed_schedule") == "true")
+                {
+                    popup_modal("ERROR", 'פעולה לא חוקית אחרי שיבוץ.', null);
+                    return;
+                }
                 this.childNodes[1].style.visibility = "hidden";
                 var moed = day.parentNode;
                 while (!moed.hasAttribute("moed"))
@@ -217,12 +254,15 @@ function make_calendar(start, end, moed) {
                         popup_modal("ERROR", 'המבחן כבר קיים במועד זה', null);
                         return;
                     }
+                } else if (course_id != ""){
+                        $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 }
                 if (course_id == "") //dragged from day
                 {
                     str = ev.dataTransfer.getData("test_drag");
                     var [temp, day_dragged_id] = str.split("|");
                     course_id = temp;
+                    $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                     var day_dragged = document.getElementById(day_dragged_id);
                     var moed_dragged = day_dragged.parentNode;
                     while (!moed_dragged.hasAttribute("moed"))
@@ -239,10 +279,9 @@ function make_calendar(start, end, moed) {
                             if (child.getAttribute("test_id") == moed.getAttribute("moed") + "_" + course_id)
                                 day_dragged.removeChild(child);
                     }
-                    $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 }
                 var entry = get_course_entry(course_id);
-                create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
+                create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"), true);
                 let constraint = ev.target.getAttribute("date");
                 save_changes_to_local(course_id, moed.getAttribute("moed") + "_constraint", constraint);
             };

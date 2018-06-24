@@ -27,10 +27,9 @@
     let map_courses = {};
     for(var i in courses)
         map_courses[courses[i]["_id"]] = courses[i];
-    //console.log(courses);
-    //console.log(map_courses);
-
     let initial_conflicts = {};
+    let error = document.getElementById("conflict_error");
+
     for (var i in courses)
     {
         for (var j in courses[i]["conflicts"])
@@ -43,6 +42,7 @@
             initial_conflicts[map_courses[courses[i]["conflicts"][j]["course"]]["id"]][courses[i]["id"]] = "1";
         }
     }
+    //console.log(initial_conflicts);
     localStorage.setItem("local_conflicts", JSON.stringify(initial_conflicts));
     var conflicts = {};
     var localConflicts = localStorage.getItem("local_conflicts");
@@ -159,8 +159,11 @@
                    conflicts[entry.id] = {};
                }
                function reloadLocalCourses(table1, table2){
+                   error.innerHTML = "";
                    table1.clear().draw();
                    table2.clear().draw();
+                   console.log("conf");
+                   console.log(conflicts);
                    for (let i in courses) {
                        if (courses[i].id == entry.id){
                            continue;
@@ -180,13 +183,16 @@
                let addConflict = function (id) {
                   return function () {
                       let count1 = table1.rows( { selected: true } ).count();
-                      let error = document.getElementById("conflict_error");
                       if (count1 == 0)
                       {
                           error.innerHTML = "לא נבחר קורס להוספה";
+                          error.style.color = "red";
+
                           return;
                       }
-                      error.innerHTML = "";
+                      error.style.color = "green";
+                      error.innerHTML = "הקישור נוסף בהצלחה.";
+
                       let selected_row = table1.row('.selected');
                       table2.row.add(selected_row.data()).draw();
                       conflicts[id][selected_row.data().id] = "1";
@@ -206,13 +212,15 @@
                let removeConflict = function (id) {
                    return function () {
                        let count2 = table2.rows( { selected: true } ).count();
-                       let error = document.getElementById("conflict_error");
                        if (count2 == 0)
                        {
                            error.innerHTML = "לא נבחר קורס להסרה";
+                           error.style.color = "red";
+
                            return;
                        }
-                       error.innerHTML = "";
+                       error.innerHTML = "הקישור הוסר בהצלחה.";
+                       error.style.color = "green";
                        let selected_row = table2.row('.selected');
                        delete conflicts[id][selected_row.data().id];
                        delete conflicts[selected_row.data().id][id];
@@ -227,14 +235,19 @@
                    for (var i in conflicts[course_id])
                        params.push(i);
                    localStorage.setItem("local_conflicts", JSON.stringify(conflicts));
-                   var jsondb = {
+                   let jsondb = {
                        "conflicts" : params
                    };
                    console.log(jsondb);
-                   sendRequest('put', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', JSON.stringify(jsondb), function (res) {
-                       console.log(123);
+                   sendRequest('put', '/api/' + localStorage.getItem('semester_name') + '/course/' + course_id + '/set_conflicts', jsondb, function (res) {
+                       error.innerHTML = "השינויים נשמרים לשרת. התהליך עשוי להימשך מספר דקות...";
+                       error.style.color = "green";
+                       setTimeout(function () {
+                           $("#conflicts_modal").modal('hide');
+                           localStorage.setItem("refresh_again", "true");
+                           window.location.href = '/scheduler'
+                       }, 1000);
                    });
-
                });
                let discardChanges = function (id) {
                    return function () {

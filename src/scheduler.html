@@ -162,7 +162,7 @@
                             <img src="graphics/loading.gif">
                         </div>
                         <div style="font-size: 20px; font-weight: bold">
-                            בונה לוחות מבחנים פוטנציאליים...
+                            בונה לוח מבחנים פוטנציאלי...
                         </div>
                     </div>
                 </div>
@@ -192,9 +192,9 @@
     let all_courses_dict = [];
 
     localStorage.setItem("pressed_schedule", "false");
-
     localStorage.previous_schedules_a = "";
     localStorage.previous_schedules_b = "";
+
     $('#cnflcts_ldr').load('cnflcts_mdl.html');
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
@@ -202,50 +202,45 @@
     $('#upload_loader').load('upload_modal.html');
     $('#download_loader').load('download_modal.html');
     $('#courses').load('datatable.html', function () {
-        $('#scheduler_function_caller').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "true")
-            {
+        $('#scheduler_function_caller').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "true") {
                 popup_modal("ERROR", 'לחץ על כפתור הניקוי לפני שיבוץ שנית.', null);
                 return;
             }
             $("[id^='exam_for_']").remove();
             makeSchedule(["a", "b"]);
             localStorage.setItem("pressed_schedule", "true");
-            for (var i in map_a)
-            {
+            for (var i in map_a) {
                 var day = document.getElementById(map_a[i]);
                 var lock = day.childNodes[1];
                 day.removeChild(lock);
             }
-            for (var i in map_b)
-            {
+            for (var i in map_b) {
                 var day = document.getElementById(map_b[i]);
                 var lock = day.childNodes[1];
                 day.removeChild(lock);
             }
         });
-        $('#scheduler_function_caller_2').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "false")
-            {
+        $('#scheduler_function_caller_2').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "false") {
                 popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
                 return;
             }
             $("[id^='exam_for_moed_a']").remove();
             goToNextSchedule("a");
         });
-        $('#scheduler_function_caller_3').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "false")
-            {
+        $('#scheduler_function_caller_3').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "false") {
                 popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
                 return;
             }
             $("[id^='exam_for_moed_b']").remove();
             goToNextSchedule("b");
         });
-        $('#scheduler_function_caller_4').click(function(){
+        $('#scheduler_function_caller_4').click(function () {
             goToPreviousSchedule("a");
         });
-        $('#scheduler_function_caller_5').click(function(){
+        $('#scheduler_function_caller_5').click(function () {
             goToPreviousSchedule("b");
         });
     });
@@ -284,6 +279,7 @@
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
                 localStorage.setItem('map_b', JSON.stringify(map_b));
                 load_courses_table();
+                console.log(1);
                 load_all_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
@@ -320,18 +316,26 @@
 
     var fillScheduleWithCourses = function (moeds) {
         let result = localStorage.getItem("result");
+        var text = "";
         result = JSON.parse(result);
-            for (var m = 0; m < moeds.length; m++){
-                var moed = "moed_" + moeds[m];
-                for(var i = 0; i < result[moed].schedule.length; i++){
-                    var examDay = result[moed].schedule[i];
-                    var day = moed +'_day_' + examDay.index;
-                    var day_elem = document.getElementById(day);
-                    for (var j = 0; j < examDay.exams.length; j++){
-                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
-                    }
+        for (var m = 0; m < moeds.length; m++){
+            var moed = "moed_" + moeds[m];
+            for(var i = 0; i < result[moed].schedule.length; i++){
+                var examDay = result[moed].schedule[i];
+                var day = moed +'_day_' + examDay.index;
+                var day_elem = document.getElementById(day);
+                for (var j = 0; j < examDay.exams.length; j++){
+                    create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                 }
             }
+            var problems = result[moed].problems;
+            for (var id in problems){
+                text += "" + 'זמן הכנה ל' + id + ' הורד ל' + problems[id] + ' ימים' + "<br>";
+            }
+        }
+        if (text){
+            popup_modal("INFO", text);
+        }
     };
     let makeSchedule = function (moeds){
         $('#schedule_board_modal').modal("show");
@@ -375,54 +379,12 @@
                         localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
                     }
                     localStorage.setItem("result", JSON.stringify(localSchedule));
-                    fillScheduleWithCourses(moeds);
                     $('#schedule_board_modal').modal("hide");
+                    fillScheduleWithCourses(moeds);
                 }
             });
         }, 5000);
 
-    };
-
-    let goToNextSchedule = function(moed){
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if (curr == null || !schedules[curr + 1]){
-            makeSchedule([moed]);
-        } else {
-            let result = localStorage.getItem("result");
-            result = JSON.parse(result);
-            result["moed_" + moed] = schedules[curr + 1];
-            schedules["curr_index"] = curr + 1;
-            localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-            localStorage.setItem("result", JSON.stringify(result));
-            fillScheduleWithCourses([moed]);
-        }
-    };
-
-    let goToPreviousSchedule = function (moed) {
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if(!curr || curr == 0){
-            return;
-        }
-        $("[id^='exam_for_moed_" + moed + "']").remove();
-        let result = localStorage.getItem("result");
-        result = JSON.parse(result);
-        result["moed_" + moed] = schedules[curr - 1];
-        schedules["curr_index"] = curr - 1;
-        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-        localStorage.setItem("result", JSON.stringify(result));
-        fillScheduleWithCourses([moed]);
     };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -439,11 +401,12 @@
     //     });
     // });
     $('body').on('click', function (e) {
-        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input"))
+        if (e.target.className == "popover-body" || e.target.id.startsWith("popover_input") || e.target.id.startsWith("msgs_cntr") || e.target.id.startsWith("messages_button"))
             return;
         $('[data-toggle="popover"]').each(function () {
             $(this).popover('hide');
         });
+        $("#msgs_cntr").hide();
     });
 
 
@@ -454,14 +417,14 @@
         console.log("sent");
         let params = JSON.parse(localStorage.getItem("popover_data"));
         if (!params["moed"].localeCompare("a")) {
-          params["moed"] = 'A';
+            params["moed"] = 'A';
         } else {
-          params["moed"] = 'B';
+            params["moed"] = 'B';
         }
         let json = {
-          course: params["course_id"],
-          message: params["msg"],
-          moed: params["moed"]
+            course: params["course_id"],
+            message: params["msg"],
+            moed: params["moed"]
         };
         let route = '/api/' + params["semester"] + '/message/send';
         sendRequest('post', route, json, () => {
@@ -487,62 +450,60 @@
     // }
 
     function reload_message_list() {
-      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      if (msgs_cntr_lst){
-          while (msgs_cntr_lst.firstChild) {
-              msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
-          }
-      }
-      sendRequest('get', '/api/message/list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-          let li = document.createElement('li');
-          li.className = "list-group-item";
-          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-
-          let id = document.createElement('p');
-          id.innerHTML = data[i].course.id;
-          li.appendChild(id);
-
-          let course = document.createElement('p');
-          course.innerHTML = data[i].course.name;
-          li.appendChild(course);
-
-          let year = document.createElement('p');
-          year.innerHTML = data[i].semester.year;
-          li.appendChild(year);
-
-          let semester = document.createElement('p');
-          semester.innerHTML = data[i].semester.semester;
-          li.appendChild(semester);
-
-          let schedule = document.createElement('p');
-          schedule.innerHTML = data[i].schedule;
-          li.appendChild(schedule);
-
-          let moed = document.createElement('p');
-          moed.innerHTML = data[i].moed;
-          li.appendChild(moed);
-
-          let sender = document.createElement('p');
-          sender.innerHTML = data[i].sender.name;
-          li.appendChild(sender);
-
-          let date = document.createElement('p');
-          date.innerHTML = data[i].date;
-          li.appendChild(date);
-
-          let text = document.createElement('p');
-          text.innerHTML = data[i].text;
-          li.appendChild(text);
-
-          let read = document.createElement('p');
-          read.innerHTML = data[i].read;
-          li.appendChild(read);
-
-          msgs_cntr_lst.appendChild(li);
+        let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
+        if (msgs_cntr_lst) {
+            while (msgs_cntr_lst.firstChild) {
+                msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+            }
         }
-      });
+        sendRequest('get', '/api/message/list', null, res => {
+            let data = JSON.parse(res);
+            let new_messages = false;
+            let i = data.length - 1;
+            while (i >= 0) {
+                console.log(data[i].read);
+                if (data[i].read == false) {
+                    new_messages = true;
+                }
+                let date = new Date(data[i].schedule);
+                let sender = data[i].sender.name;
+                if (sender == 'Administrator') {
+                    sender = 'לימודי הסמכה';
+                }
+                let semester = 'חורף';
+                if (data[i].semester.semester == 'spring') {
+                    semester = 'אביב';
+                }
+                let moed = "א'";
+                if (data[i].moed == 'B') {
+                    moed = "ב'";
+                }
+                let li = document.createElement('li');
+                li.id = "msgs_cntr_" + i;
+                li.className = "list-group-item myhover";
+                li.style = "border-bottom: 1px solid #ced4da; text-align: right; font-size:13px";
+                li.innerHTML = '<div id=' + "msgs_cntr_1_" + i + ' style="font-weight: bold; margin-bottom:-5px;">\n' +
+                    '                  <i  id=' + "msgs_cntr_5_" + i + '  class="fas fa-user" style="color: grey; padding: 5px"></i>\n' +
+                    sender + '\n' +
+                    '                </div>\n' +
+                    '                <div id=' + "msgs_cntr_2_" + i + ' style="font-weight: bold; margin-bottom:-5px;">\n' +
+                    '                  <i id=' + "msgs_cntr_6_" + i + '  class="fas fa-file-alt" style="color: grey; padding: 5px"></i>\n' +
+                    data[i].course.id + ' - ' + data[i].course.name + '\n' +
+                    '                </div>\n' +
+                    '                <div id=' + "msgs_cntr_3_" + i + ' style="font-weight: bold;">\n' +
+                    '                  <i id=' + "msgs_cntr_7_" + i + '  class="fas fa-clock" style="color: grey; padding: 5px"></i>\n' +
+                    semester + ' ' + data[i].semester.year + ' מועד ' + moed + ' ' + date.getDate() + '/' + (parseInt(date.getMonth()) + parseInt(1)) + '/' + date.getFullYear() + '\n' +
+                    '                </div>\n' +
+                    '                <div id=' + "msgs_cntr_4_" + i + ' style="line-height: 1.3">\n' +
+                    data[i].text + '\n' +
+                    '                </div>';
+                msgs_cntr_lst.appendChild(li);
+            i = i - 1;
+            }
+            if (new_messages) {
+                document.getElementById('messages_button').className = "btn btn-danger btn-md dropdown-toggle";
+            }
+        });
     }
 
     $(document).ready(reload_message_list);
@@ -602,25 +563,26 @@
     };
 
     function load_all_courses_table() {
-    var table1 = $("#all_courses").DataTable();
-    var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-        var courses = JSON.parse(res);
-        //console.log(courses);
-        for (var i in courses) {
-            var entry = {
-                "id": ("0" + courses[i]["id"]).slice(-6),
-                "name": courses[i]["name"],
-                "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
-                "conflicts" : courses[i]["conflicts"],
-                "_id" : courses[i]["_id"],
-            };
-            all_courses_dict.push(entry);
-            table1.row.add(entry).draw();
-        }
+        var table1 = $("#all_courses").DataTable();
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+            console.log(2);
+            var courses = JSON.parse(res);
+            //console.log(courses);
+            for (var i in courses) {
+                var entry = {
+                    "id": ("0" + courses[i]["id"]).slice(-6),
+                    "name": courses[i]["name"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"],
+                };
+                all_courses_dict.push(entry);
+                table1.row.add(entry).draw();
+            }
 
-        localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
-    });
-}
+            localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        });
+    }
 
 
 
@@ -715,7 +677,48 @@
         setTimeout(function () {
             $("#password_change_modal").modal('hide');
         }, 1500);
-    }
+    };
+    let goToNextSchedule = function(moed){
+        let schedules = localStorage.getItem("previous_schedules_" + moed);
+        if (schedules){
+            schedules = JSON.parse(schedules);
+        } else {
+            schedules = {};
+        }
+        let curr = schedules["curr_index"];
+        if (curr == null || !schedules[curr + 1]){
+            makeSchedule([moed]);
+        } else {
+            let result = localStorage.getItem("result");
+            result = JSON.parse(result);
+            result["moed_" + moed] = schedules[curr + 1];
+            schedules["curr_index"] = curr + 1;
+            localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
+            localStorage.setItem("result", JSON.stringify(result));
+            fillScheduleWithCourses([moed]);
+        }
+    };
+
+    let goToPreviousSchedule = function (moed) {
+        let schedules = localStorage.getItem("previous_schedules_" + moed);
+        if (schedules){
+            schedules = JSON.parse(schedules);
+        } else {
+            schedules = {};
+        }
+        let curr = schedules["curr_index"];
+        if(!curr || curr == 0){
+            return;
+        }
+        $("[id^='exam_for_moed_" + moed + "']").remove();
+        let result = localStorage.getItem("result");
+        result = JSON.parse(result);
+        result["moed_" + moed] = schedules[curr - 1];
+        schedules["curr_index"] = curr - 1;
+        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
+        localStorage.setItem("result", JSON.stringify(result));
+        fillScheduleWithCourses([moed]);
+    };
 
 
 
