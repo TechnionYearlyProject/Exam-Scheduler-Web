@@ -1,18 +1,48 @@
+import {sendRequest} from "./request";
+
+function downloadContent(name, content) {
+    var atag = document.createElement("a");
+    var file = new Blob([content], {type: 'text/plain'});
+    atag.href = URL.createObjectURL(file);
+    atag.download = name;
+    atag.click();
+}
+
+// downloadContent("t1.txt","hello world");
+
 function debug() {
 
 
     var result = JSON.parse(localStorage.getItem("result"));
     var moed_a_schedule = result["moed_a"]["schedule"];
-    for(let i in moed_a_schedule){
-        for(let j in moed_a_schedule[i].exams){
-            var id = moed_a_schedule[i].exams[j].id;
-            var name = moed_a_schedule[i].exams[j].name;
-            var date = moed_a_schedule[i].date.substring(0,10);
-            var exam = id.concat(',',name,',',date);
-            console.log(exam);
-            // console.log(moed_a_schedule[i].exams[j].id,',',moed_a_schedule[i].exams[j].name,',',moed_a_schedule[i].date.substring(0,10));
+    var moed_b_schedule = result["moed_b"]["schedule"];
+
+    var all_exams = 'מערכת מועדי א\r\n';
+    all_exams += 'מספר קורס , שם קורס , תאריך\r\n';
+    for(let i in moed_a_schedule) {
+        for (let j in moed_a_schedule[i].exams) {
+            all_exams += moed_a_schedule[i].exams[j].id;
+            all_exams += ' , ';
+            all_exams += moed_a_schedule[i].exams[j].name;
+            all_exams += ' , ';
+            all_exams += moed_a_schedule[i].date.substring(0, 10);
+            all_exams += "\r\n";
         }
     }
+    all_exams+='\r\n\r\n';
+    all_exams += 'מערכת מועדי ב\r\n';
+    for(let i in moed_b_schedule) {
+        for (let j in moed_b_schedule[i].exams) {
+            all_exams += moed_b_schedule[i].exams[j].id;
+            all_exams += ' , ';
+            all_exams += moed_b_schedule[i].exams[j].name;
+            all_exams += ' , ';
+            all_exams += moed_b_schedule[i].date.substring(0, 10);
+            all_exams += "\r\n";
+        }
+    }
+
+    downloadContent("exams.txt",all_exams);
     var studyPrograms = [
         {
             "name":"מסלול כללי ארבע שנתי",
@@ -8114,6 +8144,13 @@ function debug() {
             "programs": []
         }
     ];
+
+    // for(var i in studyPrograms){
+    //     sendRequest('POST', '/api/program/create',studyPrograms[i],function(out){
+    //         console.log(out);
+    //     })
+    // }
+
 
     // for (var i in cs) {
     //     sendRequest('POST', '/api/2018-spring/course/create', cs[i], function (out) {
