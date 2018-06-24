@@ -193,8 +193,6 @@
 
     localStorage.setItem("pressed_schedule", "false");
 
-    localStorage.previous_schedules_a = "";
-    localStorage.previous_schedules_b = "";
     $('#cnflcts_ldr').load('cnflcts_mdl.html');
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
@@ -209,7 +207,7 @@
                 return;
             }
             $("[id^='exam_for_']").remove();
-            makeSchedule(["a", "b"]);
+            makeSchedule(["moed_a", "moed_b"]);
             localStorage.setItem("pressed_schedule", "true");
             for (var i in map_a)
             {
@@ -231,7 +229,7 @@
                 return;
             }
             $("[id^='exam_for_moed_a']").remove();
-            goToNextSchedule("a");
+            makeSchedule(["moed_a"]);
         });
         $('#scheduler_function_caller_3').click(function(){
             if (localStorage.getItem("pressed_schedule") == "false")
@@ -240,13 +238,7 @@
                 return;
             }
             $("[id^='exam_for_moed_b']").remove();
-            goToNextSchedule("b");
-        });
-        $('#scheduler_function_caller_4').click(function(){
-            goToPreviousSchedule("a");
-        });
-        $('#scheduler_function_caller_5').click(function(){
-            goToPreviousSchedule("b");
+            makeSchedule(["moed_b"]);
         });
     });
 
@@ -284,10 +276,12 @@
                 map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
                 localStorage.setItem('map_b', JSON.stringify(map_b));
                 load_courses_table();
+                console.log(1);
                 load_all_courses_table();
             };
             document.getElementById('sem_picker').appendChild(a);
         }
+
         var top = document.getElementById('sem_picker').firstChild;
         document.getElementById('semester_button').innerHTML = top.innerHTML;
         localStorage.setItem('start_a', top.getAttribute('start_a'));
@@ -300,6 +294,7 @@
         map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
         localStorage.setItem('map_b', JSON.stringify(map_b));
         load_courses_table();
+        console.log(3);
         load_all_courses_table();
     });
 
@@ -389,48 +384,6 @@
             });
         }, 5000);
 
-    };
-
-    let goToNextSchedule = function(moed){
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if (curr == null || !schedules[curr + 1]){
-            makeSchedule([moed]);
-        } else {
-            let result = localStorage.getItem("result");
-            result = JSON.parse(result);
-            result["moed_" + moed] = schedules[curr + 1];
-            schedules["curr_index"] = curr + 1;
-            localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-            localStorage.setItem("result", JSON.stringify(result));
-            fillScheduleWithCourses([moed]);
-        }
-    };
-
-    let goToPreviousSchedule = function (moed) {
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if(!curr || curr == 0){
-            return;
-        }
-        $("[id^='exam_for_moed_" + moed + "']").remove();
-        let result = localStorage.getItem("result");
-        result = JSON.parse(result);
-        result["moed_" + moed] = schedules[curr - 1];
-        schedules["curr_index"] = curr - 1;
-        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-        localStorage.setItem("result", JSON.stringify(result));
-        fillScheduleWithCourses([moed]);
     };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -610,21 +563,22 @@
     };
 
     function load_all_courses_table() {
-        var table1 = $("#all_courses").DataTable();
-        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-            var courses = JSON.parse(res);
-            //console.log(courses);
-            for (var i in courses) {
-                var entry = {
-                    "id": ("0" + courses[i]["id"]).slice(-6),
-                    "name": courses[i]["name"],
-                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
-                    "conflicts" : courses[i]["conflicts"],
-                    "_id" : courses[i]["_id"],
-                };
-                all_courses_dict.push(entry);
-                table1.row.add(entry).draw();
-            }
+    var table1 = $("#all_courses").DataTable();
+    var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+        console.log(2);
+        var courses = JSON.parse(res);
+        //console.log(courses);
+        for (var i in courses) {
+            var entry = {
+                "id": ("0" + courses[i]["id"]).slice(-6),
+                "name": courses[i]["name"],
+                "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                "conflicts" : courses[i]["conflicts"],
+                "_id" : courses[i]["_id"],
+            };
+            all_courses_dict.push(entry);
+            table1.row.add(entry).draw();
+        }
 
             localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
         });
