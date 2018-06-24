@@ -136,7 +136,7 @@ exports.init = async function (req, res, next) {
             }
         }
         if(flag === false ){
-            return res.status(400).send('Study program does not exist.');
+            return res.status(404).send('Study program does not exist.');
         }
     }
     // console.log(programs);
