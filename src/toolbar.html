@@ -35,7 +35,7 @@
           יצוא
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 14px;">
-          <a class="dropdown-item" href="#">בתור txt</a>
+          <a class="dropdown-item" id="txt_export_button" href="#">בתור txt</a>
           <a class="dropdown-item" id="png_export_button" href="#">בתור png</a>
         </div>
       </div>
@@ -73,6 +73,47 @@
                   a.click();
               }});
       };
+
+      function downloadContent(name, content) {
+          var atag = document.createElement("a");
+          var file = new Blob([content], {type: 'text/plain'});
+          atag.href = URL.createObjectURL(file);
+          atag.download = name;
+          atag.click();
+      }
+
+      document.getElementById('txt_export_button').onclick = function(e) {
+          var result = JSON.parse(localStorage.getItem("result"));
+          var moed_a_schedule = result["moed_a"]["schedule"];
+          var moed_b_schedule = result["moed_b"]["schedule"];
+
+          var all_exams = 'מערכת מועדי א\r\n';
+          all_exams += 'מספר קורס , שם קורס , תאריך\r\n';
+          for (let i in moed_a_schedule) {
+              for (let j in moed_a_schedule[i].exams) {
+                  all_exams += moed_a_schedule[i].exams[j].id;
+                  all_exams += ' , ';
+                  all_exams += moed_a_schedule[i].exams[j].name;
+                  all_exams += ' , ';
+                  all_exams += moed_a_schedule[i].date.substring(0, 10);
+                  all_exams += "\r\n";
+              }
+          }
+          all_exams += '\r\n\r\n';
+          all_exams += 'מערכת מועדי ב\r\n';
+          for (let i in moed_b_schedule) {
+              for (let j in moed_b_schedule[i].exams) {
+                  all_exams += moed_b_schedule[i].exams[j].id;
+                  all_exams += ' , ';
+                  all_exams += moed_b_schedule[i].exams[j].name;
+                  all_exams += ' , ';
+                  all_exams += moed_b_schedule[i].date.substring(0, 10);
+                  all_exams += "\r\n";
+              }
+          }
+
+          downloadContent("exams.txt", all_exams);
+      }
 
 
       var name = localStorage.getItem('faculty_name');
