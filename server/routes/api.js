@@ -18,12 +18,12 @@ router.get('/faculty/list', faculty_controller.faculty_list); // Necessary to di
 // Database API routes
 
 router.all('*', auth.verify_token);
+router.post(sem_regex + '/course/init',course_controller.init);
 router.get(sem_regex+'/faculty/courses', course_controller.get_list);
 router.get('/faculty/name', faculty_controller.get_name);
 router.get('/faculty/email', faculty_controller.get_email);
 router.get('/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty
 router.put(sem_regex+'/course/:id/set_conflicts',course_controller.set_conflicts);
-//router.delete('/program/delete', study_program_controller.study_program_delete);
 
 router.get(sem_regex+'/download/conflicts',course_controller.get_conflicts_dates);
 
@@ -50,7 +50,7 @@ router.put('/update_email', faculty_controller.faculty_update_mail);
 router.put('/update_password', faculty_controller.faculty_update_password);
 
 router.post(sem_regex + '/course/create',course_controller.course_create);
-
+router.post('/semester/add',semester_controller.new_semester);
 // Following routes require admin user
 
 router.all('*', auth.verify_admin);
