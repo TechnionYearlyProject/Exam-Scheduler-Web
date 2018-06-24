@@ -1,6 +1,24 @@
 var occupied = {};
 var changes_root_key = "local_course_changes";
 
+function course_num_to_faculty_id(course_num) {
+    let faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    let courses_dict = JSON.parse(localStorage.getItem('courses_dict'));
+    let faculty_name = '';
+    for (let i in courses_dict) {
+        if (courses_dict[i]['id'] == course_num) {
+            faculty_name = courses_dict[i]['faculty'];
+            break;
+        }
+    }
+    for (let faculty_id in faculties_dict) {
+        if (faculties_dict[faculty_id]['name'] == faculty_name) {
+            return faculty_id;
+        }
+    }
+    return '';
+}
+
 function faculty_name_to_id(name) {
     let faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
     for (let key in faculties_dict) {
@@ -56,15 +74,16 @@ function popup_modal(type, text, func) {
 
 
 
-function popover_comment(elem_id, semester, moed, course_id) {
+function popover_comment(elem_id, course_id) {
     var test = document.getElementById(elem_id);
     test.setAttribute("data-toggle", "popover");
-    var input = document.getElementById("popover_input");
     var popover = document.createElement("div");
+    console.log("in_pop");
+    console.log(course_id);
     popover.id = "popover_" + course_id;
     popover.innerHTML = '    <div class = "row">\n' +
-        '        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input_' + course_id + '" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>\n' +
-        '        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button_' + course_id + '" class="btn btn-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>\n' +
+        '        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input_' + course_id + '" rows = "1" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>\n' +
+        '        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button_' + course_id + '" class="btn btn-outline-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-envelope" style="padding-left: 5px"></i></button></div>\n' +
         '    </div>';
     $('#' + elem_id).popover({
         trigger: 'focus',
@@ -103,7 +122,6 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
     }
     test.style.backgroundColor = color;
     test.ondragstart = function(ev) {
-        $('#' + test.id).popover("hide");
         $('#' + test.id).tooltip("hide");
         var test2 = document.createElement("label");
         test2.className = "test_tooltip";
@@ -224,46 +242,13 @@ function make_calendar(start, end, moed) {
                     $("#exam_for_moed_" + moed.getAttribute("moed") + "_" + course_id).remove();
                 }
                 var entry = get_course_entry(course_id);
-                var test = create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
+                create_test(ev.target, "div", entry["name"], course_id, "test", "moed_" + moed.getAttribute("moed"));
                 let constraint = ev.target.getAttribute("date");
                 save_changes_to_local(course_id, moed.getAttribute("moed") + "_constraint", constraint);
-                popover_comment(test.id, localStorage.getItem('semester_name'), moed.getAttribute("moed"), entry["id"]);
-                test.ondblclick = function () {
-                    $('#' + test.id).popover("show");
-                    var button = document.getElementById("popover_button_"+entry["id"]);
-                    var input = document.getElementById("popover_input_"+entry["id"]);
-                    input.value = "";
-                    button.onclick = function() {
-                        var event = new CustomEvent(
-                            "send_msg",
-                            {
-                                detail: {
-                                    message: "Hello World!",
-                                    time: new Date(),
-                                },
-                                bubbles: true,
-                                cancelable: true
-                            }
-                        );
-                        localStorage.setItem("popover_data",JSON.stringify({
-                            "msg" : input.value,
-                            "semester" : localStorage.getItem('semester_name'),
-                            "moed" : moed.getAttribute("moed"),
-                            "course_id" : entry["id"]
-                        }));
-                        document.getElementById("popover_input_"+entry["id"]).dispatchEvent(event);
-
-                    };
-
-
-                }
             };
             day.ondragover = function (ev) {
                 ev.preventDefault();
             };
-            day.oncontextmenu = function (ev) {
-
-            }
             var lock = document.createElement("span");
             lock.style = "float: right; padding:0px; padding-right:1px; visibility: hidden";
             var img = document.createElement("i");

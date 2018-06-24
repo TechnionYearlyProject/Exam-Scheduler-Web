@@ -17,14 +17,14 @@
             <input type="checkbox" id="moed_a_conflicts_switch">
             <span class="slider round"></span>
           </label>
-          <label class="form-check-label" style="margin-right: 20px;" for="moed_a_conflicts_switch">שיבוצים קשורים במועד א'</label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_a_conflicts_switch">שיבוצי קורסים קשורים במועד א'</label>
         </div>
         <div class="form-check">
           <label class="switch" style="margin-bottom: -2px; display: inline-block">
             <input type="checkbox" id="moed_b_conflicts_switch">
             <span class="slider round"></span>
           </label>
-          <label class="form-check-label" style="margin-right: 20px;" for="moed_b_conflicts_switch">שיבוצים קשורים במועד ב'</label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_b_conflicts_switch">שיבוצי קורסים קשורים במועד ב'</label>
         </div>
       </div>
       <div class="modal-footer" style="padding: 10px;">
@@ -67,7 +67,6 @@
         $("[id^='exam_for_moed_a_downloaded_']").remove();
         $("[id^='exam_for_moed_b_downloaded_']").remove();
         update_translation();
-        console.log(translation_map_courses);
         faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
         current_semester = localStorage.getItem('semester_name');
         schedule_a = {};
@@ -146,7 +145,37 @@
                                 let add_to = document.getElementById(map_a[curr_date]);
                                 for (let h in schedule_a[curr_date]) {
                                     let entry = translation_map_courses[schedule_a[curr_date][h]];
-                                    create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a");
+                                    let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a");
+                                    popover_comment("exam_for_moed_a_downloaded_" + entry['id'], entry['id']);
+                                    let id = entry["id"];
+                                    test.ondblclick = function () {
+                                        $('#' + test.id).popover("show");
+                                        console.log(entry["id"]);
+                                        var button = document.getElementById("popover_button_"+id);
+                                        console.log(button);
+                                        var input = document.getElementById("popover_input_"+id);
+                                        input.value = "";
+                                        button.onclick = function() {
+                                            var event = new CustomEvent(
+                                                "send_msg",
+                                                {
+                                                    detail: {
+                                                        message: "Hello World!",
+                                                        time: new Date(),
+                                                    },
+                                                    bubbles: true,
+                                                    cancelable: true
+                                                }
+                                            );
+                                            localStorage.setItem("popover_data",JSON.stringify({
+                                                "msg" : input.value,
+                                                "semester" : localStorage.getItem('semester_name'),
+                                                "moed" : "a",
+                                                "course_id" : entry["id"]
+                                            }));
+                                            document.getElementById("popover_input_"+ entry["id"]).dispatchEvent(event);
+                                        };
+                                    }
                                 }
                             }
                         }
@@ -155,20 +184,18 @@
                         let map_b = JSON.parse(localStorage.getItem('map_b'));
                         for (let curr_date in map_b) {
                             if (schedule_b[curr_date] != undefined) {
-                                let add_to = document.getElementById(map_a[curr_date]);
-                                for (let h in schedule_a[curr_date]) {
-                                    let entry = translation_map_courses[schedule_a[curr_date][h]];
+                                let add_to = document.getElementById(map_b[curr_date]);
+                                for (let h in schedule_b[curr_date]) {
+                                    let entry = translation_map_courses[schedule_b[curr_date][h]];
                                     create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
                                 }
                             }
                         }
                     }
                     $('#download_modal').modal('hide');
-
                 });
             }
         }
-
     };
 
     function update_translation() {

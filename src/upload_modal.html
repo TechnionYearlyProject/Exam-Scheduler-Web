@@ -17,21 +17,21 @@
             <input type="checkbox" id="courses_switch">
             <span class="slider round"></span>
           </label>
-          <label class="form-check-label" style="margin-right: 20px;" for="courses_switch">מערכת קורסים</label>
+          <label class="form-check-label" style="margin-right: 20px;" for="courses_switch">נתוני קורסים</label>
         </div>
         <div class="form-check">
           <label class="switch" style="margin-bottom: -2px; display: inline-block">
             <input type="checkbox" id="moed_a_switch">
             <span class="slider round"></span>
           </label>
-          <label class="form-check-label" style="margin-right: 20px;" for="moed_a_switch">מועד א'</label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_a_switch">שיבוצים מקומיים במועד א'</label>
         </div>
         <div class="form-check">
           <label class="switch" style="margin-bottom: -2px; display: inline-block">
             <input type="checkbox" id="moed_b_switch">
             <span class="slider round"></span>
           </label>
-          <label class="form-check-label" style="margin-right: 20px;" for="moed_b_switch">מועד ב'</label>
+          <label class="form-check-label" style="margin-right: 20px;" for="moed_b_switch">שיבוצים מקומיים במועד ב'</label>
         </div>
       </div>
       <div class="modal-footer" style="padding: 10px;">
@@ -53,11 +53,55 @@
     let all_local_courses = [];
     let faculty_name = '';
     let faculty_id = '';
+    let faculties_dict = [];
+
     sendRequest('GET', '/api/faculty/name', null, function (res) {
         let json = JSON.parse(res);
         faculty_name = json['name'];
         faculty_id = json['_id'];
     });
+
+    function execute_update() {
+        for (let course_id in local_course_changes) {
+            if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
+                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'faculty': course_num_to_faculty_id(course_id), 'date': local_course_changes[course_id]['a_constraint']} ,function(out){
+                });
+            }
+            if (moed_b_switch.checked && local_course_changes[course_id]['b_constraint'] != undefined) {
+                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'faculty': course_num_to_faculty_id(course_id), 'date': local_course_changes[course_id]['b_constraint']}, function (out) {
+                });
+            }
+            if ((courses_switch.checked) && ((local_course_changes[course_id]['preparationTime'] != undefined) || (local_course_changes[course_id]['has_exam'] != undefined) || (local_course_changes[course_id]['pref'] != undefined))) {
+                let current_entry = {}
+                for (let i in all_local_courses) {
+                    if (all_local_courses[i]['id'] == course_id) {
+                        current_entry = all_local_courses[i];
+                        break;
+                    }
+                }
+                let entry = {'days_before': parseInt(current_entry['days_before']),
+                    'has_exam': current_entry['has_exam'].toString(),
+                    'is_first': current_entry['is_first'].toString(),
+                    'is_last': current_entry['is_last'].toString()
+                };
+                if (local_course_changes[course_id]['preparationTime'] != undefined)
+                    entry["days_before"] = parseInt(local_course_changes[course_id]['preparationTime']);
+                if (local_course_changes[course_id]['has_exam'] != undefined)
+                    entry["has_exam"] = local_course_changes[course_id]['has_exam'].toString();
+                if (local_course_changes[course_id]['pref'] != undefined) {
+                    entry["is_first"] = "false";
+                    entry["is_last"] = "false";
+                    if (local_course_changes[course_id]['pref'] == "סוף")
+                        entry["is_last"] = "true";
+                    if (local_course_changes[course_id]['pref'] == "התחלה")
+                        entry["is_first"] = "true";
+                }
+                sendRequest('PUT', '/api/' + current_semester + '/course/' + course_id + '/update', entry, function (out) {
+                });
+            }
+        }
+        $('#upload_modal').modal('hide');
+    };
 
     document.getElementById('cloud_upload_button').onclick = function() {
         courses_switch.checked = false;
@@ -66,54 +110,33 @@
         upload_alert.innerHTML = "";
         $('#upload_modal').modal();
     };
+
     document.getElementById('upload_save').onclick = function () {
         upload_alert.style.color = "green";
         upload_alert.innerHTML = "המידע מועלה לשרת.";
+        faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
         local_course_changes = JSON.parse(localStorage.getItem('local_course_changes'));
         current_semester = localStorage.getItem('semester_name');
         all_local_courses = JSON.parse(localStorage.getItem('courses_dict'));
-        for (var course_id in local_course_changes) {
-                        
-            if (moed_a_switch.checked && local_course_changes[course_id]['a_constraint'] != undefined) {
-                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_a', {'date': local_course_changes[course_id]['a_constraint']} ,function(out){
-                });
+        if (faculty_name == 'Administrator') {
+            let i = 0;
+            let len = Object.keys(faculties_dict).length
+            for (faculty_id in faculties_dict) {
+                i++;
+                if (i == len) {
+                    sendRequest('POST', '/api/' + current_semester + '/schedule', {'faculty': faculty_id}, function (out) {
+                        execute_update();
+                    });
+                } else {
+                    sendRequest('POST', '/api/' + current_semester + '/schedule', {'faculty': faculty_id}, function (out) {
+                    });
+                }
             }
-            if (moed_b_switch.checked && local_course_changes[course_id]['b_constraint'] != undefined) {
-                sendRequest('PATCH', '/api/' + current_semester + '/course/' + course_id + '/schedule_b', {'date': local_course_changes[course_id]['b_constraint']}, function (out) {
-                });
-            }
-            if ((courses_switch.checked) && ((local_course_changes[course_id]['preparationTime'] != undefined) || (local_course_changes[course_id]['has_exam'] != undefined) || (local_course_changes[course_id]['pref'] != undefined))) {
-              let current_entry = {}
-              for (let i in all_local_courses) {
-                  if (all_local_courses[i]['id'] == course_id) {
-                      current_entry = all_local_courses[i];
-                      break;
-                  }
-              }
-              let entry = {'days_before': parseInt(current_entry['days_before']),
-                  'has_exam': current_entry['has_exam'].toString(),
-                  'is_first': current_entry['is_first'].toString(),
-                  'is_last': current_entry['is_last'].toString()
-              };
-              if (local_course_changes[course_id]['preparationTime'] != undefined)
-                  entry["days_before"] = parseInt(local_course_changes[course_id]['preparationTime']);
-              if (local_course_changes[course_id]['has_exam'] != undefined)
-                  entry["has_exam"] = local_course_changes[course_id]['has_exam'].toString();
-              if (local_course_changes[course_id]['pref'] != undefined) {
-                  entry["is_first"] = "false";
-                  entry["is_last"] = "false";
-                  if (local_course_changes[course_id]['pref'] == "סוף")
-                      entry["is_last"] = "true";
-                  if (local_course_changes[course_id]['pref'] == "התחלה")
-                      entry["is_first"] = "true";
-              }
-              sendRequest('PUT', '/api/' + current_semester + '/course/' + course_id + '/update', entry, function (out) {
-              });
-            }
+        } else {
+            sendRequest('POST', '/api/' + current_semester + '/schedule', {'faculty': faculty_id}, function (out) {
+                execute_update();
+            });
         }
-        setTimeout(function () {
-            $('#upload_modal').modal('hide');
-        }, 2000);
     }
 
 </script>
