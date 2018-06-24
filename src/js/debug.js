@@ -3581,9 +3581,9 @@ function debug() {
             "id": 234111,
             "name": "מבוא למדעי המחשב",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -3591,9 +3591,9 @@ function debug() {
             "id": 234112,
             "name": "מבוא למחשב - שפת סי",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234123,
                 234218,
@@ -3605,9 +3605,9 @@ function debug() {
             "id": 234114,
             "name": "מבוא למדעי המחשב מ'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234145,
                 44145,
@@ -3650,9 +3650,9 @@ function debug() {
             "id": 234118,
             "name": "ארגון ותכנות המחשב",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234122,
                 234141,
@@ -3703,9 +3703,9 @@ function debug() {
             "id": 234117,
             "name": "מבוא למדעי המחשב ח'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234145
             ],
@@ -3720,9 +3720,9 @@ function debug() {
             "id": 234122,
             "name": "מבוא לתכנות מערכות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234118,
                 234141,
@@ -3773,9 +3773,9 @@ function debug() {
             "id": 234123,
             "name": "מערכות הפעלה",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [
                 234125,
                 234247,
@@ -3828,9 +3828,9 @@ function debug() {
             "id": 234125,
             "name": "אלגוריתמים נומריים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234123,
                 234247,
@@ -3866,9 +3866,9 @@ function debug() {
             "id": 234126,
             "name": "מבוא למחשב - שפת סי אנגלית",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 44000,
                 44114,
@@ -3882,9 +3882,9 @@ function debug() {
             "id": 234141,
             "name": "קומבינטוריקה למדעי המחשב",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234118,
                 234122,
@@ -3935,9 +3935,9 @@ function debug() {
             "id": 234144,
             "name": "מתמטיקה דיסקרטית מ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -3945,9 +3945,9 @@ function debug() {
             "id": 234145,
             "name": "מערכות ספרתיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234114,
                 234117,
@@ -3995,9 +3995,9 @@ function debug() {
             "id": 234218,
             "name": "מבני נתונים 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234262,
                 234293,
@@ -4045,9 +4045,9 @@ function debug() {
             "id": 234247,
             "name": "אלגוריתמים 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234123,
                 234125,
@@ -4100,9 +4100,9 @@ function debug() {
             "id": 234262,
             "name": "תכן לוגי",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234218,
                 234247,
@@ -4142,9 +4142,9 @@ function debug() {
             "id": 234267,
             "name": "מבנה מחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234123,
                 234247,
@@ -4171,9 +4171,9 @@ function debug() {
             "id": 234291,
             "name": "פרויקט 2 במדעי המחשב",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4181,9 +4181,9 @@ function debug() {
             "id": 234293,
             "name": "לוגיקה ותורת הקבוצות למדעי המחשב",
             "days_before": 7,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234218,
                 234262,
@@ -4221,9 +4221,9 @@ function debug() {
             "id": 234306,
             "name": "פרויקט ב- וי.אל.אס.אי. א'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4231,9 +4231,9 @@ function debug() {
             "id": 234312,
             "name": "פרויקט שנתי בהנדסת תוכנה-שלב ב'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4241,9 +4241,9 @@ function debug() {
             "id": 234313,
             "name": "פרויקט תעשייתי",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4251,9 +4251,9 @@ function debug() {
             "id": 234319,
             "name": "שפות תכנות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234218,
                 234262,
@@ -4270,9 +4270,9 @@ function debug() {
             "id": 234322,
             "name": "מערכות אחסון מידע",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 236334,
                 236343,
@@ -4293,9 +4293,9 @@ function debug() {
             "id": 234326,
             "name": "פרויקט בגרפיקה ממוחשבת ה'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4303,9 +4303,9 @@ function debug() {
             "id": 234329,
             "name": "פרויקט בעיבוד וניתוח תמונות",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4313,9 +4313,9 @@ function debug() {
             "id": 234900,
             "name": "סדנה בתכנות תחרותי",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4323,9 +4323,9 @@ function debug() {
             "id": 236026,
             "name": "ידע ומשחקים במערכות מבוזרות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4333,9 +4333,9 @@ function debug() {
             "id": 236270,
             "name": "ניהול פרויקטי תוכנה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4343,9 +4343,9 @@ function debug() {
             "id": 236278,
             "name": "מאיצים חישוביים ומערכות מואצות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4353,9 +4353,9 @@ function debug() {
             "id": 236299,
             "name": "מבוא לעיבוד שפות טבעיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4363,9 +4363,9 @@ function debug() {
             "id": 236321,
             "name": "שיטות בהנדסת תוכנה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4373,9 +4373,9 @@ function debug() {
             "id": 236323,
             "name": "פרויקט בעיבוד נתונים מ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4383,9 +4383,9 @@ function debug() {
             "id": 236327,
             "name": "עיבוד תמונות ואותות במחשב",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4393,9 +4393,9 @@ function debug() {
             "id": 236328,
             "name": "פרוייקט בגרפיקה ממוחשבת מ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4403,9 +4403,9 @@ function debug() {
             "id": 236329,
             "name": "עיבוד ספרתי של גאומטריה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4413,9 +4413,9 @@ function debug() {
             "id": 236330,
             "name": "מבוא לאופטימיזציה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4423,9 +4423,9 @@ function debug() {
             "id": 236332,
             "name": "האינטרנט של הדברים - טכנולוגיות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4433,9 +4433,9 @@ function debug() {
             "id": 236333,
             "name": "פרויקט באינטרנט של הדברים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4443,9 +4443,9 @@ function debug() {
             "id": 236334,
             "name": "מבוא לרשתות מחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234125,
                 234322,
@@ -4471,9 +4471,9 @@ function debug() {
             "id": 236336,
             "name": "פתרון נומרי של משוואות דיפ.חלקיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4481,9 +4481,9 @@ function debug() {
             "id": 236340,
             "name": "פרויקט בתקשורת מחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4491,9 +4491,9 @@ function debug() {
             "id": 236343,
             "name": "תורת החישוביות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234125,
                 234322,
@@ -4539,9 +4539,9 @@ function debug() {
             "id": 236348,
             "name": "מבוא לממשקי אדם-מחשב",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4549,9 +4549,9 @@ function debug() {
             "id": 236350,
             "name": "הגנה במערכות מתוכנתות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4559,9 +4559,9 @@ function debug() {
             "id": 236349,
             "name": "פרויקט באבטחת מידע",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4569,9 +4569,9 @@ function debug() {
             "id": 236353,
             "name": "אוטומטים ושפות פורמליות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 "234123",
                 "234247",
@@ -4608,9 +4608,9 @@ function debug() {
             "id": 236358,
             "name": "נושאים מתקדמים באלגוריתמים מבוזרי",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4618,9 +4618,9 @@ function debug() {
             "id": 236360,
             "name": "תורת הקומפילציה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 "234125",
                 "234322",
@@ -4652,9 +4652,9 @@ function debug() {
             "id": 236363,
             "name": "מערכות מסד נתונים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234123,
                 234247
@@ -4670,9 +4670,9 @@ function debug() {
             "id": 236366,
             "name": "פרויקט במערכות הפעלה מ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4680,9 +4680,9 @@ function debug() {
             "id": 236371,
             "name": "פרויקט בתכנות מקבילי ומבוזר",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4690,9 +4690,9 @@ function debug() {
             "id": 236374,
             "name": "שיטות הסתברותיות ואלגוריתמים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4700,9 +4700,9 @@ function debug() {
             "id": 236378,
             "name": "עקרונות ניהול מידע חסר ודאות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4710,9 +4710,9 @@ function debug() {
             "id": 236381,
             "name": "פרויקט ב- וי.אל.אס.אי. ב'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4720,9 +4720,9 @@ function debug() {
             "id": 236499,
             "name": "פרויקט בחומות אש",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4730,9 +4730,9 @@ function debug() {
             "id": 236502,
             "name": "פרויקט בבינה מלאכותית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4740,9 +4740,9 @@ function debug() {
             "id": 236503,
             "name": "פרויקט תכנות מתקדם במדעי המחשב 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4750,9 +4750,9 @@ function debug() {
             "id": 236504,
             "name": "פרויקט המשך בתוכנה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4760,9 +4760,9 @@ function debug() {
             "id": 236506,
             "name": "קריפטולוגיה מודרנית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4770,9 +4770,9 @@ function debug() {
             "id": 236510,
             "name": "ממוש מערכות מסדי נתונים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4780,9 +4780,9 @@ function debug() {
             "id": 236520,
             "name": "קידוד במערכות אחסון-מידע",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4790,9 +4790,9 @@ function debug() {
             "id": 236522,
             "name": "אלגוריתמים בביולוגיה חישובית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4800,9 +4800,9 @@ function debug() {
             "id": 236525,
             "name": "מבוא לקידוד רשת, חסמים ובניות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4810,9 +4810,9 @@ function debug() {
             "id": 236526,
             "name": "פרויקט תכנות מתקדם במדעי המחשב 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4820,9 +4820,9 @@ function debug() {
             "id": 236601,
             "name": "נושאים מתקדמים במדעי המחשב 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4830,9 +4830,9 @@ function debug() {
             "id": 236602,
             "name": "נושאים מתקדמים במדעי המחשב 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4840,9 +4840,9 @@ function debug() {
             "id": 236603,
             "name": "נושאים מתקדמים במדעי המחשב 3",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4850,9 +4850,9 @@ function debug() {
             "id": 236604,
             "name": "נושאים מתקדמים במדעי המחשב 4",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4860,9 +4860,9 @@ function debug() {
             "id": 236605,
             "name": "נושאים מתקדמים במדעי המחשב 5",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4870,9 +4870,9 @@ function debug() {
             "id": 236606,
             "name": "נושאים מתקדמים במדעי המחשב 6",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4880,9 +4880,9 @@ function debug() {
             "id": 236607,
             "name": "נושאים מתקדמים במדעי המחשב 7",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4890,9 +4890,9 @@ function debug() {
             "id": 236608,
             "name": "נושאים מתקדמים במדעי המחשב 8",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4900,9 +4900,9 @@ function debug() {
             "id": 236610,
             "name": "נושאים מתקדמים במדעי המחשב 10",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4910,9 +4910,9 @@ function debug() {
             "id": 236611,
             "name": "נושאים מתקדמים במדעי המחשב 11",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4920,9 +4920,9 @@ function debug() {
             "id": 236613,
             "name": "נושאים מתקדמים בקריפטולוגיה ה'",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4930,9 +4930,9 @@ function debug() {
             "id": 236620,
             "name": "נושאים מתקדמים באלגוריתמים ה'",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4940,9 +4940,9 @@ function debug() {
             "id": 236638,
             "name": "נושאים מתק. בתכנון וניתוח רשתות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4950,9 +4950,9 @@ function debug() {
             "id": 236640,
             "name": "נושאים מתקדמים באינפורמציה קוונטי",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4960,9 +4960,9 @@ function debug() {
             "id": 236653,
             "name": "נושאים מתקדמים באבטחת מידע ה'+ת'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4970,9 +4970,9 @@ function debug() {
             "id": 236698,
             "name": "הבטחת איכות תוכנה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4980,9 +4980,9 @@ function debug() {
             "id": 236700,
             "name": "תיכון תוכנה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -4990,9 +4990,9 @@ function debug() {
             "id": 236714,
             "name": "נושאים בהוכחה אוטומטית של משפטים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5000,9 +5000,9 @@ function debug() {
             "id": 236703,
             "name": "תכנות מונחה עצמים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234123,
                 234247,
@@ -5020,9 +5020,9 @@ function debug() {
             "id": 236719,
             "name": "גאומטריה חישובית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5030,9 +5030,9 @@ function debug() {
             "id": 236754,
             "name": "פרויקט במערכות נבונות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5040,9 +5040,9 @@ function debug() {
             "id": 236756,
             "name": "מבוא למערכות לומדות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5050,9 +5050,9 @@ function debug() {
             "id": 236800,
             "name": "סמינר בהנדסת תוכנה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5060,9 +5060,9 @@ function debug() {
             "id": 236801,
             "name": "סמינר במדעי המחשב 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5070,9 +5070,9 @@ function debug() {
             "id": 236802,
             "name": "סמינר במדעי המחשב 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5080,9 +5080,9 @@ function debug() {
             "id": 236803,
             "name": "סמינר במדעי המחשב 3",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5090,9 +5090,9 @@ function debug() {
             "id": 236804,
             "name": "סמינר במדעי המחשב 4",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5100,9 +5100,9 @@ function debug() {
             "id": 236814,
             "name": "סמינר בשיטות אימות פורמליות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5110,9 +5110,9 @@ function debug() {
             "id": 236818,
             "name": "סמינר בביואינפורמטיקה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5120,9 +5120,9 @@ function debug() {
             "id": 236828,
             "name": "פרויקט במערכות מחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5130,9 +5130,9 @@ function debug() {
             "id": 236874,
             "name": "פרויקט בראיה ממוחשבת",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5140,9 +5140,9 @@ function debug() {
             "id": 238902,
             "name": "סמינריון מחקר בקומבינטוריקה ותורת",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         }
@@ -5153,9 +5153,9 @@ function debug() {
             "id": 44000,
             "name": "פרויקט מחקרי לסטודנטים מצטיינים",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5163,9 +5163,9 @@ function debug() {
             "id": 44101,
             "name": "מבוא למערכות תכנה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44131
             ],
@@ -5180,9 +5180,9 @@ function debug() {
             "id": 44105,
             "name": "תורת המעגלים החשמליים",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234218,
                 234262,
@@ -5216,9 +5216,9 @@ function debug() {
             "id": 44114,
             "name": "מתמטיקה דיסקרטית ח'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44105,
                 44268,
@@ -5237,9 +5237,9 @@ function debug() {
             "id": 44124,
             "name": "אלקטרוניקה פיסיקלית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44148,
                 44160,
@@ -5256,9 +5256,9 @@ function debug() {
             "id": 44125,
             "name": "יסודות התקני מוליכים למחצה מ'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5266,9 +5266,9 @@ function debug() {
             "id": 44131,
             "name": "אותות ומערכות",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 234123,
                 234125,
@@ -5301,9 +5301,9 @@ function debug() {
             "id": 44139,
             "name": "ממירי מתח ממותגים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5311,9 +5311,9 @@ function debug() {
             "id": 44140,
             "name": "שדות אלקטרומגנטיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 44131,
                 114036,
@@ -5334,9 +5334,9 @@ function debug() {
             "id": 44142,
             "name": "מעגלים אלקטרוניים לינאריים",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5344,9 +5344,9 @@ function debug() {
             "id": 44145,
             "name": "מערכות ספרתיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234114,
                 234145
@@ -5362,9 +5362,9 @@ function debug() {
             "id": 44147,
             "name": "מעגלי מיתוג אלקטרוניים",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5372,9 +5372,9 @@ function debug() {
             "id": 44148,
             "name": "גלים ומערכות מפולגות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44124,
                 44160,
@@ -5396,9 +5396,9 @@ function debug() {
             "id": 44151,
             "name": "מעבדה להנדסת חשמל 1ח'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5406,9 +5406,9 @@ function debug() {
             "id": 44160,
             "name": "מעבדה בהנדסת חשמל 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44124,
                 44148,
@@ -5425,9 +5425,9 @@ function debug() {
             "id": 44165,
             "name": "מעבדה בהנדסת חשמל 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44167
             ],
@@ -5442,9 +5442,9 @@ function debug() {
             "id": 44166,
             "name": "מעבדה בהנדסת חשמל 3",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [
                 44169
             ],
@@ -5463,9 +5463,9 @@ function debug() {
             "id": 44167,
             "name": "פרוייקט א'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 236360,
                 44165,
@@ -5495,9 +5495,9 @@ function debug() {
             "id": 44169,
             "name": "פרויקט  ב",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 44166,
                 114250,
@@ -5526,9 +5526,9 @@ function debug() {
             "id": 44170,
             "name": "פרויקט  מיוחד",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5536,9 +5536,9 @@ function debug() {
             "id": 44173,
             "name": "פרויקט בתעשיה",
             "days_before": 8,
-            "credit_point": {
-                "$numberDecimal": "8"
-            },
+            "credit_point"
+                : "8"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5546,9 +5546,9 @@ function debug() {
             "id": 44180,
             "name": "נושא אישי למצטיינים",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5556,9 +5556,9 @@ function debug() {
             "id": 44184,
             "name": "נושאים מתקדמים למצטיינים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5566,9 +5566,9 @@ function debug() {
             "id": 44185,
             "name": "נושא מיוחד למצטיינים",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5576,9 +5576,9 @@ function debug() {
             "id": 44191,
             "name": "מערכות בקרה 1",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5586,9 +5586,9 @@ function debug() {
             "id": 44192,
             "name": "מערכות בקרה 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5596,9 +5596,9 @@ function debug() {
             "id": 44193,
             "name": "מעבדה לבקרה לינארית",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5606,9 +5606,9 @@ function debug() {
             "id": 44196,
             "name": "המרת אנרגיה,מקורות אנרגיה מתחדשים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5616,9 +5616,9 @@ function debug() {
             "id": 44198,
             "name": "מבוא לעבוד ספרתי של אותות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5626,9 +5626,9 @@ function debug() {
             "id": 44202,
             "name": "אותות אקראיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 236343,
                 236353,
@@ -5657,9 +5657,9 @@ function debug() {
             "id": 44239,
             "name": "תהליכים במיקרואלקטרוניקה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5667,9 +5667,9 @@ function debug() {
             "id": 44252,
             "name": "מערכות ספרתיות ומבנה המחשב",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [
                 114020,
                 114076
@@ -5693,9 +5693,9 @@ function debug() {
             "id": 44262,
             "name": "תכן לוגי ומבוא למחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 234118,
                 234122,
@@ -5712,9 +5712,9 @@ function debug() {
             "id": 44268,
             "name": "מבוא למבני נתונים ואלגוריתמים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44105,
                 44114,
@@ -5742,9 +5742,9 @@ function debug() {
             "id": 44334,
             "name": "רשתות מחשבים ואינטרנט 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 236360,
                 44167
@@ -5764,9 +5764,9 @@ function debug() {
             "id": 44339,
             "name": "אלקטרואופטיקה 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5774,9 +5774,9 @@ function debug() {
             "id": 45001,
             "name": "פרויקט מבוא בהנדסת חשמל",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5784,9 +5784,9 @@ function debug() {
             "id": 46002,
             "name": "תכן וניתוח אלגוריתמים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 44105,
                 44114,
@@ -5805,9 +5805,9 @@ function debug() {
             "id": 46004,
             "name": "נושאים מתקדמים 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5815,9 +5815,9 @@ function debug() {
             "id": 46005,
             "name": "רשתות מחשבים ואינטרנט 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5825,9 +5825,9 @@ function debug() {
             "id": 46006,
             "name": "נושאים מתקדמים 3",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5835,9 +5835,9 @@ function debug() {
             "id": 46043,
             "name": "עיבוד הספק",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5845,9 +5845,9 @@ function debug() {
             "id": 46188,
             "name": "מעגלים אלקטרוניים לאותות מעורבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5855,9 +5855,9 @@ function debug() {
             "id": 46189,
             "name": "תכן מסננים אקטיביים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5865,9 +5865,9 @@ function debug() {
             "id": 46194,
             "name": "למידה ותכנון במערכות דינאמיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5875,9 +5875,9 @@ function debug() {
             "id": 46195,
             "name": "מערכות לומדות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5885,9 +5885,9 @@ function debug() {
             "id": 46197,
             "name": "שיטות חישוביות באופטימיזציה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5895,9 +5895,9 @@ function debug() {
             "id": 46200,
             "name": "עבוד ונתוח תמונות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5905,9 +5905,9 @@ function debug() {
             "id": 46201,
             "name": "מבוא לעיבוד אותות אקראיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5915,9 +5915,9 @@ function debug() {
             "id": 46206,
             "name": "מבוא לתקשורת ספרתית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5925,9 +5925,9 @@ function debug() {
             "id": 46209,
             "name": "מבנה מערכות הפעלה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 44105,
                 44114,
@@ -5946,9 +5946,9 @@ function debug() {
             "id": 46210,
             "name": "מעבדה במערכות הפעלה",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [
                 44105,
                 44114,
@@ -5967,9 +5967,9 @@ function debug() {
             "id": 46216,
             "name": "מיקרוגלים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5977,9 +5977,9 @@ function debug() {
             "id": 46225,
             "name": "עקרונות פיזיקליים של התקני מל\"מ",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5987,9 +5987,9 @@ function debug() {
             "id": 46232,
             "name": "פרקים בננו-אלקטרוניקה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -5997,9 +5997,9 @@ function debug() {
             "id": 46235,
             "name": "התקני הספק משולבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6007,9 +6007,9 @@ function debug() {
             "id": 46237,
             "name": "מעגלים משולבים - מבוא ל-וי.ל.ס.י.",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6017,9 +6017,9 @@ function debug() {
             "id": 46239,
             "name": "מעבדה בננו-אלקטרוניקה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6027,9 +6027,9 @@ function debug() {
             "id": 46244,
             "name": "תופעות גלים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6037,9 +6037,9 @@ function debug() {
             "id": 46250,
             "name": "אלקטרואופטיקה 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6047,9 +6047,9 @@ function debug() {
             "id": 46256,
             "name": "אנטנות וקרינה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6057,9 +6057,9 @@ function debug() {
             "id": 46267,
             "name": "מבנה מחשבים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 236343,
                 236353,
@@ -6076,9 +6076,9 @@ function debug() {
             "id": 46273,
             "name": "תכנות פונקציונאלי מבוזר",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6086,9 +6086,9 @@ function debug() {
             "id": 46275,
             "name": "תרגום ואופטמיזציה דינמיים של קוד",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6096,9 +6096,9 @@ function debug() {
             "id": 46278,
             "name": "מאיצים חישוביים ומערכות מואצות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6106,9 +6106,9 @@ function debug() {
             "id": 46332,
             "name": "מערכות ראיה ושמיעה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6116,9 +6116,9 @@ function debug() {
             "id": 46342,
             "name": "מבוא לתקשורת בסיבים אופטיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6126,9 +6126,9 @@ function debug() {
             "id": 46733,
             "name": "תורת האינפורמציה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6136,9 +6136,9 @@ function debug() {
             "id": 46746,
             "name": "אלג' ויישומים בראייה ממוחשבת",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6146,9 +6146,9 @@ function debug() {
             "id": 46831,
             "name": "מבוא לדימות רפואי",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6156,9 +6156,9 @@ function debug() {
             "id": 46851,
             "name": "לייזרים של מוליכים למחצה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6166,9 +6166,9 @@ function debug() {
             "id": 46864,
             "name": "תכן מערכות ספרתיות מהירות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6176,9 +6176,9 @@ function debug() {
             "id": 46918,
             "name": "תכן פיסי של וי.אל.אס.אי",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6186,9 +6186,9 @@ function debug() {
             "id": 46968,
             "name": "מיקרו-עיבוד ומיקרו-מערכות אלקטרומ",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6196,9 +6196,9 @@ function debug() {
             "id": 47006,
             "name": "נושאים מתקדמים 6",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6206,9 +6206,9 @@ function debug() {
             "id": 48711,
             "name": "מעבדה באלקטרואופטיקה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6216,9 +6216,9 @@ function debug() {
             "id": 48712,
             "name": "מעבדה באלקטרואופטיקה 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6226,9 +6226,9 @@ function debug() {
             "id": 48732,
             "name": "נושאים מתקדמים בתורת הגלים 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6236,9 +6236,9 @@ function debug() {
             "id": 48747,
             "name": "מעבדה באותות ומערכות ביולוגיים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6246,9 +6246,9 @@ function debug() {
             "id": 48816,
             "name": "מעבדה לעבוד אותות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6256,9 +6256,9 @@ function debug() {
             "id": 48852,
             "name": "מעבדה בהמרת אנרגיה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6266,9 +6266,9 @@ function debug() {
             "id": 48870,
             "name": "פיתוח נושאים בהנדסת חשמל 1",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6276,9 +6276,9 @@ function debug() {
             "id": 48877,
             "name": "מעבדה לתכנה וחומרה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6286,9 +6286,9 @@ function debug() {
             "id": 48879,
             "name": "סמינר בארכיטקטורות וי.ל.ס.י.",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6296,9 +6296,9 @@ function debug() {
             "id": 48885,
             "name": "נושאים מתקדמים בהנדסת מחשבים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6306,9 +6306,9 @@ function debug() {
             "id": 48887,
             "name": "מבוא למחקר הפקולטי",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6316,9 +6316,9 @@ function debug() {
             "id": 48903,
             "name": "נושאים מתקדמים במיקרואלקטרוניקה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6326,9 +6326,9 @@ function debug() {
             "id": 48908,
             "name": "נושאים מתקדמים במיקרואלקטרוניקה 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6336,9 +6336,9 @@ function debug() {
             "id": 48921,
             "name": "נושאים מתקדמים בראיה, מבנה תמונות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6346,9 +6346,9 @@ function debug() {
             "id": 48922,
             "name": "מע בראייה מבנה תמונות וראיה ממוחש",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6356,9 +6356,9 @@ function debug() {
             "id": 48929,
             "name": "עיבוד אותות מסתגל )אדפטיבי(",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6366,9 +6366,9 @@ function debug() {
             "id": 48933,
             "name": "מעבדה לתקשורת",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6376,9 +6376,9 @@ function debug() {
             "id": 48934,
             "name": "תקשורת מקודדת",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6386,9 +6386,9 @@ function debug() {
             "id": 48954,
             "name": "שיטות סטטיסטיות בעיבוד תמונה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6396,9 +6396,9 @@ function debug() {
             "id": 48966,
             "name": "מעבדה במיקרואלקטרוניקה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6406,9 +6406,9 @@ function debug() {
             "id": 48967,
             "name": "מעבדה לרשתות מחשבים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6416,9 +6416,9 @@ function debug() {
             "id": 48976,
             "name": "מעבדה במערכות מקביליות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6426,9 +6426,9 @@ function debug() {
             "id": 48978,
             "name": "מקורות קרינה מבוססים על אלומות אל",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6436,9 +6436,9 @@ function debug() {
             "id": 48979,
             "name": "נושאים בהסתברות ותהליכים אקראיים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6446,9 +6446,9 @@ function debug() {
             "id": 48985,
             "name": "שיטות טופולוגיות בהנדסה, רשתות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6456,9 +6456,9 @@ function debug() {
             "id": 48987,
             "name": "נושאים מתקדמים באנרגיה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6466,9 +6466,9 @@ function debug() {
             "id": "048990",
             "name": "סמינריון 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6476,9 +6476,9 @@ function debug() {
             "id": "048991",
             "name": "סמינריון 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6486,9 +6486,9 @@ function debug() {
             "id": "049005",
             "name": "מעבדה בנושאי בקרה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6496,9 +6496,9 @@ function debug() {
             "id": 49006,
             "name": "מעבדה לגלים אלקטרומגנטיים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6506,9 +6506,9 @@ function debug() {
             "id": "049026",
             "name": "ידע ומשחקים במערכות מבוזרות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6516,9 +6516,9 @@ function debug() {
             "id": "049030",
             "name": "נושאים במערכות אחסון",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6526,9 +6526,9 @@ function debug() {
             "id": "049050",
             "name": "נושאים מתקדמים בננו אלקטרוניקה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6536,9 +6536,9 @@ function debug() {
             "id": "049053",
             "name": "מעבדה בלמידה חישובית",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6546,9 +6546,9 @@ function debug() {
             "id": "049054",
             "name": "פיסיקה סטטיסטית ותורת האינפורמציה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6556,9 +6556,9 @@ function debug() {
             "id": "049056",
             "name": "נושאים בראיה ממוחשבת# ניתוח צורה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6566,9 +6566,9 @@ function debug() {
             "id": "049061",
             "name": "צפני קיטוב",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6576,9 +6576,9 @@ function debug() {
             "id": "049062",
             "name": "דימות ושחזור תלת-מימדי",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6586,9 +6586,9 @@ function debug() {
             "id": "049063",
             "name": "מידע בהתקני איחסון",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         }
@@ -6599,9 +6599,9 @@ function debug() {
             "id": 104003,
             "name": "חשבון דיפרנציאלי ואינטגרלי 1",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6609,9 +6609,9 @@ function debug() {
             "id": 104004,
             "name": "חשבון דיפרנציאלי ואינטגרלי 2",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6619,9 +6619,9 @@ function debug() {
             "id": 104013,
             "name": "חשבון דיפרנציאלי ואינטגרלי 2ת'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5.5"
-            },
+            "credit_point"
+                : "5.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6629,9 +6629,9 @@ function debug() {
             "id": 104016,
             "name": "אלגברה 1/מורחב",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6639,9 +6639,9 @@ function debug() {
             "id": 104017,
             "name": "חשבון דיפרנציאלי ואינטגרלי 1נ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6649,9 +6649,9 @@ function debug() {
             "id": 104018,
             "name": "חשבון דיפרנציאלי ואינטגרלי 1מ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6659,9 +6659,9 @@ function debug() {
             "id": 104019,
             "name": "אלגברה ליניארית מ'",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6669,9 +6669,9 @@ function debug() {
             "id": 104020,
             "name": "חשבון דיפרנציאלי ואינטגרלי 2נ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6679,9 +6679,9 @@ function debug() {
             "id": 104022,
             "name": "חשבון דיפרנציאלי ואינטגרלי 2מ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6689,9 +6689,9 @@ function debug() {
             "id": 104030,
             "name": "מבוא למשוואות דיפרנציאליות חלקיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6699,9 +6699,9 @@ function debug() {
             "id": 104031,
             "name": "חשבון אינפיניטסימלי 1מ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5.5"
-            },
+            "credit_point"
+                : "5.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6709,9 +6709,9 @@ function debug() {
             "id": 104032,
             "name": "חשבון אינפיניטסימלי 2מ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6719,9 +6719,9 @@ function debug() {
             "id": 104033,
             "name": "אנליזה וקטורית",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6729,9 +6729,9 @@ function debug() {
             "id": 104034,
             "name": "מבוא להסתברות ח'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6739,9 +6739,9 @@ function debug() {
             "id": 104035,
             "name": "משוואות דיפ' רגילות ואינפי 2ח'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6749,9 +6749,9 @@ function debug() {
             "id": 104114,
             "name": "יסודות הגאומטריה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6759,9 +6759,9 @@ function debug() {
             "id": 104122,
             "name": "תורת הפונקציות 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234123",
                 "234247",
@@ -6784,9 +6784,9 @@ function debug() {
             "id": 104131,
             "name": "משואות דיפרנציאליות רגילות/ח",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6794,9 +6794,9 @@ function debug() {
             "id": 104134,
             "name": "אלגברה מודרנית ח",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6804,9 +6804,9 @@ function debug() {
             "id": 104135,
             "name": "משוואות דפרנציאליות רגילות ת'",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6814,9 +6814,9 @@ function debug() {
             "id": 104142,
             "name": "מבוא למרחבים מטריים וטופולוגיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "104279",
                 "104282",
@@ -6833,9 +6833,9 @@ function debug() {
             "id": 104144,
             "name": "טופולוגיה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6843,9 +6843,9 @@ function debug() {
             "id": 104166,
             "name": "אלגברה א'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5.5"
-            },
+            "credit_point"
+                : "5.5"
+            ,
             "conflicts": [
                 "234114",
                 "234145",
@@ -6867,9 +6867,9 @@ function debug() {
             "id": 104172,
             "name": "מבוא לחבורות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -6893,9 +6893,9 @@ function debug() {
             "id": 104173,
             "name": "אלגברה ליניארית ב'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -6919,9 +6919,9 @@ function debug() {
             "id": 104174,
             "name": "אלגברה ליניארית במ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6929,9 +6929,9 @@ function debug() {
             "id": 104182,
             "name": "סמינר באנליזה להסמכה 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6939,9 +6939,9 @@ function debug() {
             "id": 104183,
             "name": "סמינר באלגברה להסמכה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6949,9 +6949,9 @@ function debug() {
             "id": 104185,
             "name": "סמינר לסטודנ.בהסמכה1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6959,9 +6959,9 @@ function debug() {
             "id": 104191,
             "name": "מכניקת הרצף",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -6969,9 +6969,9 @@ function debug() {
             "id": 104192,
             "name": "מבוא למתמטיקה שמושית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 "236343",
                 "104122",
@@ -6992,9 +6992,9 @@ function debug() {
             "id": 104193,
             "name": "תורת האופטימיזציה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7002,9 +7002,9 @@ function debug() {
             "id": 104195,
             "name": "חשבון אינפיניטסימלי 1",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5.5"
-            },
+            "credit_point"
+                : "5.5"
+            ,
             "conflicts": [
                 "234114",
                 "234145",
@@ -7026,9 +7026,9 @@ function debug() {
             "id": 104221,
             "name": "פונקצ' מרוכבות והתמרות אינטגרליות",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7036,9 +7036,9 @@ function debug() {
             "id": 104222,
             "name": "תורת ההסתברות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234123",
                 "234247",
@@ -7061,9 +7061,9 @@ function debug() {
             "id": 104223,
             "name": "מד\"ח וטורי פוריה",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7071,9 +7071,9 @@ function debug() {
             "id": 104228,
             "name": "משוואות דיפרנציאליות חלקיות מ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7081,9 +7081,9 @@ function debug() {
             "id": 104274,
             "name": "תורת השדות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7091,9 +7091,9 @@ function debug() {
             "id": 104276,
             "name": "מבוא לאנליזה פונקציונלית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7101,9 +7101,9 @@ function debug() {
             "id": 104279,
             "name": "מבוא לחוגים ושדות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [
                 "104142",
                 "104282",
@@ -7120,9 +7120,9 @@ function debug() {
             "id": 104281,
             "name": "חשבון אינפי 2",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -7146,9 +7146,9 @@ function debug() {
             "id": 104282,
             "name": "חשבון אינפי 3",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [
                 "234218",
                 "234293",
@@ -7171,9 +7171,9 @@ function debug() {
             "id": 104285,
             "name": "משוואות דיפרנציאליות רגילות א'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234123",
                 "234247",
@@ -7198,9 +7198,9 @@ function debug() {
             "id": 104286,
             "name": "קומבינטוריקה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -7224,9 +7224,9 @@ function debug() {
             "id": 104290,
             "name": "תורת הקבוצות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234114",
                 "234145",
@@ -7244,9 +7244,9 @@ function debug() {
             "id": 106156,
             "name": "לוגיקה מתמטית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7254,9 +7254,9 @@ function debug() {
             "id": 106378,
             "name": "תורת המידה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7264,9 +7264,9 @@ function debug() {
             "id": 106380,
             "name": "אלגברה מודרנית 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7274,9 +7274,9 @@ function debug() {
             "id": 106429,
             "name": "תהליכים סטוכסטיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7284,9 +7284,9 @@ function debug() {
             "id": 106416,
             "name": "שיטות נומריות במד\"ח",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7294,9 +7294,9 @@ function debug() {
             "id": 106803,
             "name": "נושאים בגאומטריה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7304,9 +7304,9 @@ function debug() {
             "id": 106702,
             "name": "פרקים נבחרים באלגברה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7314,9 +7314,9 @@ function debug() {
             "id": 106925,
             "name": "נושאים נבחרים בחבורות אלגבריות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7324,9 +7324,9 @@ function debug() {
             "id": 106928,
             "name": "נושאים נבחרים בקומבינטוריקה 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7334,9 +7334,9 @@ function debug() {
             "id": 106933,
             "name": "נושאים נבחרים בטופולוגיה 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7344,9 +7344,9 @@ function debug() {
             "id": 106937,
             "name": "נושאים נבחרים באנליזה מתמטית 4",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7354,9 +7354,9 @@ function debug() {
             "id": 108327,
             "name": "אנליזה פונקציונלית להנדסת חשמל",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7364,9 +7364,9 @@ function debug() {
             "id": 196001,
             "name": "סמינר במתמטיקה שימושית 2",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7374,9 +7374,9 @@ function debug() {
             "id": 198002,
             "name": "שיטות אסימפטוטיות 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7384,9 +7384,9 @@ function debug() {
             "id": 198008,
             "name": "נושאים נבחרים במתמטיקה שימושית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         }
@@ -7397,9 +7397,9 @@ function debug() {
             "id": 114010,
             "name": "תגליות מדעיות 1",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7407,9 +7407,9 @@ function debug() {
             "id": 114011,
             "name": "תגליות מדעיות 2",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7417,9 +7417,9 @@ function debug() {
             "id": 114014,
             "name": "מכניקה וגלים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7427,9 +7427,9 @@ function debug() {
             "id": 114020,
             "name": "מעבדה לפיסיקה 1מ'",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [
                 "234218",
                 "044252",
@@ -7455,9 +7455,9 @@ function debug() {
             "id": 114021,
             "name": "מעבדה לפיסיקה  2מ",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [
                 "234123",
                 "114020",
@@ -7478,9 +7478,9 @@ function debug() {
             "id": 114027,
             "name": "מעבדה לפיסיקה 5",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7488,9 +7488,9 @@ function debug() {
             "id": 114028,
             "name": "מעבדה לפיסיקה 6",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7498,9 +7498,9 @@ function debug() {
             "id": 114030,
             "name": "מעבדה לפיסיקה 2 מח'",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [
                 "044105",
                 "044268"
@@ -7516,9 +7516,9 @@ function debug() {
             "id": 114032,
             "name": "מעבדה לפיסיקה 1ח'",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7526,9 +7526,9 @@ function debug() {
             "id": 114034,
             "name": "מעבדה לפיסיקה 2מפ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": [
                 {
@@ -7541,9 +7541,9 @@ function debug() {
             "id": 114035,
             "name": "מעבדה לפיסיקה 3 - גלים",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [
                 "044148",
                 "044202"
@@ -7559,9 +7559,9 @@ function debug() {
             "id": 114036,
             "name": "פיסיקה סטטיסטית ותרמית",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [
                 "044131",
                 "044140",
@@ -7578,9 +7578,9 @@ function debug() {
             "id": 114037,
             "name": "מעבדה לפיסיקה 4מח'",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [
                 "044167",
                 "115203"
@@ -7604,9 +7604,9 @@ function debug() {
             "id": 114038,
             "name": "מעבדה לפיזיקה - גלים - 3מפ'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7614,9 +7614,9 @@ function debug() {
             "id": 114051,
             "name": "פיסיקה 1",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7624,9 +7624,9 @@ function debug() {
             "id": 114052,
             "name": "פיסיקה 2",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7634,9 +7634,9 @@ function debug() {
             "id": 114054,
             "name": "פיסיקה 3",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7644,9 +7644,9 @@ function debug() {
             "id": 114071,
             "name": "פיסיקה 1מ",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7654,9 +7654,9 @@ function debug() {
             "id": 114073,
             "name": "פיסיקה 3ח'",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7664,9 +7664,9 @@ function debug() {
             "id": 114075,
             "name": "פיסיקה 2ממ",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7674,9 +7674,9 @@ function debug() {
             "id": 114076,
             "name": "פיסיקה 2פ'",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -7705,9 +7705,9 @@ function debug() {
             "id": 114077,
             "name": "פיסיקה 1ל",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7715,9 +7715,9 @@ function debug() {
             "id": 114078,
             "name": "פיסיקה 2ל",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7725,9 +7725,9 @@ function debug() {
             "id": 114081,
             "name": "מעבדה לפיסיקה 1",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7735,9 +7735,9 @@ function debug() {
             "id": 114082,
             "name": "מעבדה לפיסיקה 2",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1.5"
-            },
+            "credit_point"
+                : "1.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7745,9 +7745,9 @@ function debug() {
             "id": 114102,
             "name": "מרחבי זמן וחורים שחורים",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7755,9 +7755,9 @@ function debug() {
             "id": 114208,
             "name": "מעבדה במדידות אופטיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7765,9 +7765,9 @@ function debug() {
             "id": 114210,
             "name": "אופטיקה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [
                 "234118",
                 "234122",
@@ -7785,9 +7785,9 @@ function debug() {
             "id": 114226,
             "name": "דו\"ח סגל מחקר סתיו",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7795,9 +7795,9 @@ function debug() {
             "id": 114227,
             "name": "דו\"ח סגל מחקר אביב",
             "days_before": 1,
-            "credit_point": {
-                "$numberDecimal": "1"
-            },
+            "credit_point"
+                : "1"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7805,9 +7805,9 @@ function debug() {
             "id": 114229,
             "name": "פרויקט",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4.5"
-            },
+            "credit_point"
+                : "4.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7815,9 +7815,9 @@ function debug() {
             "id": 114246,
             "name": "אלקטרומגנטיות ואלקטרודינמיקה",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7825,9 +7825,9 @@ function debug() {
             "id": 114249,
             "name": "פיסיקה 2 ר",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7835,9 +7835,9 @@ function debug() {
             "id": 114250,
             "name": "מעבדה לפיסיקה 5ת",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 "044169",
                 "114252"
@@ -7857,9 +7857,9 @@ function debug() {
             "id": 114251,
             "name": "מעבדה לפיסיקה 6ת",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7867,9 +7867,9 @@ function debug() {
             "id": 114252,
             "name": "פרויקט ת",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [
                 "044169",
                 "114250"
@@ -7889,9 +7889,9 @@ function debug() {
             "id": 115203,
             "name": "פיסיקה קוונטית 1",
             "days_before": 5,
-            "credit_point": {
-                "$numberDecimal": "5"
-            },
+            "credit_point"
+                : "5"
+            ,
             "conflicts": [
                 "044131",
                 "044140",
@@ -7917,9 +7917,9 @@ function debug() {
             "id": 115249,
             "name": "פיסיקה 2רל",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7927,9 +7927,9 @@ function debug() {
             "id": 116004,
             "name": "פיס. של גרעינים וחלקיקים יסודיים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7937,9 +7937,9 @@ function debug() {
             "id": 116027,
             "name": "פיסיקה של זורמים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7947,9 +7947,9 @@ function debug() {
             "id": 116030,
             "name": "סמינר בפרקים נבחרים בפיסיקה-אביב",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7957,9 +7957,9 @@ function debug() {
             "id": 116031,
             "name": "תורת האינפורמציה הקוונטית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7967,9 +7967,9 @@ function debug() {
             "id": 116321,
             "name": "ביו-פיסיקה של התא",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7977,9 +7977,9 @@ function debug() {
             "id": 117015,
             "name": "פיסיקה של אטומים ומולקולות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7987,9 +7987,9 @@ function debug() {
             "id": 117018,
             "name": "פיסיקה של מוליכים למחצה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -7997,9 +7997,9 @@ function debug() {
             "id": 117140,
             "name": "תורת החבורות בפיסיקה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8007,9 +8007,9 @@ function debug() {
             "id": 118024,
             "name": "תופעות קריטיות",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8017,9 +8017,9 @@ function debug() {
             "id": 118076,
             "name": "מעבדה מתקדמת",
             "days_before": 4,
-            "credit_point": {
-                "$numberDecimal": "4"
-            },
+            "credit_point"
+                : "4"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8027,9 +8027,9 @@ function debug() {
             "id": 118090,
             "name": "אסטרופיסיקה של אנרגיות גבוהות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2.5"
-            },
+            "credit_point"
+                : "2.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8037,9 +8037,9 @@ function debug() {
             "id": 118095,
             "name": "קוסמולוגיה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8047,9 +8047,9 @@ function debug() {
             "id": 118107,
             "name": "נושאים נבחרים בתורת השדות",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8057,9 +8057,9 @@ function debug() {
             "id": 118111,
             "name": "נושאים נבחרים באסטרופיסיקה",
             "days_before": 2,
-            "credit_point": {
-                "$numberDecimal": "2"
-            },
+            "credit_point"
+                : "2"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8067,9 +8067,9 @@ function debug() {
             "id": 118123,
             "name": "מבוא לפיסיקת החלקיקים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8077,9 +8077,9 @@ function debug() {
             "id": 118130,
             "name": "מבוא ליחסות כללית",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8087,9 +8087,9 @@ function debug() {
             "id": 118132,
             "name": "תורת השדות הקוונטית 1",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8097,9 +8097,9 @@ function debug() {
             "id": 118136,
             "name": "אופטיקה אולטרה מהירה",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3"
-            },
+            "credit_point"
+                : "3"
+            ,
             "conflicts": [],
             "programs": []
         },
@@ -8107,9 +8107,9 @@ function debug() {
             "id": 118138,
             "name": "מצב מוצק למוסמכים",
             "days_before": 3,
-            "credit_point": {
-                "$numberDecimal": "3.5"
-            },
+            "credit_point"
+                : "3.5"
+            ,
             "conflicts": [],
             "programs": []
         }

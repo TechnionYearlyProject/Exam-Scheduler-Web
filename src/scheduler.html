@@ -193,8 +193,6 @@
 
     localStorage.setItem("pressed_schedule", "false");
 
-    localStorage.previous_schedules_a = "";
-    localStorage.previous_schedules_b = "";
     $('#cnflcts_ldr').load('cnflcts_mdl.html');
     $('#toolbar').load('toolbar.html');
     $('#moed_a').load('moed_a.html');
@@ -209,7 +207,7 @@
                 return;
             }
             $("[id^='exam_for_']").remove();
-            makeSchedule(["a", "b"]);
+            makeSchedule(["moed_a", "moed_b"]);
             localStorage.setItem("pressed_schedule", "true");
             for (var i in map_a)
             {
@@ -231,7 +229,7 @@
                 return;
             }
             $("[id^='exam_for_moed_a']").remove();
-            goToNextSchedule("a");
+            makeSchedule(["moed_a"]);
         });
         $('#scheduler_function_caller_3').click(function(){
             if (localStorage.getItem("pressed_schedule") == "false")
@@ -240,13 +238,7 @@
                 return;
             }
             $("[id^='exam_for_moed_b']").remove();
-            goToNextSchedule("b");
-        });
-        $('#scheduler_function_caller_4').click(function(){
-            goToPreviousSchedule("a");
-        });
-        $('#scheduler_function_caller_5').click(function(){
-            goToPreviousSchedule("b");
+            makeSchedule(["moed_b"]);
         });
     });
 
@@ -289,6 +281,7 @@
             };
             document.getElementById('sem_picker').appendChild(a);
         }
+
         var top = document.getElementById('sem_picker').firstChild;
         document.getElementById('semester_button').innerHTML = top.innerHTML;
         localStorage.setItem('start_a', top.getAttribute('start_a'));
@@ -321,10 +314,13 @@
     });
 
     var fillScheduleWithCourses = function (moeds) {
-        let result = localStorage.getItem("result");
-        result = JSON.parse(result);
+        return function (result) {
+            $('#schedule_board_modal').modal("hide");
+            localStorage.setItem("result", result);
+            result = JSON.parse(result);
+            console.log(result);
             for (var m = 0; m < moeds.length; m++){
-                var moed = "moed_" + moeds[m];
+                var moed = moeds[m];
                 for(var i = 0; i < result[moed].schedule.length; i++){
                     var examDay = result[moed].schedule[i];
                     var day = moed +'_day_' + examDay.index;
@@ -334,6 +330,7 @@
                     }
                 }
             }
+        }
     };
     let makeSchedule = function (moeds){
         $('#schedule_board_modal').modal("show");
@@ -349,82 +346,10 @@
                     changes: localStorage.getItem(changes_root_key),
                     conflicts: localStorage.getItem("local_conflicts"),
                 },
-                success: function(result){
-                    result = JSON.parse(result);
-                    let localSchedule = localStorage.getItem("result");
-                    if (localSchedule){
-                        localSchedule = JSON.parse(localSchedule);
-                    } else {
-                        localSchedule = result;
-                    }
-                    for (var k = 0; k < moeds.length; k++){
-                        let moed = moeds[k];
-                        localSchedule["moed_" + moed] = result["moed_" + moed];
-                        let schedules = localStorage.getItem("previous_schedules_" + moed);
-                        if (schedules){
-                            schedules = JSON.parse(schedules);
-                        } else {
-                            schedules = {};
-                        }
-                        let curr = schedules["curr_index"];
-                        if (curr == null){
-                            curr = 0;
-                        } else {
-                            curr++;
-                        }
-                        schedules[curr] = result["moed_" + moed];
-                        schedules.curr_index = curr;
-                        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-                    }
-                    localStorage.setItem("result", JSON.stringify(localSchedule));
-                    fillScheduleWithCourses(moeds);
-                    $('#schedule_board_modal').modal("hide");
-                }
+                success: fillScheduleWithCourses(moeds)
             });
         }, 5000);
 
-    };
-
-    let goToNextSchedule = function(moed){
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if (curr == null || !schedules[curr + 1]){
-            makeSchedule([moed]);
-        } else {
-            let result = localStorage.getItem("result");
-            result = JSON.parse(result);
-            result["moed_" + moed] = schedules[curr + 1];
-            schedules["curr_index"] = curr + 1;
-            localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-            localStorage.setItem("result", JSON.stringify(result));
-            fillScheduleWithCourses([moed]);
-        }
-    };
-
-    let goToPreviousSchedule = function (moed) {
-        let schedules = localStorage.getItem("previous_schedules_" + moed);
-        if (schedules){
-            schedules = JSON.parse(schedules);
-        } else {
-            schedules = {};
-        }
-        let curr = schedules["curr_index"];
-        if(!curr || curr == 0){
-            return;
-        }
-        $("[id^='exam_for_moed_" + moed + "']").remove();
-        let result = localStorage.getItem("result");
-        result = JSON.parse(result);
-        result["moed_" + moed] = schedules[curr - 1];
-        schedules["curr_index"] = curr - 1;
-        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
-        localStorage.setItem("result", JSON.stringify(result));
-        fillScheduleWithCourses([moed]);
     };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
