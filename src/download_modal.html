@@ -47,6 +47,7 @@
     let faculty_id = '';
     let faculties_dict = [];
     let translation_map_courses = {};
+    let local_conflicts = {};
 
     sendRequest('GET', '/api/faculty/name', null, function (res) {
         let json = JSON.parse(res);
@@ -64,6 +65,7 @@
     document.getElementById('download_save').onclick = function () {
         download_alert.style.color = "green";
         download_alert.innerHTML = "המידע נטען מהשרת...";
+        local_conflicts = JSON.parse(localStorage.getItem('local_conflicts'));
         $("[id^='exam_for_moed_a_downloaded_']").remove();
         $("[id^='exam_for_moed_b_downloaded_']").remove();
         update_translation();
@@ -138,6 +140,8 @@
                     }
                     localStorage.setItem('schedule_a', JSON.stringify(schedule_a));
                     localStorage.setItem('schedule_b', JSON.stringify(schedule_b));
+                    console.log(schedule_a);
+                    console.log(schedule_b);
                     if (moed_a_conflicts_switch.checked) {
                         let map_a = JSON.parse(localStorage.getItem('map_a'));
                         for (let curr_date in map_a) {
@@ -145,6 +149,8 @@
                                 let add_to = document.getElementById(map_a[curr_date]);
                                 for (let h in schedule_a[curr_date]) {
                                     let entry = translation_map_courses[schedule_a[curr_date][h]];
+                                    if ((faculty_name != "Administrator") && (entry['faculty'] != faculty_name) && (local_conflicts[entry['id']] == undefined))
+                                        continue;
                                     let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a", false);
                                     popover_comment("exam_for_moed_a_downloaded_" + entry['id'], entry['id']);
                                     let id = entry["id"];
@@ -187,6 +193,8 @@
                                 let add_to = document.getElementById(map_b[curr_date]);
                                 for (let h in schedule_b[curr_date]) {
                                     let entry = translation_map_courses[schedule_b[curr_date][h]];
+                                    if ((faculty_name != "Administrator") && (entry['faculty'] != faculty_name) && (local_conflicts[entry['id']] == undefined))
+                                        continue;
                                     let test = create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b", false);
                                     popover_comment("exam_for_moed_b_downloaded_" + entry['id'], entry['id']);
                                     let id = entry["id"];

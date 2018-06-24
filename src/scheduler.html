@@ -192,11 +192,7 @@
     let all_courses_dict = [];
     let working_semester = '';
     let working_year = '';
-    setTimeout(function () {
-        var elem = document.getElementById(sys_loader);
-        if (elem != null && elem != undefined)
-            window.location.href = "/scheduler";
-    }, 30000);
+
     localStorage.setItem("pressed_schedule", "false");
     localStorage.previous_schedules_a = "";
     localStorage.previous_schedules_b = "";
@@ -291,7 +287,6 @@
             heb_name = 'חורף';
         }
         heb_name = 'סמסטר ' + heb_name + ' ' + working_year;
-        console.log(heb_name);
         document.getElementById('semester_button').innerHTML = heb_name;
         let entry = {}
         for (let j in all_semester_dict) {
@@ -475,7 +470,6 @@
             let new_messages = false;
             let i = data.length - 1;
             while (i >= 0) {
-                console.log(data[i].read);
                 if (data[i].read == false) {
                     new_messages = true;
                 }
@@ -579,7 +573,6 @@
     function load_all_courses_table() {
         var table1 = $("#all_courses").DataTable();
         var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-            console.log(2);
             var courses = JSON.parse(res);
             //console.log(courses);
             for (var i in courses) {
