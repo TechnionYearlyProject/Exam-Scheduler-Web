@@ -190,7 +190,13 @@
     let all_semester_dict = [];
     let faculties_dict = {};
     let all_courses_dict = [];
-
+    let working_semester = '';
+    let working_year = '';
+    setTimeout(function () {
+        var elem = document.getElementById(sys_loader);
+        if (elem != null && elem != undefined)
+            window.location.href = "/scheduler";
+    }, 30000);
     localStorage.setItem("pressed_schedule", "false");
     localStorage.previous_schedules_a = "";
     localStorage.previous_schedules_b = "";
@@ -268,32 +274,40 @@
             a.setAttribute('start_b', semesters[i].start_b);
             a.setAttribute('end_b', semesters[i].end_b);
             a.onclick = function () {
-                document.getElementById('semester_button').innerHTML = a.innerHTML;
-                localStorage.setItem('start_a', a.getAttribute('start_a'));
-                localStorage.setItem('end_a', a.getAttribute('end_a'));
-                localStorage.setItem('start_b', a.getAttribute('start_b'));
-                localStorage.setItem('end_b', a.getAttribute('end_b'));
-                localStorage.setItem('semester_name', a.getAttribute('semester_name'));
-                map_a = make_calendar(new Date(a.getAttribute('start_a')), new Date(a.getAttribute('end_a')), "a");
-                localStorage.setItem('map_a', JSON.stringify(map_a));
-                map_b = make_calendar(new Date(a.getAttribute('start_b')), new Date(a.getAttribute('end_b')), "b");
-                localStorage.setItem('map_b', JSON.stringify(map_b));
-                load_courses_table();
-                console.log(1);
-                load_all_courses_table();
+                localStorage.setItem('working_semester', semesters[i].semester);
+                localStorage.setItem('working_year', semesters[i].year);
+                window.location.href = '/scheduler';
             };
             document.getElementById('sem_picker').appendChild(a);
         }
-        var top = document.getElementById('sem_picker').firstChild;
-        document.getElementById('semester_button').innerHTML = top.innerHTML;
-        localStorage.setItem('start_a', top.getAttribute('start_a'));
-        localStorage.setItem('end_a', top.getAttribute('end_a'));
-        localStorage.setItem('start_b', top.getAttribute('start_b'));
-        localStorage.setItem('end_b', top.getAttribute('end_b'));
-        localStorage.setItem('semester_name', top.getAttribute('semester_name'));
-        map_a = make_calendar(new Date(top.getAttribute('start_a')), new Date(top.getAttribute('end_a')), "a");
+        working_semester = localStorage.getItem('working_semester');
+        working_year = localStorage.getItem('working_year');
+        if (working_semester == '' || working_year == '' || working_semester == null || working_year == null) {
+            working_semester = all_semester_dict[all_semester_dict.length-1]['semester'];
+            working_year = all_semester_dict[all_semester_dict.length-1]['year'];
+        }
+        let heb_name = 'אביב';
+        if (working_semester == 'winter') {
+            heb_name = 'חורף';
+        }
+        heb_name = 'סמסטר ' + heb_name + ' ' + working_year;
+        console.log(heb_name);
+        document.getElementById('semester_button').innerHTML = heb_name;
+        let entry = {}
+        for (let j in all_semester_dict) {
+            if ((all_semester_dict[j]['year'] == working_year) && (all_semester_dict[j]['semester'] == working_semester)) {
+                entry = all_semester_dict[j];
+                break;
+            }
+        }
+        localStorage.setItem('start_a', entry['start_a']);
+        localStorage.setItem('end_a', entry['end_a']);
+        localStorage.setItem('start_b', entry['start_b']);
+        localStorage.setItem('end_b', entry['end_b']);
+        localStorage.setItem('semester_name', working_year + '-' + working_semester);
+        map_a = make_calendar(new Date(entry['start_a']), new Date(entry['end_a']), "a");
         localStorage.setItem('map_a', JSON.stringify(map_a));
-        map_b = make_calendar(new Date(top.getAttribute('start_b')), new Date(top.getAttribute('end_b')), "b");
+        map_b = make_calendar(new Date(entry['start_b']), new Date(entry['end_b']), "b");
         localStorage.setItem('map_b', JSON.stringify(map_b));
         load_courses_table();
         load_all_courses_table();

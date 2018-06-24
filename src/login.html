@@ -57,6 +57,8 @@
     import { sendRequest } from './js/request';
     import { setCookie } from './js/cookie';
     let faculties_dict = {};
+    localStorage.setItem('working_semester','');
+    localStorage.setItem('working_year','');
     function getFaculties() {
         sendRequest('GET', '/api/faculty/list', null, function (res) {
             var faculties_grid = document.getElementById('faculties_grid');
