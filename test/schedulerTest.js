@@ -33,7 +33,7 @@ describe('Scheduler', function() {
                  agent
                      .post('/make-schedule')
                      .send({
-                         semester:'2018-spring',
+                         semester:'2018-winter',
                          faculty: 'מדעי המחשב',
                          changes: '{}',
                      })
@@ -44,6 +44,37 @@ describe('Scheduler', function() {
                      });
              });
      });
+
+
+
+    it('should schedule with additional data', done => {
+        agent
+            .post('/api/login')
+            .send(admin_user)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('auth').eql(true);
+                res.body.should.have.property('token');
+                var token = res.body.token;
+                agent
+                    .post('/make-schedule')
+                    .send({
+                        semester:'2018-spring',
+                        faculty: 'מדעי המחשב',
+                        changes: JSON.stringify({
+                        '234111': {pref: 'סוף', preparationTime: '4'},
+                        '234118': {pref: 'אוטומטי', 'has_exam': false},
+                        '234122': {a_constraint: 'Tue Jul 10 2018 02:00:00 GMT+0300 (Israel Daylight Time)'}
+                        }),
+                    })
+                    .set("Cookie", "token="+token)
+                    .end((err, res) => {
+                        validateResultLegality(res);
+                        done();
+                    });
+            });
+    });
 });
 
 function validateScheduleLegality(schedule) {
