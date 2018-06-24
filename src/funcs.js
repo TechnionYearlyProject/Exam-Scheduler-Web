@@ -63,8 +63,8 @@ function popover_comment(elem_id, semester, moed, course_id) {
     var popover = document.createElement("div");
     popover.id = "popover_" + course_id;
     popover.innerHTML = '    <div class = "row">\n' +
-        '        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input_' + course_id + '" rows = "2" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>\n' +
-        '        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button_' + course_id + '" class="btn btn-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-flag"></i></button></div>\n' +
+        '        <div class="col-9" style="padding-left: 0px; padding-right: 11px"><textarea id="popover_input_' + course_id + '" rows = "1" type="text" style="overflow-x: hidden !important; resize: none;  font-size: 13px" class="form-control" placeholder="שליחת הערה"></textarea></div>\n' +
+        '        <div class="col-3" style="padding-left: 11px; padding-right: 7px"><button id="popover_button_' + course_id + '" class="btn btn-outline-secondary" style=" font-size: 13px; height: 100%; width: 100%;"><i class="fas fa-envelope" style="padding-left: 5px"></i></button></div>\n' +
         '    </div>';
     $('#' + elem_id).popover({
         trigger: 'focus',
