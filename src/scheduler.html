@@ -97,28 +97,28 @@
                 <span id="email_change_icon" style="font-size: 20px;"><i class="fas fa-envelope"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">עדכון כתובת דוא"ל</h5>
             </div>
-            <div class="modal-body" style="text-align: right; height: 120px;">
-                <div class='row align-items-center' style="margin-bottom: 5px;">
-                    <div class = "col-sm-3">
-                        <div style="text-align: right;">כתובת נוכחית:</div>
+            <div class="modal-body" style="text-align: right; height: 100px;">
+                <div class="container">
+                    <div class='row align-items-center' style="margin-bottom: 5px;">
+                        <div class = "col-sm-3">
+                            <div style="text-align: right;">כתובת נוכחית:</div>
+                        </div>
+                        <div class = "col-sm-9" style="padding-right: 0px;">
+                            <p class="text-right form-control-plaintext" id="current_mail"></p>
+                        </div>
                     </div>
-                    <div class = "col-sm-9" style="padding-right: 0px;">
-                        <p class="text-right form-control-plaintext" id="current_mail"></p>
+                    <div class='row align-items-center'>
+                        <div class = "col-sm-3">
+                            <div style="text-align: right">כתובת חדשה:</div>
+                        </div>
+                        <div class = "col-sm-9" style="padding-right: 0px;">
+                            <input type="text" class="form-control" id="new_email">
+                        </div>
                     </div>
-                </div>
-                <div class='row align-items-center'>
-                    <div class = "col-sm-3">
-                        <div style="text-align: right">כתובת חדשה:</div>
-                    </div>
-                    <div class = "col-sm-9" style="padding-right: 0px;">
-                        <input type="text" class="form-control" id="new_email">
-                    </div>
-                </div>
-                <div class='row align-items-center'>
-                    <p class="text-right" id="email_change_error" style="color: red; margin-top: 5px; padding-right: 15px"></p>
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
+                <p class="text-right" id="email_change_error" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
                 <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
                 <button type="button" id="email_change_button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
             </div>
@@ -132,14 +132,16 @@
                 <span id="password_change_icon" style="font-size: 20px;"><i class="fas fa-key"></i></span>
                 <h5 class="modal-title" style="margin-right: 5px;">עדכון סיסמה</h5>
             </div>
-            <div class="modal-body" style="text-align: right; height: 170px;">
-                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">סיסמה חדשה:</div>
-                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_1"></div>
-                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">אישור סיסמה חדשה:</div>
-                <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_2"></div>
-                <div class='row' id="password_change_message" style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"></div>
+            <div class="modal-body" style="text-align: right; height: 150px;">
+                <div class="container">
+                    <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">סיסמה חדשה:</div>
+                    <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_1"></div>
+                    <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;">אישור סיסמה חדשה:</div>
+                    <div class='row' style="padding-right: 10px; padding-left: 10px; padding-bottom: 5px;"><input type="password" class="form-control" id="new_password_2"></div>
+                </div>
             </div>
             <div class="modal-footer" style="padding: 10px;">
+                <p class="text-right" id="password_change_message" style="position: absolute; right: 30px; bottom: 17px; margin:0px; color: red;"></p>
                 <button type="button" class="btn btn-secondary" style="width:80px; margin-left: inherit; color: white" data-dismiss="modal">ביטול</button>
                 <button type="button" id="password_change_submit" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white">עדכן</button>
             </div>
@@ -498,16 +500,16 @@
         let old = document.getElementById('current_mail');
 
         if (!email.match(/[\w\.]+@(\w+\.)+\w+/)) {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'כתובת הדוא"ל שהוקלדה אינה תקינה';
         } else if (email == old.innerHTML) {
-            error.style = "color: red; margin-top: 5px; padding-right: 15px;";
+            error.style.color = "red";
             error.innerHTML = 'כתובת הדוא"ל זהה לכתובת השמורה';
         }
         else {
             let json = {"email": email};
             sendRequest('put', '/api/update_email', json, function () {
-                error.style = "color: green; margin-top: 5px; padding-right: 15px;";
+                error.style.color = "green";
                 error.innerHTML = 'כתובת הדוא"ל שונתה בהצלחה';
                 setTimeout(function () {
                     $('#email_change_modal').modal('hide');
