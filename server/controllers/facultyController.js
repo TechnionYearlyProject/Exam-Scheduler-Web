@@ -2,7 +2,6 @@ const Faculty = require('../models/faculty').model;
 const config = require('../auth/config');
 const bcrypt = require('bcryptjs');
 const logging = require('../../logging');
-
 exports.faculty_list = function (req, res, next) {
   logging.db('Fetch faculty list.');
   Faculty.find({}, 'name image _id')
@@ -45,11 +44,13 @@ exports.faculty_create = function (req, res, next) {
   });
 };
 
-exports.faculty_delete = function (req, res, next) {
+exports.faculty_delete = async function (req, res, next) {
   logging.db('Remove faculty ' + req.body.name + '.');
   if (req.body.name === config.admin_default.name) {
       return next(new Error('Cant remove admin user from the system'));
   }
+  const f = Faculty.findOne({name:req.body.name}).then(f=>{return f;}).catch(err=>{next(err);});
+
   Faculty.remove({name: req.body.name})
   .then(() => {
     return res.end();

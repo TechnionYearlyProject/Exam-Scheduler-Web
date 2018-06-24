@@ -5,6 +5,7 @@ const logging = require('../../logging');
 const StudyProgram = require('../models/studyprogram').model;
 const Schedule = require('../models/schedule').model;
 
+
 exports.get_list = async function(req,res,next){
     const semester = await Semester.findOne({
         year: req.params.year,
@@ -16,7 +17,7 @@ exports.get_list = async function(req,res,next){
             }
             return semester;
         }).catch(err=>{next(err);});
-    const course = await Course.find({
+    var course = await Course.find({
                     semester: semester._id,
                     faculty: req.faculty_id
                 }, 'name id credit_point days_before conflicts registrations').then(c=>{
@@ -24,24 +25,47 @@ exports.get_list = async function(req,res,next){
     }).catch(err => {
             next(err);
         });
-   //console.log(course);
-   var i =0;
-   var j = 0;
-   for(i =0;i<course.length;i++){
-       var conflicts = [];
-       for(j=0;j<course[i].conflicts.length;j++){
+    var arr = [];
+   for(let i =0;i<course.length;i++){
+       let json = {};
+       json["id"] = course[i]["id"];
+       json["name"] = course[i]["name"];
+       json["days_before"] = course[i]["days_before"];
+       json["credit_point"] = course[i]["credit_point"];
+        var conflicts = [];
+        var programs = [];
+       for(let j=0;j<course[i].conflicts.length;j++) {
            var query = {};
 
            var id = course[i].conflicts[j].course;
-           query["_id"] = id;
-           const cc = await Course.find(query).then(c=>{return c;}).catch(err=>{next(err);});
-
-           conflicts.push(cc.id);
+           query["_id"] = id.toString();
+           const cc = await Course.findOne(query).then(c => {
+               return c;
+           }).catch(err => {
+               next(err);
+           });
+           conflicts.push(cc.id.toString());
        }
-       console.log(conflicts);
-       course[i].conflicts = conflicts;
+       for(let j=0;j<course[i].registrations.length;j++) {
+           var query = {};
+
+           var id = course[i].registrations[j].study_program;
+           query["_id"] = id.toString();
+           const cp = await StudyProgram.findOne(query).then(c => {
+               return c;
+           }).catch(err => {
+               next(err);
+           });
+           var t = {"name":cp.name, "semester":course[i].registrations[j].semester};
+
+           programs.push(t);
+       }
+       json["conflicts"] = conflicts;
+       json["programs"] = programs;
+
+       arr.push(json);
    }
-    return res.json(course);
+    return res.json(arr);
 };
 
 exports.faculty_course_list = function(req,res,next){
@@ -67,6 +91,83 @@ exports.faculty_course_list = function(req,res,next){
 
 };
 
+exports.init = async function (req, res, next) {
+    logging.db('Create course ' + req.body.id + '.');
+    const semester = await Semester.findOne({
+        year: req.params.year,
+        semester: req.params.semester
+    })
+        .then(semester => {
+            if (!semester) {
+                return res.status(404).send('Semester not found.');
+            }
+            return semester;
+        })
+        .catch(err => {
+            next(err);
+        });
+
+    // if(req.body.id.length !== 6){
+    //     return res.status(400).send('Course ID must be 6 digits.');
+    // }
+
+    const faculty_programs = await StudyProgram.find({
+        faculty: req.faculty_id
+    }).then(programs => {
+        return programs;
+    }).catch(err => {
+        next(err);
+    });
+    var i;
+    var programs = [];
+    // console.log(faculty_programs);
+    for(i =0;i<req.body.programs.length;i++){
+       var flag = false;
+        //console.log(req.body.programs[i]["name"]);
+        for(let j in faculty_programs){
+            if(faculty_programs[j].name === req.body.programs[i]["name"]){
+               flag = true;
+               //  console.log("im here");
+                var p = {
+                    "study_program":faculty_programs[j]._id,
+                    "semester":req.body.programs[i].semester
+                };
+                programs.push(p);
+            }
+        }
+        if(flag === false ){
+            return res.status(400).send('Study program does not exist.');
+        }
+    }
+    // console.log(programs);
+    Course.findOne({
+        id: req.body.id,
+        semester: semester._id,
+        faculty: req.faculty_id
+    })
+        .then(exists => {
+            if (exists) {
+                return res.status(400).send('Course already exists.');
+            }
+            return Course.create({
+                id: req.body.id,
+                name: req.body.name,
+                faculty: req.faculty_id,
+                semester: semester._id,
+                credit_point: req.body.credit_point,
+                registrations: programs,
+                days_before: req.body.days_before
+            });
+        })
+        .then(() => {
+            return res.end();
+        })
+        .catch(err => {
+            next(err);
+        });
+};
+
+
 exports.course_create = async function (req, res, next) {
     logging.db('Create course ' + req.body.id + '.');
     const semester = await Semester.findOne({
@@ -82,9 +183,9 @@ exports.course_create = async function (req, res, next) {
         .catch(err => {
             next(err);
         });
-    if(req.body.id.length !== 6){
-        return res.status(400).send('Course ID must be 6 digits.');
-    }
+    // if(req.body.id.length !== 6){
+    //     return res.status(400).send('Course ID must be 6 digits.');
+    // }
     const fac = await Faculty.findOne({
         _id:req.body.faculty
     }).then(f=>{
@@ -118,7 +219,7 @@ exports.course_create = async function (req, res, next) {
             }
         }
         if(flag === false ){
-            return res.status(400).send('Study program does not exist.');
+            return res.status(404).send('Study program does not exist.');
         }
     }
 
@@ -163,8 +264,6 @@ exports.set_conflicts = async function(req,res,err) {
         .catch(err => {
             next(err);
         });
-    console.log(semester);
-
     const course_conflicts = await Course.find({
         id: req.body.conflicts,
         semester: semester._id
@@ -173,16 +272,14 @@ exports.set_conflicts = async function(req,res,err) {
     }).catch(err => {
         next(err);
     });
-    console.log(course_conflicts);
     var conflicts = [];
     for (let i in course_conflicts) {
         var p = {
             "course": course_conflicts[i]._id
         };
+
         conflicts.push(p);
     }
-    console.log(conflicts);
-
     Course.findOneAndUpdate({semester: semester._id, id: req.params.id}, {conflicts: conflicts}).then(() => {
         return res.end();
     }).catch(err => {
