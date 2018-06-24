@@ -168,7 +168,7 @@
                 </div>
             </div>
             <div class="modal-footer"style="padding: 10px;">
-                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>
+                <button type="button" class="btn btn-secondary" style="width:80px; margin-right:10px; margin-left: inherit; color: white" data-dismiss="modal" disabled>אישור</button>
             </div>
         </div>
     </div>
@@ -192,6 +192,15 @@
     let all_courses_dict = [];
     let working_semester = '';
     let working_year = '';
+
+    let faculty_name = '';
+    let faculty_id = '';
+
+    sendRequest('GET', '/api/faculty/name', null, function (res) {
+        let json = JSON.parse(res);
+        faculty_name = json['name'];
+        faculty_id = json['_id'];
+    });
 
     localStorage.setItem("pressed_schedule", "false");
     localStorage.previous_schedules_a = "";
@@ -339,7 +348,7 @@
             }
             var problems = result[moed].problems;
             for (var id in problems){
-                text += "" + 'זמן הכנה ל' + id + ' הורד ל' + problems[id] + ' ימים' + "<br>";
+                text += "" + 'ימי הלמידה עבור קורס מספר ' + id + ' צומצמו ל-' + Math.floor(problems[id]) + "<br>";
             }
         }
         if (text){
@@ -347,6 +356,10 @@
         }
     };
     let makeSchedule = function (moeds){
+        if (faculty_name == "Administrator") {
+            popup_modal("ERROR", "השיבוץ מתבצע דרך חשבונות הפקולטות", null);
+            return;
+        }
         $('#schedule_board_modal').modal("show");
         localStorage.setItem("changesForSchedule", localStorage.getItem(changes_root_key));
         setTimeout(function () {

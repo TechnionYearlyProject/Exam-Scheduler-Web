@@ -76,6 +76,7 @@ function popup_modal(type, text, func) {
         icon.innerHTML = '<i class="fas fa-info-circle"></i>';
         icon.style.color = '#ffc107';
         buttons.innerHTML = '<button type="button" class="btn btn-warning" style="width: 80px; margin-left: inherit; color: white" data-dismiss="modal">אישור</button>';
+        body.style.height = "350px";
     }
     if (type == 'CONF') {
         title.innerHTML = 'אישור';
