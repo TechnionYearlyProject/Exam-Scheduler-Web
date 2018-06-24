@@ -373,6 +373,7 @@
 
     document.addEventListener("send_msg", send_msg_handler , false);
     function send_msg_handler(e) {
+        console.log("sent");
         let params = JSON.parse(localStorage.getItem("popover_data"));
         if (!params["moed"].localeCompare("a")) {
           params["moed"] = 'A';
