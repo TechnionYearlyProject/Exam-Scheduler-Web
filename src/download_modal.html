@@ -63,7 +63,9 @@
 
     document.getElementById('download_save').onclick = function () {
         download_alert.style.color = "green";
-        download_alert.innerHTML = "המידע יורד מהשרת.";
+        download_alert.innerHTML = "המידע נטען מהשרת.";
+        $("[id^='exam_for_moed_a_downloaded_']").remove();
+        $("[id^='exam_for_moed_b_downloaded_']").remove();
         update_translation();
         console.log(translation_map_courses);
         faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
@@ -135,28 +137,33 @@
                             schedule_b[date].push(course);
                         }
                     }
-
                     localStorage.setItem('schedule_a', JSON.stringify(schedule_a));
                     localStorage.setItem('schedule_b', JSON.stringify(schedule_b));
                     if (moed_a_conflicts_switch.checked) {
                         let map_a = JSON.parse(localStorage.getItem('map_a'));
                         for (let curr_date in map_a) {
-                            let add_to = document.getElementById(map_a[curr_date]);
                             if (schedule_a[curr_date] != undefined) {
+                                let add_to = document.getElementById(map_a[curr_date]);
                                 for (let h in schedule_a[curr_date]) {
                                     let entry = translation_map_courses[schedule_a[curr_date][h]];
-                                    console.log(entry);
-                                    //create_test(add_to, "div", schedule_a[curr_date][h], "123456", "test", "moed_a");
-
+                                    create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_a");
                                 }
                             }
-
-
-
                         }
-
-
                     }
+                    if (moed_b_conflicts_switch.checked) {
+                        let map_b = JSON.parse(localStorage.getItem('map_b'));
+                        for (let curr_date in map_b) {
+                            if (schedule_b[curr_date] != undefined) {
+                                let add_to = document.getElementById(map_a[curr_date]);
+                                for (let h in schedule_a[curr_date]) {
+                                    let entry = translation_map_courses[schedule_a[curr_date][h]];
+                                    create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
+                                }
+                            }
+                        }
+                    }
+                    $('#download_modal').modal('hide');
 
                 });
             }
@@ -166,12 +173,10 @@
 
     function update_translation() {
         let courses = JSON.parse(localStorage.getItem("all_courses_dict"));
-        console.log(courses);
         translation_map_courses = {};
         for(let i in courses) {
             translation_map_courses[courses[i]["_id"]] = courses[i];
         }
-        console.log(translation_map_courses);
     }
 
 </script>
