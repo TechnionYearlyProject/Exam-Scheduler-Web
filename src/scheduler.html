@@ -192,6 +192,8 @@
     let all_courses_dict = [];
 
     localStorage.setItem("pressed_schedule", "false");
+    localStorage.previous_schedules_a = "";
+    localStorage.previous_schedules_b = "";
 
     $('#cnflcts_ldr').load('cnflcts_mdl.html');
     $('#toolbar').load('toolbar.html');
@@ -200,45 +202,46 @@
     $('#upload_loader').load('upload_modal.html');
     $('#download_loader').load('download_modal.html');
     $('#courses').load('datatable.html', function () {
-        $('#scheduler_function_caller').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "true")
-            {
+        $('#scheduler_function_caller').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "true") {
                 popup_modal("ERROR", 'לחץ על כפתור הניקוי לפני שיבוץ שנית.', null);
                 return;
             }
             $("[id^='exam_for_']").remove();
-            makeSchedule(["moed_a", "moed_b"]);
+            makeSchedule(["a", "b"]);
             localStorage.setItem("pressed_schedule", "true");
-            for (var i in map_a)
-            {
+            for (var i in map_a) {
                 var day = document.getElementById(map_a[i]);
                 var lock = day.childNodes[1];
                 day.removeChild(lock);
             }
-            for (var i in map_b)
-            {
+            for (var i in map_b) {
                 var day = document.getElementById(map_b[i]);
                 var lock = day.childNodes[1];
                 day.removeChild(lock);
             }
         });
-        $('#scheduler_function_caller_2').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "false")
-            {
+        $('#scheduler_function_caller_2').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "false") {
                 popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
                 return;
             }
             $("[id^='exam_for_moed_a']").remove();
-            makeSchedule(["moed_a"]);
+            goToNextSchedule("a");
         });
-        $('#scheduler_function_caller_3').click(function(){
-            if (localStorage.getItem("pressed_schedule") == "false")
-            {
+        $('#scheduler_function_caller_3').click(function () {
+            if (localStorage.getItem("pressed_schedule") == "false") {
                 popup_modal("ERROR", 'פעולה לא חוקית לפני לחיצה על כפתור השיבוץ.', null);
                 return;
             }
             $("[id^='exam_for_moed_b']").remove();
-            makeSchedule(["moed_b"]);
+            goToNextSchedule("b");
+        });
+        $('#scheduler_function_caller_4').click(function () {
+            goToPreviousSchedule("a");
+        });
+        $('#scheduler_function_caller_5').click(function () {
+            goToPreviousSchedule("b");
         });
     });
 
@@ -312,22 +315,26 @@
     });
 
     var fillScheduleWithCourses = function (moeds) {
-        return function (result) {
-            $('#schedule_board_modal').modal("hide");
-            localStorage.setItem("result", result);
-            result = JSON.parse(result);
-            console.log(result);
-            for (var m = 0; m < moeds.length; m++){
-                var moed = moeds[m];
-                for(var i = 0; i < result[moed].schedule.length; i++){
-                    var examDay = result[moed].schedule[i];
-                    var day = moed +'_day_' + examDay.index;
-                    var day_elem = document.getElementById(day);
-                    for (var j = 0; j < examDay.exams.length; j++){
-                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed, true);
-                    }
+        let result = localStorage.getItem("result");
+        var text = "";
+        result = JSON.parse(result);
+        for (var m = 0; m < moeds.length; m++){
+            var moed = "moed_" + moeds[m];
+            for(var i = 0; i < result[moed].schedule.length; i++){
+                var examDay = result[moed].schedule[i];
+                var day = moed +'_day_' + examDay.index;
+                var day_elem = document.getElementById(day);
+                for (var j = 0; j < examDay.exams.length; j++){
+                    create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                 }
             }
+            var problems = result[moed].problems;
+            for (var id in problems){
+                text += "" + 'זמן הכנה ל' + id + ' הורד ל' + problems[id] + ' ימים' + "<br>";
+            }
+        }
+        if (text){
+            popup_modal("INFO", text);
         }
     };
     let makeSchedule = function (moeds){
@@ -344,7 +351,37 @@
                     changes: localStorage.getItem(changes_root_key),
                     conflicts: localStorage.getItem("local_conflicts"),
                 },
-                success: fillScheduleWithCourses(moeds)
+                success: function(result){
+                    result = JSON.parse(result);
+                    let localSchedule = localStorage.getItem("result");
+                    if (localSchedule){
+                        localSchedule = JSON.parse(localSchedule);
+                    } else {
+                        localSchedule = result;
+                    }
+                    for (var k = 0; k < moeds.length; k++){
+                        let moed = moeds[k];
+                        localSchedule["moed_" + moed] = result["moed_" + moed];
+                        let schedules = localStorage.getItem("previous_schedules_" + moed);
+                        if (schedules){
+                            schedules = JSON.parse(schedules);
+                        } else {
+                            schedules = {};
+                        }
+                        let curr = schedules["curr_index"];
+                        if (curr == null){
+                            curr = 0;
+                        } else {
+                            curr++;
+                        }
+                        schedules[curr] = result["moed_" + moed];
+                        schedules.curr_index = curr;
+                        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
+                    }
+                    localStorage.setItem("result", JSON.stringify(localSchedule));
+                    $('#schedule_board_modal').modal("hide");
+                    fillScheduleWithCourses(moeds);
+                }
             });
         }, 5000);
 
@@ -379,14 +416,14 @@
         console.log("sent");
         let params = JSON.parse(localStorage.getItem("popover_data"));
         if (!params["moed"].localeCompare("a")) {
-          params["moed"] = 'A';
+            params["moed"] = 'A';
         } else {
-          params["moed"] = 'B';
+            params["moed"] = 'B';
         }
         let json = {
-          course: params["course_id"],
-          message: params["msg"],
-          moed: params["moed"]
+            course: params["course_id"],
+            message: params["msg"],
+            moed: params["moed"]
         };
         let route = '/api/' + params["semester"] + '/message/send';
         sendRequest('post', route, json, () => {
@@ -412,62 +449,62 @@
     // }
 
     function reload_message_list() {
-      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      if (msgs_cntr_lst){
-          while (msgs_cntr_lst.firstChild) {
-              msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
-          }
-      }
-      sendRequest('get', '/api/message/list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-          let li = document.createElement('li');
-          li.className = "list-group-item";
-          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-
-          let id = document.createElement('p');
-          id.innerHTML = data[i].course.id;
-          li.appendChild(id);
-
-          let course = document.createElement('p');
-          course.innerHTML = data[i].course.name;
-          li.appendChild(course);
-
-          let year = document.createElement('p');
-          year.innerHTML = data[i].semester.year;
-          li.appendChild(year);
-
-          let semester = document.createElement('p');
-          semester.innerHTML = data[i].semester.semester;
-          li.appendChild(semester);
-
-          let schedule = document.createElement('p');
-          schedule.innerHTML = data[i].schedule;
-          li.appendChild(schedule);
-
-          let moed = document.createElement('p');
-          moed.innerHTML = data[i].moed;
-          li.appendChild(moed);
-
-          let sender = document.createElement('p');
-          sender.innerHTML = data[i].sender.name;
-          li.appendChild(sender);
-
-          let date = document.createElement('p');
-          date.innerHTML = data[i].date;
-          li.appendChild(date);
-
-          let text = document.createElement('p');
-          text.innerHTML = data[i].text;
-          li.appendChild(text);
-
-          let read = document.createElement('p');
-          read.innerHTML = data[i].read;
-          li.appendChild(read);
-
-          msgs_cntr_lst.appendChild(li);
+        let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
+        if (msgs_cntr_lst){
+            while (msgs_cntr_lst.firstChild) {
+                msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+            }
         }
-      });
+        sendRequest('get', '/api/message/list', null, res => {
+            let data = JSON.parse(res);
+            for (let i in data) {
+                let li = document.createElement('li');
+                li.className = "list-group-item";
+                li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+
+                let id = document.createElement('p');
+                id.innerHTML = data[i].course.id;
+                li.appendChild(id);
+
+                let course = document.createElement('p');
+                course.innerHTML = data[i].course.name;
+                li.appendChild(course);
+
+                let year = document.createElement('p');
+                year.innerHTML = data[i].semester.year;
+                li.appendChild(year);
+
+                let semester = document.createElement('p');
+                semester.innerHTML = data[i].semester.semester;
+                li.appendChild(semester);
+
+                let schedule = document.createElement('p');
+                schedule.innerHTML = data[i].schedule;
+                li.appendChild(schedule);
+
+                let moed = document.createElement('p');
+                moed.innerHTML = data[i].moed;
+                li.appendChild(moed);
+
+                let sender = document.createElement('p');
+                sender.innerHTML = data[i].sender.name;
+                li.appendChild(sender);
+
+                let date = document.createElement('p');
+                date.innerHTML = data[i].date;
+                li.appendChild(date);
+
+                let text = document.createElement('p');
+                text.innerHTML = data[i].text;
+                li.appendChild(text);
+
+                let read = document.createElement('p');
+                read.innerHTML = data[i].read;
+                li.appendChild(read);
+
+                msgs_cntr_lst.appendChild(li);
+            }
+        });
     }
 
     $(document).ready(reload_message_list);
@@ -527,26 +564,26 @@
     };
 
     function load_all_courses_table() {
-    var table1 = $("#all_courses").DataTable();
-    var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-        console.log(2);
-        var courses = JSON.parse(res);
-        //console.log(courses);
-        for (var i in courses) {
-            var entry = {
-                "id": ("0" + courses[i]["id"]).slice(-6),
-                "name": courses[i]["name"],
-                "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
-                "conflicts" : courses[i]["conflicts"],
-                "_id" : courses[i]["_id"],
-            };
-            all_courses_dict.push(entry);
-            table1.row.add(entry).draw();
-        }
+        var table1 = $("#all_courses").DataTable();
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+            console.log(2);
+            var courses = JSON.parse(res);
+            //console.log(courses);
+            for (var i in courses) {
+                var entry = {
+                    "id": ("0" + courses[i]["id"]).slice(-6),
+                    "name": courses[i]["name"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"],
+                };
+                all_courses_dict.push(entry);
+                table1.row.add(entry).draw();
+            }
 
-        localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
-    });
-}
+            localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        });
+    }
 
 
 
@@ -641,7 +678,48 @@
         setTimeout(function () {
             $("#password_change_modal").modal('hide');
         }, 1500);
-    }
+    };
+    let goToNextSchedule = function(moed){
+        let schedules = localStorage.getItem("previous_schedules_" + moed);
+        if (schedules){
+            schedules = JSON.parse(schedules);
+        } else {
+            schedules = {};
+        }
+        let curr = schedules["curr_index"];
+        if (curr == null || !schedules[curr + 1]){
+            makeSchedule([moed]);
+        } else {
+            let result = localStorage.getItem("result");
+            result = JSON.parse(result);
+            result["moed_" + moed] = schedules[curr + 1];
+            schedules["curr_index"] = curr + 1;
+            localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
+            localStorage.setItem("result", JSON.stringify(result));
+            fillScheduleWithCourses([moed]);
+        }
+    };
+
+    let goToPreviousSchedule = function (moed) {
+        let schedules = localStorage.getItem("previous_schedules_" + moed);
+        if (schedules){
+            schedules = JSON.parse(schedules);
+        } else {
+            schedules = {};
+        }
+        let curr = schedules["curr_index"];
+        if(!curr || curr == 0){
+            return;
+        }
+        $("[id^='exam_for_moed_" + moed + "']").remove();
+        let result = localStorage.getItem("result");
+        result = JSON.parse(result);
+        result["moed_" + moed] = schedules[curr - 1];
+        schedules["curr_index"] = curr - 1;
+        localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
+        localStorage.setItem("result", JSON.stringify(result));
+        fillScheduleWithCourses([moed]);
+    };
 
 
 
