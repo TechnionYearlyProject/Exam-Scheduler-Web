@@ -95,7 +95,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed) {
     if (course_id.startsWith("234")){
         color = "#26A69A";
     } else if (course_id.startsWith("104")){
-        color = "#EF5350";
+        color = "#9B59B6";
     } else if (course_id.startsWith("094")) {
         color = "#FFEB3B";
     } else if (course_id.startsWith("236")) {
