@@ -107,7 +107,7 @@ function popover_comment(elem_id, course_id) {
         '    </div>';
     $('#' + elem_id).popover({
         trigger: 'focus',
-        placement: 'left',
+        placement: 'right',
         html:true,
         content: popover
     });
@@ -171,7 +171,7 @@ function create_test(target, elem_type, text, course_id, class_name, moed, dragg
     target.appendChild(test);
     $('#' + test.id).tooltip({
         trigger: 'hover',
-        placement: 'left',
+        placement: 'right',
         title:  text
     });
     return test;

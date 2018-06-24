@@ -113,4 +113,5 @@ body{
 
 .tooltip {
     z-index: 200 !important;
+    margin-left:15px;
 }
