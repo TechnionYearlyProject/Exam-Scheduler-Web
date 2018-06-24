@@ -110,3 +110,7 @@ body{
     -ms-user-select: none;
     user-select: none;
 }
+
+.tooltip {
+    z-index: 200 !important;
+}

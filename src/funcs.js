@@ -107,7 +107,7 @@ function popover_comment(elem_id, course_id) {
         '    </div>';
     $('#' + elem_id).popover({
         trigger: 'focus',
-        placement: 'right',
+        placement: 'left',
         html:true,
         content: popover
     });
