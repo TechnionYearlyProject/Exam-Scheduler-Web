@@ -10,6 +10,14 @@ const admin_user = { name: 'Administrator',
     email: 'admin@technion.ac.il',
     password: 'Aa123456'
 };
+const new_semester = {
+    year: 2018,
+    semester: 'spring',
+    start_a: '2018-07-03',
+    end_a: '2018-07-29',
+    start_b:'2018-10-04',
+    end_b:'2018-10-21'
+};
 
 describe('Scheduler', function() {
      before(async () => {
@@ -57,22 +65,26 @@ describe('Scheduler', function() {
                 res.body.should.have.property('auth').eql(true);
                 res.body.should.have.property('token');
                 var token = res.body.token;
-                agent
-                    .post('/make-schedule')
-                    .send({
-                        semester:'2018-spring',
-                        faculty: 'מדעי המחשב',
-                        changes: JSON.stringify({
-                        '234111': {pref: 'סוף', preparationTime: '4'},
-                        '234118': {pref: 'אוטומטי', 'has_exam': false},
-                        '234122': {a_constraint: 'Tue Jul 10 2018 02:00:00 GMT+0300 (Israel Daylight Time)'}
-                        }),
-                    })
-                    .set("Cookie", "token="+token)
-                    .end((err, res) => {
-                        validateResultLegality(res);
-                        done();
-                    });
+                agent.post('/api/semester/create')
+                    .set('x-access-token', token)
+                    .send(new_semester).end(function () {
+                    agent
+                        .post('/make-schedule')
+                        .send({
+                            semester:'2018-spring',
+                            faculty: 'מדעי המחשב',
+                            changes: JSON.stringify({
+                                '234111': {pref: 'סוף', preparationTime: '4'},
+                                '234118': {pref: 'אוטומטי', 'has_exam': false},
+                                '234122': {a_constraint: 'Tue Jul 10 2018 02:00:00 GMT+0300 (Israel Daylight Time)'}
+                            }),
+                        })
+                        .set("Cookie", "token="+token)
+                        .end((err, res) => {
+                            validateResultLegality(res);
+                            done();
+                        });
+                });
             });
     });
 });
