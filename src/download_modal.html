@@ -140,8 +140,6 @@
                     }
                     localStorage.setItem('schedule_a', JSON.stringify(schedule_a));
                     localStorage.setItem('schedule_b', JSON.stringify(schedule_b));
-                    console.log(schedule_a);
-                    console.log(schedule_b);
                     if (moed_a_conflicts_switch.checked) {
                         let map_a = JSON.parse(localStorage.getItem('map_a'));
                         for (let curr_date in map_a) {
@@ -156,9 +154,7 @@
                                     let id = entry["id"];
                                     test.ondblclick = function () {
                                         $('#' + test.id).popover("show");
-                                        console.log(entry["id"]);
                                         var button = document.getElementById("popover_button_"+id);
-                                        console.log(button);
                                         var input = document.getElementById("popover_input_"+id);
                                         input.value = "";
                                         button.onclick = function() {
@@ -200,9 +196,7 @@
                                     let id = entry["id"];
                                     test.ondblclick = function () {
                                         $('#' + test.id).popover("show");
-                                        console.log(entry["id"]);
                                         var button = document.getElementById("popover_button_"+id);
-                                        console.log(button);
                                         var input = document.getElementById("popover_input_"+id);
                                         input.value = "";
                                         button.onclick = function() {
