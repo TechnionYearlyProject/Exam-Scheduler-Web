@@ -1,6 +1,24 @@
 var occupied = {};
 var changes_root_key = "local_course_changes";
 
+function course_num_to_faculty_id(course_num) {
+    let faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
+    let courses_dict = JSON.parse(localStorage.getItem('courses_dict'));
+    let faculty_name = '';
+    for (let i in courses_dict) {
+        if (courses_dict[i]['id'] == course_num) {
+            faculty_name = courses_dict[i]['faculty'];
+            break;
+        }
+    }
+    for (let faculty_id in faculties_dict) {
+        if (faculties_dict[faculty_id]['name'] == faculty_name) {
+            return faculty_id;
+        }
+    }
+    return '';
+}
+
 function faculty_name_to_id(name) {
     let faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
     for (let key in faculties_dict) {

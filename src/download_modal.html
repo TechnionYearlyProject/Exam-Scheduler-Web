@@ -67,7 +67,6 @@
         $("[id^='exam_for_moed_a_downloaded_']").remove();
         $("[id^='exam_for_moed_b_downloaded_']").remove();
         update_translation();
-        console.log(translation_map_courses);
         faculties_dict = JSON.parse(localStorage.getItem('faculties_dict'));
         current_semester = localStorage.getItem('semester_name');
         schedule_a = {};
@@ -155,20 +154,18 @@
                         let map_b = JSON.parse(localStorage.getItem('map_b'));
                         for (let curr_date in map_b) {
                             if (schedule_b[curr_date] != undefined) {
-                                let add_to = document.getElementById(map_a[curr_date]);
-                                for (let h in schedule_a[curr_date]) {
-                                    let entry = translation_map_courses[schedule_a[curr_date][h]];
+                                let add_to = document.getElementById(map_b[curr_date]);
+                                for (let h in schedule_b[curr_date]) {
+                                    let entry = translation_map_courses[schedule_b[curr_date][h]];
                                     create_test(add_to, "div", entry['name'], 'downloaded_' + entry['id'], "test", "moed_b");
                                 }
                             }
                         }
                     }
                     $('#download_modal').modal('hide');
-
                 });
             }
         }
-
     };
 
     function update_translation() {
