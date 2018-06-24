@@ -18,7 +18,7 @@ router.get('/faculty/list', faculty_controller.faculty_list); // Necessary to di
 // Database API routes
 
 router.all('*', auth.verify_token);
-router.get('/faculty/courses', course_controller.get_list);
+router.get(sem_regex+'/faculty/courses', course_controller.get_list);
 router.get('/faculty/name', faculty_controller.get_name);
 router.get('/faculty/email', faculty_controller.get_email);
 router.get('/program/list', study_program_controller.study_program_list_by_faculty); // Programs by faculty

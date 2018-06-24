@@ -5,8 +5,8 @@ const logging = require('../../logging');
 const StudyProgram = require('../models/studyprogram').model;
 const Schedule = require('../models/schedule').model;
 
-exports.get_list = function(req,res,next){
-    Semester.findOne({
+exports.get_list = async function(req,res,next){
+    const semester = await Semester.findOne({
         year: req.params.year,
         semester: req.params.semester
     })
@@ -14,26 +14,41 @@ exports.get_list = function(req,res,next){
             if (!semester) {
                 return res.status(404).send('Semester not found.');
             }
-            return Course.find({
+            return semester;
+        }).catch(err=>{next(err);});
+    const course = await Course.find({
                     semester: semester._id,
                     faculty: req.faculty_id
-                },
-                'name id credit_point faculty days_before conflicts registrations');
-        })
-        .then(courses => {
-            return res.json(courses);
-        })
-        .catch(err => {
+                }, 'name id credit_point days_before conflicts registrations').then(c=>{
+                    return c;
+    }).catch(err => {
             next(err);
         });
+   //console.log(course);
+   var i =0;
+   var j = 0;
+   for(i =0;i<course.length;i++){
+       var conflicts = [];
+       for(j=0;j<course[i].conflicts.length;j++){
+           var query = {};
+
+           var id = course[i].conflicts[j].course;
+           query["_id"] = id;
+           const cc = await Course.find(query).then(c=>{return c;}).catch(err=>{next(err);});
+
+           conflicts.push(cc.id);
+       }
+       console.log(conflicts);
+       course[i].conflicts = conflicts;
+   }
+    return res.json(course);
 };
 
 exports.faculty_course_list = function(req,res,next){
     Semester.findOne({
         year: req.params.year,
         semester: req.params.semester
-    })
-        .then(semester => {
+    }).then(semester => {
             if (!semester) {
                 return res.status(404).send('Semester not found.');
             }
@@ -49,6 +64,7 @@ exports.faculty_course_list = function(req,res,next){
         .catch(err => {
             next(err);
         });
+
 };
 
 exports.course_create = async function (req, res, next) {
@@ -165,7 +181,7 @@ exports.set_conflicts = async function(req,res,err) {
         };
         conflicts.push(p);
     }
-    console.log(conflicts)
+    console.log(conflicts);
 
     Course.findOneAndUpdate({semester: semester._id, id: req.params.id}, {conflicts: conflicts}).then(() => {
         return res.end();
