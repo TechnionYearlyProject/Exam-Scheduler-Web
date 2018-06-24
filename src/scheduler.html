@@ -320,18 +320,26 @@
 
     var fillScheduleWithCourses = function (moeds) {
         let result = localStorage.getItem("result");
+        var text = "";
         result = JSON.parse(result);
-            for (var m = 0; m < moeds.length; m++){
-                var moed = "moed_" + moeds[m];
-                for(var i = 0; i < result[moed].schedule.length; i++){
-                    var examDay = result[moed].schedule[i];
-                    var day = moed +'_day_' + examDay.index;
-                    var day_elem = document.getElementById(day);
-                    for (var j = 0; j < examDay.exams.length; j++){
-                        create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
-                    }
+        for (var m = 0; m < moeds.length; m++){
+            var moed = "moed_" + moeds[m];
+            for(var i = 0; i < result[moed].schedule.length; i++){
+                var examDay = result[moed].schedule[i];
+                var day = moed +'_day_' + examDay.index;
+                var day_elem = document.getElementById(day);
+                for (var j = 0; j < examDay.exams.length; j++){
+                    create_test(day_elem, "div", examDay.exams[j]["name"], examDay.exams[j]["id"], "test", moed);
                 }
             }
+            var problems = result[moed].problems;
+            for (var id in problems){
+                text += "" + 'זמן הכנה ל' + id + ' הורד ל' + problems[id] + ' ימים' + "<br>";
+            }
+        }
+        if (text){
+            popup_modal("INFO", text);
+        }
     };
     let makeSchedule = function (moeds){
         $('#schedule_board_modal').modal("show");
@@ -375,8 +383,8 @@
                         localStorage.setItem("previous_schedules_" + moed, JSON.stringify(schedules));
                     }
                     localStorage.setItem("result", JSON.stringify(localSchedule));
-                    fillScheduleWithCourses(moeds);
                     $('#schedule_board_modal').modal("hide");
+                    fillScheduleWithCourses(moeds);
                 }
             });
         }, 5000);
@@ -454,14 +462,14 @@
         console.log("sent");
         let params = JSON.parse(localStorage.getItem("popover_data"));
         if (!params["moed"].localeCompare("a")) {
-          params["moed"] = 'A';
+            params["moed"] = 'A';
         } else {
-          params["moed"] = 'B';
+            params["moed"] = 'B';
         }
         let json = {
-          course: params["course_id"],
-          message: params["msg"],
-          moed: params["moed"]
+            course: params["course_id"],
+            message: params["msg"],
+            moed: params["moed"]
         };
         let route = '/api/' + params["semester"] + '/message/send';
         sendRequest('post', route, json, () => {
@@ -487,62 +495,62 @@
     // }
 
     function reload_message_list() {
-      let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
-      if (msgs_cntr_lst){
-          while (msgs_cntr_lst.firstChild) {
-              msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
-          }
-      }
-      sendRequest('get', '/api/message/list', null, res => {
-        let data = JSON.parse(res);
-        for (let i in data) {
-          let li = document.createElement('li');
-          li.className = "list-group-item";
-          li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
-
-          let id = document.createElement('p');
-          id.innerHTML = data[i].course.id;
-          li.appendChild(id);
-
-          let course = document.createElement('p');
-          course.innerHTML = data[i].course.name;
-          li.appendChild(course);
-
-          let year = document.createElement('p');
-          year.innerHTML = data[i].semester.year;
-          li.appendChild(year);
-
-          let semester = document.createElement('p');
-          semester.innerHTML = data[i].semester.semester;
-          li.appendChild(semester);
-
-          let schedule = document.createElement('p');
-          schedule.innerHTML = data[i].schedule;
-          li.appendChild(schedule);
-
-          let moed = document.createElement('p');
-          moed.innerHTML = data[i].moed;
-          li.appendChild(moed);
-
-          let sender = document.createElement('p');
-          sender.innerHTML = data[i].sender.name;
-          li.appendChild(sender);
-
-          let date = document.createElement('p');
-          date.innerHTML = data[i].date;
-          li.appendChild(date);
-
-          let text = document.createElement('p');
-          text.innerHTML = data[i].text;
-          li.appendChild(text);
-
-          let read = document.createElement('p');
-          read.innerHTML = data[i].read;
-          li.appendChild(read);
-
-          msgs_cntr_lst.appendChild(li);
+        let msgs_cntr_lst = document.getElementById('msgs_cntr_lst');
+        if (msgs_cntr_lst){
+            while (msgs_cntr_lst.firstChild) {
+                msgs_cntr_lst.removeChild(msgs_cntr_lst.firstChild);
+            }
         }
-      });
+        sendRequest('get', '/api/message/list', null, res => {
+            let data = JSON.parse(res);
+            for (let i in data) {
+                let li = document.createElement('li');
+                li.className = "list-group-item";
+                li.style = "text-align: right; font-size: 13px; line-height: 20px; padding: 5px; padding-right: 15px; border-bottom: 1px solid #ced4da";
+
+                let id = document.createElement('p');
+                id.innerHTML = data[i].course.id;
+                li.appendChild(id);
+
+                let course = document.createElement('p');
+                course.innerHTML = data[i].course.name;
+                li.appendChild(course);
+
+                let year = document.createElement('p');
+                year.innerHTML = data[i].semester.year;
+                li.appendChild(year);
+
+                let semester = document.createElement('p');
+                semester.innerHTML = data[i].semester.semester;
+                li.appendChild(semester);
+
+                let schedule = document.createElement('p');
+                schedule.innerHTML = data[i].schedule;
+                li.appendChild(schedule);
+
+                let moed = document.createElement('p');
+                moed.innerHTML = data[i].moed;
+                li.appendChild(moed);
+
+                let sender = document.createElement('p');
+                sender.innerHTML = data[i].sender.name;
+                li.appendChild(sender);
+
+                let date = document.createElement('p');
+                date.innerHTML = data[i].date;
+                li.appendChild(date);
+
+                let text = document.createElement('p');
+                text.innerHTML = data[i].text;
+                li.appendChild(text);
+
+                let read = document.createElement('p');
+                read.innerHTML = data[i].read;
+                li.appendChild(read);
+
+                msgs_cntr_lst.appendChild(li);
+            }
+        });
     }
 
     $(document).ready(reload_message_list);
@@ -602,25 +610,25 @@
     };
 
     function load_all_courses_table() {
-    var table1 = $("#all_courses").DataTable();
-    var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
-        var courses = JSON.parse(res);
-        //console.log(courses);
-        for (var i in courses) {
-            var entry = {
-                "id": ("0" + courses[i]["id"]).slice(-6),
-                "name": courses[i]["name"],
-                "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
-                "conflicts" : courses[i]["conflicts"],
-                "_id" : courses[i]["_id"],
-            };
-            all_courses_dict.push(entry);
-            table1.row.add(entry).draw();
-        }
+        var table1 = $("#all_courses").DataTable();
+        var req1 = sendRequest("get", "/api/" + localStorage.getItem('semester_name') + "/courses/list", null, function (res) {
+            var courses = JSON.parse(res);
+            //console.log(courses);
+            for (var i in courses) {
+                var entry = {
+                    "id": ("0" + courses[i]["id"]).slice(-6),
+                    "name": courses[i]["name"],
+                    "faculty" : faculties_dict[courses[i]["faculty"]]['name'],
+                    "conflicts" : courses[i]["conflicts"],
+                    "_id" : courses[i]["_id"],
+                };
+                all_courses_dict.push(entry);
+                table1.row.add(entry).draw();
+            }
 
-        localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
-    });
-}
+            localStorage.setItem("all_courses_dict",JSON.stringify(all_courses_dict));
+        });
+    }
 
 
 
